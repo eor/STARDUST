@@ -27,8 +27,8 @@
  ***************************************************************/
 #include "table_settings.h"
 #include "constants.h"
-#include "ODE_solver.h"
-#include "Patterson.h"
+//#include "ODE_solver.h"
+//#include "Patterson.h"
 #include "prototype.h"
 #include "allvars.h"
 #include "log.h"

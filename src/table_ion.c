@@ -7,7 +7,6 @@
 #include "table_settings.h"
 #include "constants.h"
 
-#include "Patterson.h"
 
 
 #include "prototype.h"

@@ -1,6 +1,8 @@
-/*! \file proto.h
- *  \brief this file contains all function prototypes of the code
- */
+/***************************************************************
+ * 
+ * this file contains all function prototypes of the code
+ * 
+ ***************************************************************/
 
 #ifndef ALLVARS_H
 #include "allvars.h"
