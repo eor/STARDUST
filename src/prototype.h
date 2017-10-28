@@ -70,7 +70,6 @@ double cross_sec_ehe2(double );
 /***************************************************************
  * derivs.c and jac.c functions
  ***************************************************************/
-
          
 /* Sets up the system of differential equations */      
 int derivs (double t, const double y[], double dydt[], void *params);
@@ -149,16 +148,15 @@ void utils_print_help();
 void utils_print_hello();   
 
 /***************************************************************
- * etc
+ * functions in interpolation.c
  ***************************************************************/
-
 
 /* interpolates the table of integrals*/
 void interpolation(double, double, double ,double );
          
 
 /* The 2-D interpolation routine */
-void interp2d(double*, double*, double** , int , int , double , double , double *);
+void interpolation_2D(double*, double*, double** , int , int , double , double , double *);
 
 /***************************************************************
  * etc

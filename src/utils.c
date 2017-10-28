@@ -17,12 +17,6 @@
 #include "log.h"
 
 /***************************************************************
- * Etc
- ***************************************************************/
-#define pow2(x) ((x)*(x))
-#define pow3(x) ((x)*(x)*(x))
-
-/***************************************************************
  * given directory and filename this function returns a full path
  ***************************************************************/
 char* utils_concat_path(char *dir, char *file){
@@ -39,7 +33,8 @@ char* utils_concat_path(char *dir, char *file){
     sprintf(tmpPrefix, "M%.3f_z%.3f_", myConfig.haloMass, myConfig.redshiftLow );
     
     
-    char *result = (char*) malloc( sizeof(char) * (strlen(dir)+1+strlen(file)+1 +lenPrefix) ); // +1 for "/" and +1 for the zero-terminator
+    char *result = (char*) malloc( sizeof(char) * (strlen(dir)+1+strlen(file)+1 +lenPrefix) ); 
+    // +1 for "/" and +1 for the zero-terminator
     
     strcpy(result, dir);
     strcat(result, "/");
@@ -59,7 +54,8 @@ char* utils_concat_path(char *dir, char *file){
 char* utils_concat_path_noID(char *dir, char *file){
     
     
-    char *result = (char*) malloc( sizeof(char) * (strlen(dir)+1+strlen(file)+1 ) ); // +1 for "/" and +1 for the zero-terminator
+    char *result = (char*) malloc( sizeof(char) * (strlen(dir)+1+strlen(file)+1 ) ); 
+    // +1 for "/" and +1 for the zero-terminator
     
     strcpy(result, dir);
     strcat(result, "/");

@@ -11,6 +11,8 @@
 #include "constants.h"
 #include "allvars.h"
 
+//TODO: Lots of variables should be renamed here
+
 /***************************************************************
  * config
  ***************************************************************/

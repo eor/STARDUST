@@ -5,10 +5,10 @@
 #include <gsl/gsl_spline.h>
 
 #include "prototype.h"
-/*
- * 2d spline interpolation via GSL
- */
 
+/***************************************************************
+ * 2d spline interpolation via GSL
+ ***************************************************************/
 void interp2d(double *x1a, double *x2a, double **ya, int m, int n, double x1, double x2, double *y){
     
     gsl_interp_accel *acc = gsl_interp_accel_alloc ();

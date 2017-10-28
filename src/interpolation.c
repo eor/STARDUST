@@ -1,6 +1,8 @@
-/*! File interpolation.c returns from the generated tables the required 
-values of the integral.*/
-
+/***************************************************************
+ * Uses the pre-computed tables and sets interpolated 
+ * File interpolation.c returns from the generated tables the required 
+values of the integral.
+ ***************************************************************/
 
 /***************************************************************
  * libraries
@@ -92,15 +94,14 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
     gsl_spline_init (spline, xa, ya, INTERPOINTS);
     y1 = gsl_spline_eval (spline, nHX1, acc);
   
-    interp2d (nHx1a, nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1, nHeX2, &y2);  
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
+    interpolation_2D(nHx1a, nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1, nHeX2, &y2);  
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
   
   
     y1 = fabs (y1);
     y2 = fabs (y2);
     y3 = fabs (y3);
     
-    //fuku_e1h1[iGrid] = Ag * (y1 + y2 + y3) / (radius * radius * kpc2Mpc);
     fuku_e1h1[iGrid] =  (y1 + y2 + y3) / (radNorm);
       
      
@@ -117,12 +118,12 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
                                           (long int) ((nHx13a[i] - LOWLIM) / TABLERES) + 2,
                                           (long int) ((nHex2a[j] - LOWLIM) / TABLERES) + 2);
   
-    interp2d (nHx1a, nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1, nHeX2, &y2);
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
+    interpolation_2D(nHx1a, nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1, nHeX2, &y2);
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
   
     y2 = fabs (y2);
     y3 = fabs (y3);
-//     fuku_ehe1[iGrid] = Ag * (y2 + y3) / (radius * radius * kpc2Mpc);
+
     fuku_ehe1[iGrid] = (y2 + y3) / (radNorm);
   
     /* Third Integral */
@@ -132,10 +133,10 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
                                           (long int) ((nHx13a[i] - LOWLIM) / TABLERES) + 2,
                                           (long int) ((nHex2a[j] - LOWLIM) / TABLERES) + 2);
   
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
   
     y3 = fabs (y3);
-//     fuku_ehe2[iGrid] = Ag * (y3) / (radius * radius * kpc2Mpc);
+
     fuku_ehe2[iGrid] = y3 / (radNorm);
 
   
@@ -163,18 +164,16 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
     gsl_spline_init (spline, xa, ya, INTERPOINTS);
     y1 = gsl_spline_eval (spline, nHX1, acc);
     
-    interp2d (nHx1a,  nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1,  nHeX2, &y2);
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
+    interpolation_2D(nHx1a,  nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1,  nHeX2, &y2);
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
     
     y1 = fabs (y1);
     y2 = fabs (y2);
     y3 = fabs (y3);
-  
-//   integral_H1[iGrid] = Ag * (y1 + y2 + y3) / (radius * radius * kpc2Mpc);
+
     integral_H1[iGrid] = (y1 + y2 + y3) / ( radNorm);
   
-  /* Second Integral */
-  
+    /* Second Integral */
     for (i = 0; i < INTERPOINTS; i++)
         for (j = 0; j < INTERPOINTS; j++)
             yP2a[i][j] = gsl_matrix_get(  temp_matrix_ehe1_p2,
@@ -187,13 +186,12 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
                                           (long int) ((nHx13a[i] - LOWLIM) / TABLERES) + 2,
                                           (long int) ((nHex2a[j] - LOWLIM) / TABLERES) + 2);
 
-    interp2d (nHx1a,  nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1,  nHeX2, &y2);
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);  
+    interpolation_2D(nHx1a,  nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1,  nHeX2, &y2);
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);  
   
     y2 = fabs (y2);
     y3 = fabs (y3);
 
-//     integral_He1[iGrid] = Ag * (y2 + y3) / (radius * radius * kpc2Mpc);
     integral_He1[iGrid] = (y2 + y3) / ( radNorm );
   
     
@@ -204,10 +202,10 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
                                           (long int) ((nHx13a[i] - LOWLIM) / TABLERES) + 2,
                                           (long int) ((nHex2a[j] - LOWLIM) / TABLERES) + 2);  
   
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);  
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);  
   
     y3 = fabs (y3);
-//   integral_He2[iGrid] = Ag * (y3) / (radius * radius * kpc2Mpc);
+
     integral_He2[iGrid] = (y3) / ( radNorm );
   
 
@@ -234,14 +232,13 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
     gsl_spline_init (spline, xa, ya, INTERPOINTS);
     y1 = gsl_spline_eval (spline, nHX1, acc);
   
-    interp2d (nHx1a, nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1, nHeX2, &y2);
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
+    interpolation_2D(nHx1a, nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1, nHeX2, &y2);
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
 
     y1 = fabs (y1);
     y2 = fabs (y2);
     y3 = fabs (y3);
   
-//  comp_integ1[iGrid] = Ag * (y1 + y2 + y3) / (radius * radius * kpc2Mpc);
     comp_integ1[iGrid] = (y1 + y2 + y3) / ( radNorm );
 
     /* second integral */
@@ -263,17 +260,50 @@ void interpolation(double nHX1, double nHeX2, double nHX13, double radius){
     gsl_spline_init (spline, xa, ya, INTERPOINTS);
     y1 = gsl_spline_eval (spline, nHX1, acc);
     
-    interp2d (nHx1a,  nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1,  nHeX2, &y2);
-    interp2d (nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
+    interpolation_2D(nHx1a,  nHex2a, yP2a, INTERPOINTS, INTERPOINTS, nHX1,  nHeX2, &y2);
+    interpolation_2D(nHx13a, nHex2a, yP3a, INTERPOINTS, INTERPOINTS, nHX13, nHeX2, &y3);
 
     y1 = fabs (y1);
     y2 = fabs (y2);
     y3 = fabs (y3);
     
-//     comp_integ2[iGrid] = Ag * (y1 + y2 + y3) / (radius * radius * kpc2Mpc);
+
     comp_integ2[iGrid] = (y1 + y2 + y3) / ( radNorm);
 
     gsl_spline_free (spline);
+    gsl_interp_accel_free (acc);
+
+}
+
+/***************************************************************
+ * 2d spline interpolation via GSL
+ ***************************************************************/
+void interpolation_2D(double *x1a, double *x2a, double **ya, int m, int n, double x1, double x2, double *y){
+    
+    gsl_interp_accel *acc = gsl_interp_accel_alloc ();
+
+    gsl_spline *splinerow = gsl_spline_alloc (gsl_interp_cspline, n);
+
+    gsl_spline *splinecol = gsl_spline_alloc (gsl_interp_cspline, m);
+
+                    
+    int j;
+    double *ymtmp;
+ 
+    ymtmp= (double*) (malloc(sizeof(double) * m));
+    
+    for (j=0;j<m;j++) {
+        gsl_spline_init (splinerow, x2a, ya[j], n);
+        ymtmp[j] = gsl_spline_eval (splinerow, x2, acc);
+    }
+  
+    gsl_spline_init (splinecol, x1a, ymtmp, m);
+ 
+    *y = gsl_spline_eval (splinecol, x1, acc);
+
+    free(ymtmp);
+    gsl_spline_free (splinerow);
+    gsl_spline_free (splinecol);
     gsl_interp_accel_free (acc);
 
 }
