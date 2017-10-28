@@ -15,8 +15,6 @@
  * libraries
  ***************************************************************/
 #include <stdio.h>
-#include <time.h>
-#include <string.h>
 
 #include "prototype.h"
 #include "allvars.h"

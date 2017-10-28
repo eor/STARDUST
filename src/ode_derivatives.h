@@ -9,8 +9,7 @@ struct ode_system_derivatives
     
     void operator()( const vector_type &y , vector_type &dydt , double /* t */ )
     {
-//         dydt[ 0 ] = -101.0 * y[ 0 ] - 100.0 * y[ 1 ];
-//         dydt[ 1 ] = y[ 0];
+
         
         
         double fe1h1        = (params.fe1h1);    /*    fuku_e1h1[iGrid]     */
@@ -55,7 +54,7 @@ struct ode_system_derivatives
         
         double T_CMB0 = myConfig.cosmoTCMB;
         
-        // TODO change names , do so also in the jacobian
+        // TODO change names, do so also for the jacobian
 
 
 
@@ -123,13 +122,13 @@ struct ode_system_derivatives
  
         /* ---Explicitly regularize ---------- */
         #ifdef STROEMGRENTEST
-        n_Hen = 0.0;
-        psi_He1 = 0.0; //?
-        psi_He2 = 0.0; //?  
+        n_Hen       = 0.0;
+        psi_He1     = 0.0; 
+        psi_He2     = 0.0; 
         integralHe1 = 0.0;
         integralHe2 = 0.0;
-        fehe1 = 0.0;
-        fehe2 = 0.0;
+        fehe1       = 0.0;
+        fehe2       = 0.0;
         #endif    
 
         /* --------------------------------- */
@@ -139,7 +138,6 @@ struct ode_system_derivatives
 
         /* eq(26) in Ref [2] */
         dydt[0] = R1c * (1-y0) - a2h2 * ne*ne/nH;
-//         dydt[0] = R1c * (1-y0) - a2h2 * ne*(nH*y0);
   
         /* eq(29) in Ref [2] */
         dydt[1] =   (1.0-y1-y2) * fehe1 
@@ -170,65 +168,25 @@ struct ode_system_derivatives
                     - 7.5 * hubble (z) * k_BeV * y3  / mucon
                  ) * mucon / (k_BeV  * 1.5);
  
-       /*
-        * 
-        dydt[0] = R1c * n_Hn - a2h2 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y0;
-  
-       
-        dydt[1] =   n_Hen * fehe1 
-                    + bhe1 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * n_Hen 
-                    - bhe2 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y1 
-                    - ahe2 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y1 
-                    + ahe3 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y2 
-                    - zhe2 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y1;
-        
-
-        dydt[2] =   y1 * fehe2 
-                    + bhe2 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y1 
-                    - ahe3 * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * y2;
-        
-       
-        dydt[3] = ( (n_Hn * integralH1 + n_Hen * integralHe1 + y1 * integralHe2)
-                    - ((1.0 * y0 + 1.0 * y1 + 2.0 * y2) * (zeta_H1 * n_Hn + zeta_He1 * n_Hen + zeta_He2 * y1)) 
-                    - ((1.0 * y0 + 1.0 * y1 + 2.0 * y2) * (eta_H2 * y0 + eta_He2 * y1 + eta_He3 * y2)) 
-                    - (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * w_He2 * y2 
-                    - ( (1.0 * y0 + 1.0 * y1 + 2.0 * y2) * (psi_H1 * n_Hn + psi_He1 * n_Hen + psi_He2 * y1) ) 
-                    - (y3 - T_CMB0 * (1 + z)) * lamcons * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) 
-                    - thetaff * (y0 + y1 + 4 * y2) * (1.0 * y0 + 1.0 * y1 + 2.0 * y2) 
-                    - 7.5 * hubble (z) * (k_BeV * y3 * nB0 * pow((1 + z), 3.0) / mucon)
-                 ) * mucon / (k_BeV * nB0 * pow3(1 + z) * 1.5);
- */         
                  
-        // use [dt]= Myr instead of seconds
+        // use [dt] = Myr instead of seconds
         dydt[0] *= MYR;      
         dydt[1] *= MYR;    
         dydt[2] *= MYR;   
         dydt[3] *= MYR;  
         
         
-//         if (isnan(dydt[0]) || isinf(dydt[0])) dydt[0]=0.0;
-//         if (isnan(dydt[1]) || isinf(dydt[1])) dydt[1]=0.0;
-//         if (isnan(dydt[2]) || isinf(dydt[2])) dydt[2]=0.0;
-//         if (isnan(dydt[3]) || isinf(dydt[3])) dydt[3]=0.0;
+        // testing:
+        // if (isnan(dydt[0]) || isinf(dydt[0])) dydt[0]=0.0;
+
         
         
         
         #ifdef STROEMGRENTEST
         // no Helium (1,2) & constant Temperature (3)
         dydt[1] = dydt[2] = dydt[3] = 0.0;
-        // dydt[1] = dydt[2] = 0.0;
         #endif             
         
-      /* Testing */
-      
-//         if (iGrid==100 || iGrid==120){
-//             printf("--------------------------------------\n");
-//             
-//             printf("derivative: dydt[0] = %le at iGrid = %d\n",dydt[0], iGrid);
-//             printf("derivative: dydt[1] = %le \n",dydt[1]);
-//             printf("derivative: dydt[2] = %le \n",dydt[2]);
-//             printf("derivative: dydt[3] = %le \n",dydt[3]);
-//         }  
     
         
     }

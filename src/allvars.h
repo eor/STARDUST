@@ -1,10 +1,9 @@
-/*! \file allvars.h
- *  \brief declares global variables.
- *
- *  This file declares all global variables. Further variables should be added here, and declared as
- *  'extern'. The actual existence of these variables is provided by the file 'allvars.c'. 
-*/
-
+/***************************************************************
+ * About:
+ * Declarations of all global variables.
+ * Instances of these variables are provided in allvars.c
+ * 
+ ***************************************************************/
 
 #ifndef ALLVARS_H
 #define ALLVARS_H

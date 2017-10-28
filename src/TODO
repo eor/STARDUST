@@ -1,0 +1,29 @@
+* move parameter defaults from config.c to some *h file
+
+
+* refactorization of variable names
+	- everything related to integrals / tables
+	- physical constants
+	
+
+* remove lasts remnants of ifdef hell
+
+
+* refactor function names 
+	- more explicit names
+	- conform to naming scheme
+
+* distibute functions in functions.c to more appropriate files, change function names accordingly
+ 
+
+* skip table writing / reading 
+	- only write tables in debug mode
+
+
+* clean up ode_*.h files
+
+
+* Prepare for choice of UVB spectrum / file input
+
+
+* Prepare for choice of density profile / file input

@@ -36,7 +36,7 @@ OPTIONS  = $(OPTIMIZE) $(OPT) -Wunused-but-set-variable
 
 EXEC     = STARDUST
 
-OBJS     = main.o utils.o log.o config.o derivs.o jac.o allvars.o \
+OBJS     = main.o utils.o log.o config.o allvars.o \
            functions.o sed.o table_read.o  \
            table_ion.o table_temp.o table_compton.o \
            memory.o interpolation.o rt.o
