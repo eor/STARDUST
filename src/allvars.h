@@ -147,10 +147,6 @@ extern double zPrevious;
 /* column densities */
 extern double nHX1, nHeX2, nHX13;    
 
-#ifdef ODEJENSSTYLE
-extern  void **mem_jens;
-#endif
-
 extern struct ode_params{
     
     double fe1h1;    /*    fuku_e1h1[iGrid]     */

@@ -6,7 +6,7 @@
 	- physical constants
 	
 
-* remove lasts remnants of ifdef hell
+* remove last remnants of ifdef hell
 
 
 * refactor function names 
@@ -27,3 +27,11 @@
 
 
 * Prepare for choice of density profile / file input
+
+
+* refactor Findz function
+
+
+* Stroemgren sphere test: 
+	- set peak E and width of "delta function" via config
+	- clean up

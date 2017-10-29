@@ -73,7 +73,8 @@ double Findz (double rshift, void * params){
 
         gsl_integration_qags (&Func, rshift, z_of_src, 0, 1e-7, 1000, wbal, &result, &error);
         
-        //TODO: relErr absErr, different use rk8 instead of qags
+        //TODO: relErr absErr, different use rk8 instead of qags, 
+        //      catch errors as in sed norm
 
         gsl_integration_workspace_free (wbal);
 

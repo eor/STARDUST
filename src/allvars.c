@@ -100,9 +100,6 @@ double zPrevious;
 double nHX1, nHeX2, nHX13;    
 
 
-#ifdef ODEJENSSTYLE
-void **mem_jens;
-#endif
 
 struct ode_params params;
 /* params used at a given radius includes the following:

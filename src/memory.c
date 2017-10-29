@@ -18,6 +18,9 @@ program. It also frees the memory once the program is about to terminate.
 
 #define pow2(x) ((x)*(x))
 
+/***************************************************************
+ * Allocated memory for all arrays
+ ***************************************************************/
 void memory_allocate_all(void){
 
     long int totalMemoryAlloc = 0;
@@ -76,12 +79,6 @@ void memory_allocate_all(void){
     totalMemoryAlloc += 5  * sizeof(double) * INTERPOINTS;   
     totalMemoryAlloc += 2  * sizeof(double) * INTERPOINTS * INTERPOINTS;
     totalMemoryAlloc +=      sizeof(char)   * 256;
-
-#ifdef ODEJENSSTYLE
-  mem_jens = new void*[numGridPoints];
-  for(i=0; i<numGridPoints;i++) 
-      mem_jens[i] = NULL;
-#endif
 
   printf(" Total allocated memory: %.2f KB\n",  (double) ( totalMemoryAlloc / (1024.0) )  );
 
