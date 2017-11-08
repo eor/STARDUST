@@ -1,8 +1,10 @@
 # STARDUST
 Spectrum Transport Around RaDiating Universal Source Type
 
+A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first indrocuced in [n+1]
 
-## References
+Rational:
+
 
 ## Installation
 Software dependencies: 
@@ -16,6 +18,7 @@ Software dependencies:
 
 ## Generating Spectral Energy Distribution files
 
+...
 
 ## Example runs 
 
@@ -27,13 +30,22 @@ user@machine:~/SD_project/$ ./STARDUST my_SD_config
 
 
 
-
-
-
 ### A power-law-like SED
-
+...
 
 ### A star-like SED 
-
+...
 
 ### Stroemgren sphere test
+...
+
+
+
+## References
+
+* [1] Fukugita, M & Kawasaki, M. 1994, MNRAS 269, 563
+* [2]
+* [3]
+* [n]
+* [n+1]
+
