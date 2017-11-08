@@ -26,7 +26,8 @@ extern struct global_config{
     /* paths */
     char    pathOutDir[256];
     char    pathSED[256];
-    char    pathDensity[256];    
+    char    pathDensity[256];
+    char    pathID[256];    
     
     /* simulation */
     double  sourceELow;

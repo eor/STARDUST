@@ -512,7 +512,7 @@ void rt_main_run(){
                     
                     char *tmpFukuLog = (char*) malloc( sizeof(char) * 256);
                     sprintf(tmpFukuLog, "log_fuku_integrals_M%.3f_z%.3f_t%.3f.dat", myConfig.haloMass, zSrcTurnOn, (srcAge+ timeStep));    
-                    tmpFukuLog = utils_concat_path_noID(myConfig.pathOutDir, tmpFukuLog);
+                    tmpFukuLog = utils_concat_path(myConfig.pathOutDir, tmpFukuLog);
                 
                     FILE *fpFukuLog = fopen(tmpFukuLog, "w");
                     fprintf(fpFukuLog, "# R[kpc]  fe1h1 \t  fehe1 \t   fehe2 \t  intH1 \t  intHe1 \t intHe2\n");
@@ -531,7 +531,14 @@ void rt_main_run(){
                                 
                 // generate output file name and open file 
                 sprintf(outFile, "profile_M%.3f_z%.3f_t%.3f.dat", myConfig.haloMass, zSrcTurnOn, (srcAge+ timeStep));           
-                outFile = utils_concat_path_noID(myConfig.pathOutDir, outFile);
+                
+                if (myConfig.pathID == '\0')
+                    outFile = utils_concat_path_noID(myConfig.pathOutDir, outFile);
+                else
+                    outFile = utils_concat_path(myConfig.pathOutDir, outFile);
+                
+                
+                
                 fpOutFile  = fopen(outFile, "w");
                                 
                 printf(" Writing '%s' at t = %.3f Myr\n", outFile, (srcAge + timeStep) ) ;

@@ -21,7 +21,8 @@ void config_load_from_file(char *fileName){
     /* paths */
     char const *pathOutDirDefault   = ".";
     char const *pathSEDDefault      = "SAMPLE_SED.dat";
-    char const *pathDensityDefault     = '\0';      // for future use
+    char const *pathDensityDefault  = '\0';      // for future use
+    char const *pathIDDefault       = "";
     
     /* simulation */
     double  sourceELowDefault       = 13.6;
@@ -134,6 +135,20 @@ void config_load_from_file(char *fileName){
             strcpy(myConfig.pathDensity, pathDensityDefault);
             printf("\tpathDensity \t = %s  (not set, using default value)\n", myConfig.pathDensity);      
         }       
+
+        /* pathID */
+        const char *pathIDTmp;
+        if (config_lookup_string(&cfg, "paths.pathID", &pathIDTmp)){
+            strcpy(myConfig.pathID, pathIDTmp);
+            myConfig.pathID[strlen(pathIDTmp)] = '\0'; 
+            printf("\tpathID \t\t = %s\n", myConfig.pathID);
+        }else{
+            strcpy(myConfig.pathID, pathIDDefault);
+            printf("\tpathID \t\t = %s  (not set, using default value)\n", myConfig.pathID);      
+        }        
+       
+       
+       
        
         printf("\n");       
         

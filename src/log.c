@@ -57,6 +57,7 @@ void log_start(){
     log_main("\t pathOutDir   \t= %s",   myConfig.pathOutDir     );
     log_main("\t pathSED      \t= %s",   myConfig.pathSED        );
     log_main("\t pathDensity  \t= %s",   myConfig.pathDensity    );
+    log_main("\t pathID       \t= %s",   myConfig.pathDensity    );
         
     log_main("\t sourceELow   \t= %e",   myConfig.sourceELow     );
     log_main("\t sourceEHigh  \t= %e",   myConfig.sourceEHigh    );

@@ -21,27 +21,23 @@
  ***************************************************************/
 char* utils_concat_path(char *dir, char *file){
     
-    // before the file we add a prefix
-    // also add "_M%.3f_z%.3f" --> "M8.123_z9.123_"
+    // we insert the config parameter given in pathID in front of
+    // the filename.
     
-    int lenPrefix = 14;
-    if (myConfig.haloMass>=10.0) lenPrefix +=1;
-    if (myConfig.redshiftLow>=10)lenPrefix +=1;
+    int lenPrefix = strlen(myConfig.pathID);
     
-    
-    char *tmpPrefix = (char*) malloc( sizeof(char) * lenPrefix);
-    sprintf(tmpPrefix, "M%.3f_z%.3f_", myConfig.haloMass, myConfig.redshiftLow );
-    
-    
-    char *result = (char*) malloc( sizeof(char) * (strlen(dir)+1+strlen(file)+1 +lenPrefix) ); 
-    // +1 for "/" and +1 for the zero-terminator
+    char *result = (char*) malloc( sizeof(char) * (  strlen(dir)   +1   +lenPrefix   +1   +strlen(file)   +1 ) ); 
+    // +1 for "/" 
+    // +1 for "_"
+    // +1 for the zero-terminator
     
     strcpy(result, dir);
     strcat(result, "/");
-    strcat(result,  tmpPrefix);
+    strcat(result,  myConfig.pathID);
+    strcat(result, "_");
     strcat(result, file);
     
-    free(tmpPrefix);   
+
     
     return result;
     
