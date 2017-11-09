@@ -26,7 +26,7 @@ void log_start(){
     if(DEBUG){   
         
         
-        if( !asprintf(&tmpPath, "%s/M%.3f_z%.3f_%s", myConfig.pathOutDir, myConfig.haloMass, myConfig.redshiftLow, debugLogFile ) ){
+        if( !asprintf(&tmpPath, "%s/%s_M%.3f_z%.3f_%s", myConfig.pathOutDir, myConfig.pathID, myConfig.haloMass, myConfig.redshiftLow, debugLogFile ) ){
 
             log_error("asprintf failed");
             log_close();
@@ -40,7 +40,7 @@ void log_start(){
 
     tmpPath = NULL;
     
-    if( !asprintf(&tmpPath, "%s/M%.3f_z%.3f_%s", myConfig.pathOutDir, myConfig.haloMass, myConfig.redshiftLow, mainLogFile ) ){
+    if( !asprintf(&tmpPath, "%s/%s_M%.3f_z%.3f_%s", myConfig.pathOutDir, myConfig.pathID, myConfig.haloMass, myConfig.redshiftLow, mainLogFile ) ){
         log_error("asprintf failed");
         log_close();
         exit(1);             

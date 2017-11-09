@@ -14,6 +14,8 @@
  ***************************************************************/
 
 void rt_main_run();
+void rt_initialize_grids(double);
+int rt_check_is_last_time_step(double, double);
 
 /***************************************************************
  * config.c - config related

@@ -138,9 +138,10 @@ void rt_main_run(){
     
 
     /* file writing */
-    FILE    *fpOutFile   = NULL;  
-    int     writeCounter = 1;    
-    double  writeInterval= myConfig.settingsWriteT;         // in [Myr]
+    FILE    *fpOutFile      = NULL;  
+    int     writeCounter    = 1;    
+    double  writeInterval   = myConfig.settingsWriteT;         // in [Myr]
+    int     isLastTimestep  = 0;
     
     
     /* parameters */ 
@@ -182,44 +183,8 @@ void rt_main_run(){
         
 
         /* initializing computing grids */
-        for (i = 0; i < numGridPoints; i++){
-              
-            x_HI[i]       = 1.0;            
-            x_HII[i]      = 0.0;
-            //illiev 1 test
-            x_HI[i]       = 1.0 - 1.2e-3; 
-            x_HII[i]      = 1.2e-3;
-            
-            x_HeII[i]     = 0.0;
-            x_HeIII[i]    = 0.0; 
-            ne[i]         = 0.0;
-            n_H1[i]       = n_H0  * pow3(1. + zSrcTurnOn) * OverDensity; // TODO NFW or other density profiles here 
-#ifdef STROEMGRENTEST
-            x_HeI[i]      = 0.0;
-            T_e[i]        = STROEMGRENTEMP;
-            n_He1[i]      = 0.0;
-#else
-            n_He1[i]      = n_He0 * pow3(1. + zSrcTurnOn) * OverDensity;
-            x_HeI[i]      = 1.0; 
-            T_e[i]        = T_CMB0 * pow2(1 + zSrcTurnOn) / (1 + zTkinEQTCMB);
-#endif            
+        rt_initialize_grids(zSrcTurnOn);
 
-            T_spin[i]    = 0.0;
-            T_brig[i]    = 0.0;
-            
-            fuku_e1h1[i] = 0.0;
-            fuku_ehe1[i] = 0.0;
-            fuku_ehe2[i] = 0.0;
-            
-            integral_H1[i]  = 0.0;
-            integral_He1[i] = 0.0;
-            integral_He2[i] = 0.0;            
-
-        }
-            
-            
-           
-            
         
         srcAge = 0.;        
         
@@ -227,7 +192,7 @@ void rt_main_run(){
         lamcons = 4 * k_BeV * (M_PI * M_PI / 15) * pow3( (k_B * T_CMB0 * (1 + z) * 2 * M_PI / (PLANCKCONSTCGS * LIGHTVEL)) ) 
                     * (k_B * T_CMB0 * (1 + z) / (MASSELECTRON * LIGHTVEL * LIGHTVEL)) * LIGHTVEL * THOMSON_ELEC_CROSS;
         
-                    //what about n_e and (T - T_CMB*(1+z)) ???? --> those are multiplied in the solver equation
+                    //what about n_e and (T - T_CMB*(1+z)) ???? --> those are multiplied in the solver equation      // TODO: maybe clean this up?
                     
 
         /* 
@@ -269,34 +234,16 @@ void rt_main_run(){
                 nHX1  = 1e-50;            
                 nHeX2 = 1e-50;
 
-//                 for (i = 0; i < iGrid; i++){                
-//                     nHX1  += x_HI[i];
-//                     nHeX2 += x_HeI[i];             
-//                 }
-//                 
-//                 nHX1  = nHX1  * radialStep * n_H0  * OverDensity * pow3(1+z);
-//                 nHeX2 = nHeX2 * radialStep * n_He0 * OverDensity * pow3(1+z);    
-//                 
-                // for iGrid = 0, we don't go in the loop
                  for (i = 0; i < iGrid; i++){                
                     nHX1  += n_H1[i]  * radialStep;
                     nHeX2 += n_He1[i] * radialStep ;
-//                     printf("n_H1[%d]=%e\t n_He1[%d]=%e\n",i, n_H1[i],i, n_He1[i] );
-                    
-//                     printf( "-- %d\t%d\t%e\t%e\t%e\t%e\n", i, iGrid, n_H1[i], n_He1[i], nHX1,  nHeX2);
                 }               
 
-                
-                
-                //nHeX2 = 0;
                 nHX13 = (nHX1 + 64. * nHeX2);       /* The factor of 64 is basically sigma_HeII/sigma_HI */
                 //nHX13 = (nHX1 + 2. * nHeX2);      /* The factor of 2 is basically sigma_HeII/sigma_HI */                    
                 
                 
-//                 printf("nHX1=%e\t nHeX2=%e\t nHX13=%e\t\t", nHX1, nHeX2, nHX13);
-                
-                // values are tabulated as LOG in the tables, therefore ... 
-                nHX1  = log(nHX1);           
+                nHX1  = log(nHX1);                  /* values are tabulated as LOG in the tables, therefore  */    
                 nHeX2 = log(nHeX2); 
                 nHX13 = log(nHX13); 
                 
@@ -321,7 +268,6 @@ void rt_main_run(){
                 
                 
                 // Interpolate the table to obtain the params.* values below 
-//                 printf("nHX1=%e\t nHeX2=%e\t nHX13=%e\n", nHX1, nHeX2, nHX13);
                 interpolation(nHX1, nHeX2, nHX13, radius); 
 
 #ifdef STROEMGRENTEST                
@@ -346,7 +292,6 @@ void rt_main_run(){
                 params.intHe1 = integral_He1[iGrid];
                 params.intHe2 = integral_He2[iGrid]; 
 
-                
                 
                 // setting up initial conditions for the ODE solver 
                 vector_type y(4);
@@ -408,8 +353,7 @@ void rt_main_run(){
                 
 #ifdef FIREHOSEDEBUG
                 
-                // firehose level debug output:
-
+                
                 //if(iGrid>102 && iGrid<120){
                 cout << "DEBUG: number of steps:  " << numStepsODE 
                 << " at iGrid: " << iGrid
@@ -473,17 +417,13 @@ void rt_main_run(){
                 //ne[iGrid]      = n_H2[iGrid] + n_He2[iGrid] + 2.0 * n_He3[iGrid];
                 //x_HI[iGrid]     = 1.0 - x_HII[iGrid]; //1.0 - n_H2[iGrid] / ( n_H0 * OverDensity * pow3(1 + z) );
 
-                #ifdef STROEMGRENTEST
+#ifdef STROEMGRENTEST
 
                 x_HeI[iGrid]   = 0.0;
                 x_HeII[iGrid]  = 0.0;
                 x_HeIII[iGrid] = 0.0;        
                 T_e[iGrid]     = STROEMGRENTEMP; 
-                //ne[iGrid]      = n_H2[iGrid];
-//                 x_HI[iGrid]     = 1.0 - n_H2[iGrid] / ( n_H0 * OverDensity * pow3(1 + z) );
-
-
-                #endif  
+#endif  
        
             }  
             /***************************************************************
@@ -502,7 +442,9 @@ void rt_main_run(){
             // 1) after having passed the ODE solver,  the current source age is now srcAge + timeStep
             // 2) without the /2.0 in the if statement files are written one timestep prior to the desired time.            
             
-            if( ( writeCounter*writeInterval - (srcAge + timeStep) ) < timeStep/2.0 ){               
+            isLastTimestep = rt_check_is_last_time_step(srcAge, timeStep);
+            
+            if( ( writeCounter*writeInterval - (srcAge + timeStep) ) < timeStep/2.0 || isLastTimestep == 1 ){               
                 
         
                 writeCounter++;
@@ -659,3 +601,65 @@ void rt_main_run(){
 
  
 }
+
+
+/***************************************************************
+ * Initialize arrays
+ ***************************************************************/  
+void rt_initialize_grids( double zSrcTurnOn){
+    
+    int i;
+    double  T_CMB0      = myConfig.cosmoTCMB;
+    
+    for (i = 0; i < numGridPoints; i++){
+             
+        x_HI[i]       = 1.0;            
+        x_HII[i]      = 0.0;
+        //illiev 1 test
+        x_HI[i]       = 1.0 - 1.2e-3; 
+        x_HII[i]      = 1.2e-3;
+        
+        x_HeII[i]     = 0.0;
+        x_HeIII[i]    = 0.0; 
+        ne[i]         = 0.0;
+        n_H1[i]       = n_H0  * pow3(1. + zSrcTurnOn) * OverDensity; // TODO NFW or other density profiles here 
+#ifdef STROEMGRENTEST
+        x_HeI[i]      = 0.0;
+        T_e[i]        = STROEMGRENTEMP;
+        n_He1[i]      = 0.0;
+#else
+        n_He1[i]      = n_He0 * pow3(1. + zSrcTurnOn) * OverDensity;
+        x_HeI[i]      = 1.0; 
+        T_e[i]        = T_CMB0 * pow2(1 + zSrcTurnOn) / (1 + zTkinEQTCMB);
+#endif            
+
+        T_spin[i]    = 0.0;
+        T_brig[i]    = 0.0;
+        
+        fuku_e1h1[i] = 0.0;
+        fuku_ehe1[i] = 0.0;
+        fuku_ehe2[i] = 0.0;
+        
+        integral_H1[i]  = 0.0;
+        integral_He1[i] = 0.0;
+        integral_He2[i] = 0.0;            
+
+        }
+    
+    
+}
+
+/***************************************************************
+ * Check if we are in the last time stell
+ ***************************************************************/
+int rt_check_is_last_time_step(double srcAge, double timeStep){
+    
+    // after ODE solver the time is srcAge + timeStep
+    // We are in the last time step, if srcAge+ 2* timeStep > myConfig.sourceLifetime
+    
+    if (srcAge+ 2* timeStep > myConfig.sourceLifetime)
+        return 1;
+    else
+        return 0;
+}
+
