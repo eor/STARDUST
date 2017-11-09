@@ -211,7 +211,7 @@ void rt_main_run(){
         /***************************************************************
          * Time loop starts here
          ***************************************************************/
-        while (srcAge <= myConfig.sourceLifetime){      
+        while (isLastTimestep == 0 || srcAge>=myConfig.sourceLifetime){    
 
             startTime = clock(); 
               
@@ -549,7 +549,7 @@ void rt_main_run(){
             
             
             /***************************************************************
-             * find the new redshift
+             * find the new redshift TODO: put in extra function!
              ***************************************************************/              
             
             s_Findz = gsl_root_fsolver_alloc (T_Findz);
@@ -657,9 +657,9 @@ int rt_check_is_last_time_step(double srcAge, double timeStep){
     // after ODE solver the time is srcAge + timeStep
     // We are in the last time step, if srcAge+ 2* timeStep > myConfig.sourceLifetime
     
-    if (srcAge+ 2* timeStep > myConfig.sourceLifetime)
-        return 1;
-    else
-        return 0;
+    if (srcAge+ 2*timeStep >= myConfig.sourceLifetime)
+        return 1;    
+    
+    return 0;
 }
 

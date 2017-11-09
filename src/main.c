@@ -76,7 +76,7 @@ int main(int argc, char **argv){
     
     log_close();
     
-    printf("Run completed successfully. Exiting here.\n");
+    printf("\n Run completed successfully. Exiting here.\n\n");
     
     return 0;    
         
