@@ -612,22 +612,21 @@ void rt_initialize_grids( double zSrcTurnOn){
     double  T_CMB0      = myConfig.cosmoTCMB;
     
     for (i = 0; i < numGridPoints; i++){
-             
-        x_HI[i]       = 1.0;            
-        x_HII[i]      = 0.0;
-        //illiev 1 test
-        x_HI[i]       = 1.0 - 1.2e-3; 
-        x_HII[i]      = 1.2e-3;
         
         x_HeII[i]     = 0.0;
         x_HeIII[i]    = 0.0; 
         ne[i]         = 0.0;
         n_H1[i]       = n_H0  * pow3(1. + zSrcTurnOn) * OverDensity; // TODO NFW or other density profiles here 
 #ifdef STROEMGRENTEST
+        
+        x_HI[i]       = 1.0 - 1.2e-3; 
+        x_HII[i]      = 1.2e-3; //illiev 1 test
         x_HeI[i]      = 0.0;
         T_e[i]        = STROEMGRENTEMP;
         n_He1[i]      = 0.0;
 #else
+        x_HI[i]       = 1.0;            
+        x_HII[i]      = 0.0;        
         n_He1[i]      = n_He0 * pow3(1. + zSrcTurnOn) * OverDensity;
         x_HeI[i]      = 1.0; 
         T_e[i]        = T_CMB0 * pow2(1 + zSrcTurnOn) / (1 + zTkinEQTCMB);
