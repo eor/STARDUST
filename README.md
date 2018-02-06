@@ -13,19 +13,43 @@ Given a tabulated spectral energy distribution of a source associated with a dar
 
 
 
-## Installation
-Software dependencies (STARDUST): 
-
+#### Software dependencies
+STARDUST:
 * C/C++ compiler
 * GNU Scientific library (GSL)
 * ODEint (part of Boost) 
 * libconfig
 
-Software dependencies (Python scripts): 
-
+Python scripts:
 * numpy
 * scipy
 * matplotlib
+
+### Installation
+
+Change the following variables in the Makefile (in the src directory) to your liking:
+
+```bash
+GSL_INCL = -I${HOME}/local/include
+GSL_LIB  = -L${HOME}/local/bin
+
+CONF_INCL= -I${HOME}/local/include
+CONF_LIB = -L${HOME}/local/lib
+
+BOOST_INCL = -I${HOME}/local/boost-current
+```
+Compile by runing 
+```bash
+make
+```
+
+If you feel adventurous and change any of the setting in the header files or the want to play with different solvers (Makefile), make sure to recompile everything
+```bash
+make clean && make
+```
+
+
+
 
 ## Generating Spectral Energy Distribution files
 

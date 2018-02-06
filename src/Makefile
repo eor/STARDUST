@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
 # If you modify any of these options, make sure     
-# that you recompile the whole code by typing "make clean; make".      
+# to recompile the code by typing "make clean; make".      
 #                                                                      
 #----------------------------------------------------------------------
 
