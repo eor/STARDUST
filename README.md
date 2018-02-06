@@ -3,7 +3,7 @@ Spectrum Transport Around RaDiating Universal Source Type
 
 A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first indrocuced in [n+1]
 
-Rational:
+Rationale:
 
 Cosmological radiative transfer can be an important tool when studying the thermal or ionization states of the 
 intergalactic medium. This includes, for example, the study of the Epoch of Reionization or the computation of the 
