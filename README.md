@@ -19,7 +19,7 @@ Given a tabulated spectral energy distribution (SED) of a source associated with
 STARDUST:
 * C/C++ compiler
 * [GNU Scientific library (GSL)](https://www.gnu.org/software/gsl/) 
-* [ODEint (part of Boost)] (http://www.boost.org/)
+* ODEint, which is part of [Boost](http://www.boost.org/)
 * [libconfig](https://github.com/hyperrealm/libconfig)
 
 Python scripts:
@@ -42,11 +42,10 @@ CONF_LIB = -L${HOME}/local/lib
 
 BOOST_INCL = -I${HOME}/local/boost-current
 ```
-Compile by runing 
+Compile STARDUST by runing 
 ```bash
 make
 ```
-
 If you feel adventurous and want to change any of the setting in the header files or the want to play with different solvers (see, `Makefile`), make sure to recompile everything
 ```bash
 make clean && make
