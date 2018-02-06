@@ -1,5 +1,5 @@
 # STARDUST
-_S_pectrum _T_ransport _A_round _R_a_D_iating _U_niversal _S_ource _T_ype
+Spectrum Transport Around RaDiating Universal Source Type
 
 A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first indrocuced in [n+1]
 
@@ -11,7 +11,9 @@ extragalactic ionizing UV background spectrum on large scales, while on smaller 
 studying the ionizing radiation emanating from a sources embedded in a dark matter halos, such as quasars or population 3 stars. 
 Given a tabulated spectral energy distribution of a source associated with a dark matter host halo, STARDUST computes the ionization states as well as temperature along a radial grid and produces outputs at user-defined time intervals. 
 
+---
 
+## Setup
 
 #### Software dependencies
 STARDUST:
@@ -26,7 +28,7 @@ Python scripts:
 * matplotlib
 
 #### Installation
-First, install the dependencies and then change the following variables in the Makefile (in the src directory) to your liking:
+First, install the dependencies and then change the following variables in the Makefile (in the `src` directory) to your liking:
 
 ```bash
 GSL_INCL = -I${HOME}/local/include
@@ -48,11 +50,14 @@ make clean && make
 ```
 
 
-
+---
 
 ## Generating Spectral Energy Distribution files
 
-See `scripts/SED_generator`
+See `scripts/SED_generator/sed.py`
+
+
+---
 
 ## Example runs 
 
