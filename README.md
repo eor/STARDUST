@@ -1,5 +1,5 @@
 # STARDUST
-Spectrum Transport Around RaDiating Universal Source Type
+_S_pectrum _T_ransport _A_round _R_a_D_iating _U_niversal _S_ource _T_ype
 
 A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first indrocuced in [n+1]
 
@@ -25,9 +25,8 @@ Python scripts:
 * scipy
 * matplotlib
 
-### Installation
-
-Change the following variables in the Makefile (in the src directory) to your liking:
+#### Installation
+First, install the dependencies and then change the following variables in the Makefile (in the src directory) to your liking:
 
 ```bash
 GSL_INCL = -I${HOME}/local/include
@@ -43,7 +42,7 @@ Compile by runing
 make
 ```
 
-If you feel adventurous and change any of the setting in the header files or the want to play with different solvers (Makefile), make sure to recompile everything
+If you feel adventurous and want to change any of the setting in the header files or the want to play with different solvers (see, `Makefile`), make sure to recompile everything
 ```bash
 make clean && make
 ```
@@ -53,7 +52,7 @@ make clean && make
 
 ## Generating Spectral Energy Distribution files
 
-...
+See `scripts/SED_generator`
 
 ## Example runs 
 
