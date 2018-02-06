@@ -9,7 +9,7 @@ Cosmological radiative transfer can be an important tool when studying the therm
 intergalactic medium. This includes, for example, the study of the Epoch of Reionization or the computation of the 
 extragalactic ionizing UV background spectrum on large scales, while on smaller scales it is important for e.g. 
 studying the ionizing radiation emanating from a sources embedded in a dark matter halos, such as quasars or population 3 stars. 
-Given a tabulated spectral energy distribution of a source associated with a dark matter host halo, STARDUST computes the ionization states as well as temperature along a radial grid and produces outputs at user-defined time intervals. 
+Given a tabulated spectral energy distribution (SED) of a source associated with a dark matter host halo, STARDUST computes the ionization states as well as temperature along a radial grid and produces outputs at user-defined time intervals. 
 
 ---
 
@@ -18,9 +18,9 @@ Given a tabulated spectral energy distribution of a source associated with a dar
 #### Software dependencies
 STARDUST:
 * C/C++ compiler
-* GNU Scientific library (GSL)
-* ODEint (part of Boost) 
-* libconfig
+* [GNU Scientific library (GSL)](https://www.gnu.org/software/gsl/) 
+* [ODEint (part of Boost)] (http://www.boost.org/)
+* [libconfig](https://github.com/hyperrealm/libconfig)
 
 Python scripts:
 * numpy
@@ -28,7 +28,10 @@ Python scripts:
 * matplotlib
 
 #### Installation
-First, install the dependencies and then change the following variables in the Makefile (in the `src` directory) to your liking:
+First, install the dependencies, either by hand or via your package manager. We provide an installation script for 
+STARDUST's dependencies in `scripts/install_dependencies.py`
+
+Change the following variables in the Makefile (in the `src` directory) to your liking:
 
 ```bash
 GSL_INCL = -I${HOME}/local/include
@@ -54,7 +57,7 @@ make clean && make
 
 ## Generating Spectral Energy Distribution files
 
-See `scripts/SED_generator/sed.py`
+See `scripts/SED_generator/sed.py` to generate a few simple SEDs
 
 
 ---
