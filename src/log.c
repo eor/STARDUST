@@ -108,7 +108,7 @@ void log_close(){
 
 
 
-void log_time( int type){
+void log_time(int type){
     
     time_t timeNow;
     struct tm * timeInfo;

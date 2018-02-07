@@ -376,10 +376,10 @@ double sed_compute_norm(){
     gsl_error_handler_t * oldErrorHandler = gsl_set_error_handler_off();    
     
     /* set up integration workspace, variables and function */
-    gsl_integration_workspace *wnorm = gsl_integration_workspace_alloc (1000);
+    gsl_integration_workspace *wnorm = gsl_integration_workspace_alloc(1000);
 
     double result, error;
-    double alpha      =  0.;                            // alpha is only here for legacy reasons
+    double alpha      =  0.;                            // alpha is only here for legacy reasons, TODO: get rid of it!
     double absError   = 1e-4;
     double relError   = 1e-6;                           // relative error
     double lowerLimit = log(Lambda[0]);

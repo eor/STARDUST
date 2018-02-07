@@ -28,8 +28,6 @@ void config_load_from_file(char *fileName){
     double  sourceELowDefault       = 13.6;
     double  sourceEHighDefault      = 1e4;     
     double  sourceLifetimeDefault   = 10.0;         // in Myr
-//     double  sourceEfficiencyDefault = 0.1;
-        
     double  haloMass                = 9.0;  
 
     double  redshiftLowDefault      = 6.0;
@@ -37,7 +35,6 @@ void config_load_from_file(char *fileName){
     double  redshiftStrideDefault   = 1.0;      
     
     /* cosmology - defaults are from Planck results XIII, 2015, TT+lowP (Table 4) */
-    // TODO put the defaults in a .h file later
     
     double  cosmoOmegaMDefault      = 0.315;        //  Total matter density 
     double  cosmoOmegaLDefault      = 0.685;        //  Dark energy / cosmological constant

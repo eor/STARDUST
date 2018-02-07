@@ -1,5 +1,5 @@
 * move parameter defaults from config.c to some *h file
-
+--> config_defaults.h
 
 * refactorization of variable names
 	- everything related to integrals / tables
@@ -12,6 +12,7 @@
 * refactor function names 
 	- more explicit names
 	- conform to naming scheme
+
 
 * distibute functions in functions.c to more appropriate files, change function names accordingly
  
@@ -35,3 +36,13 @@
 * Stroemgren sphere test: 
 	- set peak E and width of "delta function" via config
 	- clean up
+	--> settings.h
+
+
+* sed.c clean up
+	- remove old functions
+	- remove old SED unit conversion bits
+
+* logging
+	- logs should be closed when code breaks/exits before finishing a simulation
+	- write the error message to the log  for good measure

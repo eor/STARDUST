@@ -46,7 +46,7 @@ Compile STARDUST by runing
 ```bash
 make
 ```
-If you feel adventurous and want to change any of the setting in the header files or the want to play with different solvers (see, `Makefile`), make sure to recompile everything
+Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or the want to play with different solvers (see, `Makefile`), make sure to recompile everything
 ```bash
 make clean && make
 ```

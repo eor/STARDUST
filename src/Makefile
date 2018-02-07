@@ -32,7 +32,8 @@ CPP      = g++
 
 OPTIMIZE = -O2 -Wall -g   # sets optimization and warning flags
 
-OPTIONS  = $(OPTIMIZE) $(OPT) -Wunused-but-set-variable
+OPTIONS  = $(OPTIMIZE) $(OPT) 
+#OPTIONS  = $(OPTIMIZE) $(OPT) -Wunused-but-set-variable
 
 EXEC     = STARDUST
 

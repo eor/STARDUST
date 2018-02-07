@@ -606,45 +606,44 @@ void rt_main_run(){
 /***************************************************************
  * Initialize arrays
  ***************************************************************/  
-void rt_initialize_grids( double zSrcTurnOn){
+void rt_initialize_grids(double zSrcTurnOn){
     
     int i;
-    double  T_CMB0      = myConfig.cosmoTCMB;
+    double T_CMB0 = myConfig.cosmoTCMB;
     
-    for (i = 0; i < numGridPoints; i++){
+    for (i=0; i<numGridPoints; i++){
         
-        x_HeII[i]     = 0.0;
-        x_HeIII[i]    = 0.0; 
-        ne[i]         = 0.0;
-        n_H1[i]       = n_H0  * pow3(1. + zSrcTurnOn) * OverDensity; // TODO NFW or other density profiles here 
+        x_HeII[i]       = 0.0;
+        x_HeIII[i]      = 0.0; 
+        ne[i]           = 0.0;
+        n_H1[i]         = n_H0  * pow3(1.+zSrcTurnOn) * OverDensity; // TODO NFW or other density profiles here 
 #ifdef STROEMGRENTEST
         
-        x_HI[i]       = 1.0 - 1.2e-3; 
-        x_HII[i]      = 1.2e-3; //illiev 1 test
-        x_HeI[i]      = 0.0;
-        T_e[i]        = STROEMGRENTEMP;
-        n_He1[i]      = 0.0;
+        x_HI[i]         = 1.0 - 1.2e-3; 
+        x_HII[i]        = 1.2e-3;           // Illiev 1 test
+        x_HeI[i]        = 0.0;
+        T_e[i]          = STROEMGRENTEMP;
+        n_He1[i]        = 0.0;
 #else
-        x_HI[i]       = 1.0;            
-        x_HII[i]      = 0.0;        
-        n_He1[i]      = n_He0 * pow3(1. + zSrcTurnOn) * OverDensity;
-        x_HeI[i]      = 1.0; 
-        T_e[i]        = T_CMB0 * pow2(1 + zSrcTurnOn) / (1 + zTkinEQTCMB);
+        x_HI[i]         = 1.0;            
+        x_HII[i]        = 0.0;        
+        n_He1[i]        = n_He0 * pow3(1.+zSrcTurnOn) * OverDensity;
+        x_HeI[i]        = 1.0; 
+        T_e[i]          = T_CMB0 * pow2(1+zSrcTurnOn) / (1 + zTkinEQTCMB);
 #endif            
 
-        T_spin[i]    = 0.0;
-        T_brig[i]    = 0.0;
+        T_spin[i]       = 0.0;
+        T_brig[i]       = 0.0;
         
-        fuku_e1h1[i] = 0.0;
-        fuku_ehe1[i] = 0.0;
-        fuku_ehe2[i] = 0.0;
+        fuku_e1h1[i]    = 0.0;
+        fuku_ehe1[i]    = 0.0;
+        fuku_ehe2[i]    = 0.0;
         
         integral_H1[i]  = 0.0;
         integral_He1[i] = 0.0;
         integral_He2[i] = 0.0;            
 
         }
-    
     
 }
 
