@@ -1,5 +1,3 @@
-* move parameter defaults from config.c to some *h file
---> config_defaults.h
 
 * refactorization of variable names
 	- everything related to integrals / tables
@@ -46,3 +44,8 @@
 * logging
 	- logs should be closed when code breaks/exits before finishing a simulation
 	- write the error message to the log  for good measure
+
+
+* config 
+	- pathSEDDefault not needed, code should abort if SED is not provided
+	

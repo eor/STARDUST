@@ -9,6 +9,7 @@
 
 #include "allvars.h"
 #include "prototype.h"
+#include "config_defaults.h"
 #include "constants.h"
 
 extern struct global_config myConfig;
@@ -17,45 +18,45 @@ struct config_t cfg;
 void config_load_from_file(char *fileName){
 
     /* 1. Set default parameter values */
-    // TODO: pathSEDDefault not needed, code should abort if SED is not provided
+    
+    
     /* paths */
-    char const *pathOutDirDefault   = ".";
-    char const *pathSEDDefault      = "SAMPLE_SED.dat";
-    char const *pathDensityDefault  = '\0';      // for future use
-    char const *pathIDDefault       = "";
+    char const *pathOutDirDefault   = CONFIG_DEFAULT_PATH_OUTDIR; 
+    char const *pathSEDDefault      = CONFIG_DEFAULT_PATH_SED;
+    char const *pathDensityDefault  = CONFIG_DEFAULT_PATH_DENSITY;      // for future use
+    char const *pathIDDefault       = CONFIG_DEFAULT_PATH_ID;
     
     /* simulation */
-    double  sourceELowDefault       = 13.6;
-    double  sourceEHighDefault      = 1e4;     
-    double  sourceLifetimeDefault   = 10.0;         // in Myr
-    double  haloMass                = 9.0;  
+    double  sourceELowDefault       = CONFIG_DEFAULT_SOURCE_ELOW;
+    double  sourceEHighDefault      = CONFIG_DEFAULT_SOURCE_EHIGH;     
+    double  sourceLifetimeDefault   = CONFIG_DEFAULT_SOURCE_LIFETIME;        
+    
+    double  haloMass                = CONFIG_DEFAULT_HALOMASS;      
 
-    double  redshiftLowDefault      = 6.0;
-    double  redshiftHighDefault     = 12.0;
-    double  redshiftStrideDefault   = 1.0;      
+    double  redshiftLowDefault      = CONFIG_DEFAULT_REDSHIFT_LOW;
+    double  redshiftHighDefault     = CONFIG_DEFAULT_REDSHIFT_HIGH;
+    double  redshiftStrideDefault   = CONFIG_DEFAULT_REDSHIFT_STRIDE;      
     
-    /* cosmology - defaults are from Planck results XIII, 2015, TT+lowP (Table 4) */
+    /* cosmology  */    
+    double  cosmoOmegaMDefault      = CONFIG_DEFAULT_COSMO_OMEGA_M;     //  Total matter density 
+    double  cosmoOmegaLDefault      = CONFIG_DEFAULT_COSMO_OMEGA_L;     //  Dark energy / cosmological constant
+    double  cosmoOmegaBDefault      = CONFIG_DEFAULT_COSMO_OMEGA_B;     //  Baryon density
+    double  cosmoH0Default          = CONFIG_DEFAULT_COSMO_H0;          //  Hubble parameter [km/sec/Mpc] at z = 0
+    double  cosmoH100Default        = CONFIG_DEFAULT_COSMO_H100;        //  Hubble parameter / 100
+    double  cosmoSigma8Default      = CONFIG_DEFAULT_COSMO_SIGMA8;      //  power spectrum normalization    
+    double  cosmoTauThomDefault     = CONFIG_DEFAULT_COSMO_TAU_THOM;    //  Optical depth of Thomson scattering
+    double  cosmoTCMBDefault        = CONFIG_DEFAULT_COSMO_TCMB0;       //  CMB temperature at z = 0
     
-    double  cosmoOmegaMDefault      = 0.315;        //  Total matter density 
-    double  cosmoOmegaLDefault      = 0.685;        //  Dark energy / cosmological constant
-    double  cosmoOmegaBDefault      = 0.0491;       //  Baryon density
-    double  cosmoH0Default          = 67.31;        //  Hubble parameter [km/sec/Mpc] at z = 0
-    double  cosmoH100Default        = 0.6731;       //  Hubble parameter / 100
-    double  cosmoSigma8Default      = 0.829;        //  power spectrum normalization    
-    double  cosmoTauThomDefault     = 0.078;        //  Optical depth of Thomson scattering
-    double  cosmoTCMBDefault        = 2.731;        //  CMB temperature at z = 0
+    /* general setting */
+    int     settingsDebugDefault    = CONFIG_DEFAULT_SETTINGS_DEBUG;       
     
+    double  settingsRMaxDefault     = CONFIG_DEFAULT_SETTINGS_RMAX;     // kpc    
+    double  settingsRStartDefault   = CONFIG_DEFAULT_SETTINGS_RSTART;    
     
-    /*general setting */
-    int     settingsDebugDefault    = 0;       
+    double  settingsDeltaRDefault   = CONFIG_DEFAULT_SETTINGS_DELTA_R;  
+    double  settingsDeltaTDefault   = CONFIG_DEFAULT_SETTINGS_DELTA_T;  //  in Myr
     
-    double  settingsRMaxDefault     = 1000.0;       // kpc    
-    double  settingsRStartDefault   = 0.1;    
-    
-    double  settingsDeltaRDefault   = 0.1;  
-    double  settingsDeltaTDefault   = 0.01;         //  in Myr
-    
-    double  settingsWriteTDefault   = 1.0;          // write interval in Myr
+    double  settingsWriteTDefault   = CONFIG_DEFAULT_SETTINGS_WRITE_T;  // write interval in Myr
     
     
     /* 2. Read config */

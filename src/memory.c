@@ -1,8 +1,3 @@
-/*! File allocate.c allocates and determines all the memory required in the 
-program. It also frees the memory once the program is about to terminate.
-
-*/
-
 #include <stdio.h>
 #include <math.h>
 #include <time.h>

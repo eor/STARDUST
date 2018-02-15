@@ -69,6 +69,7 @@ To run STARDUST you will need a SED file and a configuration file. Sample config
 user@machine:~/SD_project/$ ./STARDUST my_SD_config 
 ```
 
+Note that if a configuration variable is not set, STARDUST will fall back on a default value for said variable. The defaults can be changed in `src/config_defaults.h`.
 
 
 ### A power-law-like SED

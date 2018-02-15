@@ -4,11 +4,13 @@
 
 #define CONFIG_DEFAULTS_H
     
+
 /* paths */
 #define CONFIG_DEFAULT_PATH_OUTDIR      "."
 #define CONFIG_DEFAULT_PATH_SED         "SAMPLE_SED.dat"
 #define CONFIG_DEFAULT_PATH_DENSITY     "\0"
 #define CONFIG_DEFAULT_PATH_ID          ""
+
 
 /* simulation */
 #define CONFIG_DEFAULT_SOURCE_ELOW      13.6        // float, in eV
@@ -31,6 +33,7 @@
 #define CONFIG_DEFAULT_COSMO_SIGMA8     0.829        //  power spectrum normalization    
 #define CONFIG_DEFAULT_COSMO_TAU_THOM   0.078        //  Optical depth of Thomson scattering
 #define CONFIG_DEFAULT_COSMO_TCMB0      2.731        //  CMB temperature at z = 0
+
 
 /* general settings */
 #define CONFIG_DEFAULT_SETTINGS_DEBUG   0           // int 0,1
