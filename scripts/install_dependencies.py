@@ -1,14 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import os
 import subprocess as sub
 import sys
 
 
-#-------------------------------------------------
+#------------------------------------------------------------------------------
 # Set install path, select one
-#-------------------------------------------------
+#------------------------------------------------------------------------------
 
 # 0. location given relative to  home dir
 installDir      = os.path.expanduser('~/local2')        
@@ -20,10 +19,9 @@ installDir      = os.path.expanduser('~/local2')
 #installDir      = os.path.abspath("/absolute/path/to/some/other/location") 
 
 
-#-------------------------------------------------
+#------------------------------------------------------------------------------
 # Global variables
-#-------------------------------------------------
-
+#------------------------------------------------------------------------------
 
 softwareDir     = installDir+'/dl' 
 pythonVersion   = '.'.join(sys.version.split('.')[0:2])
@@ -36,9 +34,9 @@ packageList     = [
                   ]
     
     
-#-------------------------------------------------
+#------------------------------------------------------------------------------
 # Functions
-#-------------------------------------------------
+#------------------------------------------------------------------------------
 def check_all_dependencies():
     print("Checking for dependencies")
     for dep in ["gcc", "make", "wget"]:
@@ -128,8 +126,7 @@ def install_boost(srcTarFile, srcDir, pkgName):
     #run_on_shell('tar -xzvf %s -C %s/configs/'%( srcTarPath, installDir))   
  
  
-def set_paths():
-    
+def set_paths():    
     os.environ["PATH"] = os.environ.get("PATH") + ":%s/bin"%installDir
     os.environ["PATH"] = os.environ.get("PATH") + ":%s/sbin"%installDir
     if os.environ.get("LD_LIBRARY_PATH") != None:
@@ -188,28 +185,29 @@ def user_message():
     print("\t\texport SD='%s'\n"%(installDir))
     
 
-##-------------------------------------------------
-## MAIN SCRIPT STARTS HERE
-##-------------------------------------------------
+#------------------------------------------------------------------------------
+# Main script starts here
+#------------------------------------------------------------------------------
 if __name__ == "__main__":
 
-    ## SETUP
+    # 0. SETUP
     check_all_dependencies()
     create_directories(installDir)
     set_paths()                     # sets environment variables  
     download_packages()
 
-    ## AUTOCONF COMPONENTS 
+    # 1. AUTOCONF COMPONENTS 
     print("Handling autoconf components")
+    
     # gsl
     if not os.path.exists( '%s/lib/libgsl.a'%installDir ):
         install_typical_autoconf(srcTarFile='gsl-1.16.tar.gz', srcDir='gsl-1.16')
 
-    ## libconfig
+    # libconfig
     if not os.path.exists( '%s/lib/libconfig.a'%installDir ):
         install_typical_autoconf(srcTarFile='libconfig-1.5.tar.gz', srcDir='libconfig-1.5')
 
-    ## OTHER COMPONENTS 
+    # 2. OTHER COMPONENTS 
     print("Handling other components")
  
     # boost_1_59_0_redux
@@ -217,7 +215,7 @@ if __name__ == "__main__":
         install_boost(srcTarFile='boost_1_59_0_redux.tar.gz', srcDir='../boost_1_59_0_redux', pkgName='Boost (reduced)')
 
 
-    ## FINISH
+    # 3. FINISH
     user_message()
 
 
