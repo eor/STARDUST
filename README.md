@@ -29,9 +29,9 @@ Python scripts:
 
 #### Installation
 First, install the dependencies, either by hand or via your package manager. We provide an installation script for 
-STARDUST's dependencies in `scripts/install_dependencies.py`
+STARDUST's dependencies in `scripts/install_dependencies.py`. Therein change the `installDir` variable and then excecute the script.
 
-Change the following variables in the Makefile (in the `src` directory) to your liking:
+Once the dependencies are in place, change the following variables in the Makefile to your liking:
 
 ```bash
 GSL_INCL = -I${HOME}/local/include
@@ -46,7 +46,7 @@ Compile STARDUST by runing
 ```bash
 make
 ```
-Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or the want to play with different solvers (see, `Makefile`), make sure to recompile everything
+Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or twant to play with different solvers (see, `Makefile`), make sure to recompile everything
 ```bash
 make clean && make
 ```
