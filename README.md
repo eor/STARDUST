@@ -35,7 +35,7 @@ There are different ways to install these:
 * via your favorite package manager
 * using the install script provided in `scripts/install_dependencies.py`
 
-Once the dependencies are in place, change the following path variables in STARDUST's  `Makefile` to your liking:
+Once the dependencies are in place, change the following path variables in STARDUST's  `src/Makefile` to your liking:
 ```bash
 GSL_INCL = -I/path/to/gsl/include_files
 GSL_LIB  = -L/path/to/gsl/library_files
@@ -49,15 +49,15 @@ BOOST_INCL = -I/path/to/boost/include_files
 #### Notes on the install script
 
 If you choose to use the install script, open the script in your text editor, change the `installDir` variable and then execute the script.
-Once the script finishes, it will print the path variables that need to be inserted into STARDUST's `Makefile`.
+Once the script finishes, it will print the path variables that need to be inserted into STARDUST's `src/Makefile`.
 
 ### Compilation
 
-Compile STARDUST by running 
+Compile STARDUST by changing into the `src` directory and running 
 ```bash
 make
 ```
-Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or want to play with different solvers (see, `Makefile`), make sure to recompile everything
+Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or want to play with different solvers (see `Makefile`), make sure to recompile everything
 ```bash
 make clean && make
 ```
