@@ -1,7 +1,7 @@
 # STARDUST
 Spectrum Transport Around RaDiating Universal Source Type
 
-A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first indrocuced in [n+1]
+A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first introduced in [n+1]
 
 #### Rationale:
 
@@ -14,39 +14,49 @@ Given a tabulated spectral energy distribution (SED) of a source associated with
 ---
 
 ## Setup
-
-#### Software dependencies
-STARDUST:
+We assume your system is equiped with the following dependencies:
 * C/C++ compiler
-* [GNU Scientific library (GSL)](https://www.gnu.org/software/gsl/) 
-* ODEint, which is part of [Boost](http://www.boost.org/)
-* [libconfig](https://github.com/hyperrealm/libconfig)
-
-Python scripts:
+* make
+* wget
+* Python 2.7 
 * numpy
 * scipy
 * matplotlib
 
-#### Installation
-First, install the dependencies, either by hand or via your package manager. We provide an installation script for 
-STARDUST's dependencies in `scripts/install_dependencies.py`. Therein change the `installDir` variable and then excecute the script.
+### Software dependencies
+For STARDUST we furthermore need the following libraries:
+* [GNU Scientific library (GSL)](https://www.gnu.org/software/gsl/) 
+* ODEint, which is part of [Boost](http://www.boost.org/)
+* [libconfig](https://github.com/hyperrealm/libconfig)
 
-Once the dependencies are in place, change the following variables in the Makefile to your liking:
+There are different ways to install these: 
 
-```bash
-GSL_INCL = -I${HOME}/local/include
-GSL_LIB  = -L${HOME}/local/bin
+* by hand 
+* via your favorite package manager
+* using the install script provided in `scripts/install_dependencies.py`
 
-CONF_INCL= -I${HOME}/local/include
-CONF_LIB = -L${HOME}/local/lib
+Once the dependencies are in place, change the following path variables in STARDUST's  Makefile to your liking:
 
-BOOST_INCL = -I${HOME}/local/boost-current
-```
-Compile STARDUST by runing 
+GSL_INCL = -I/path/to/gsl/include_files
+GSL_LIB  = -L/path/to/gsl/library_files
+
+CONF_INCL= -I/path/to/libconfig/include_files
+CONF_LIB = -L/path/to/libconfig/library_files
+
+BOOST_INCL = -I/path/to/boost/include_files
+
+#### Notes on the install script
+
+If you choose to use the install script, open the script in your text editor, change the `installDir` variable and then excecute the script.
+Once the script finishes, it will print the path variables that need to be inserted into STARDUST's Makefile.
+
+### Compilation
+
+Compile STARDUST by running 
 ```bash
 make
 ```
-Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or twant to play with different solvers (see, `Makefile`), make sure to recompile everything
+Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or want to play with different solvers (see, `Makefile`), make sure to recompile everything
 ```bash
 make clean && make
 ```
