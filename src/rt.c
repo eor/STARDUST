@@ -474,7 +474,7 @@ void rt_main_run(){
                 // generate output file name and open file 
                 sprintf(outFile, "profile_M%.3f_z%.3f_t%.3f.dat", myConfig.haloMass, zSrcTurnOn, (srcAge+ timeStep));           
                 
-                if (myConfig.pathID == '\0')
+                if (myConfig.pathID[0] == '\0')
                     outFile = utils_concat_path_noID(myConfig.pathOutDir, outFile);
                 else
                     outFile = utils_concat_path(myConfig.pathOutDir, outFile);

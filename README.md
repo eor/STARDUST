@@ -57,7 +57,8 @@ Compile STARDUST by changing into the `src` directory and running
 ```bash
 make
 ```
-Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or want to play with different solvers (see `Makefile`), make sure to recompile everything
+Don't mind the unused variable warnings. If you feel adventurous and want to change any of the setting in the header files or 
+want to play with different solvers (see `src/Makefile`), make sure to recompile everything in the `src` directory
 ```bash
 make clean && make
 ```
