@@ -30,7 +30,8 @@ CC       = gcc               # sets the C-compiler
 
 CPP      = g++
 
-OPTIMIZE = -O2 -Wall -g   # sets optimization and warning flags
+#OPTIMIZE = -O2 -Wall -g  # sets optimization and warning flags
+OPTIMIZE = -O2 -g  # sets optimization and warning flags
 
 OPTIONS  = $(OPTIMIZE) $(OPT) 
 #OPTIONS  = $(OPTIMIZE) $(OPT) -Wunused-but-set-variable
@@ -45,15 +46,21 @@ OBJS     = main.o utils.o log.o config.o allvars.o \
 INCL     = allvars.h prototype.h  Makefile
 
 # Libraries
+# path to GSL includes and libraries
 GSL_INCL = -I${HOME}/local/include
-GSL_LIB  = -L${HOME}/local/bin
+GSL_LIB  = -L${HOME}/local/lib
 
+# path to libconfig includes and libraries
 CONF_INCL= -I${HOME}/local/include
 CONF_LIB = -L${HOME}/local/lib
 
-BOOST_INCL = -I${HOME}/local/boost-current
+# path to boost includes
+BOOST_INCL = -I${HOME}/local/boost_1_59_0_redux
 
-CFLAGS   = $(OPTIONS) $(GSL_INCL) $(BOOST_INCL)
+
+
+
+CFLAGS   = $(OPTIONS) $(GSL_INCL) $(BOOST_INCL) $(CONF_INCL)
 CPPFLAGS = 
 
 

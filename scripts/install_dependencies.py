@@ -4,19 +4,29 @@ import os
 import subprocess as sub
 import sys
 
-
 #------------------------------------------------------------------------------
-# Set install path, select one
+# User defined settings
 #------------------------------------------------------------------------------
+#
+# 1. Set install path, select *one*
+#
 
-# 0. location given relative to  home dir
-installDir      = os.path.expanduser('~/local2')        
+# a) location given relative to  home dir
+installDir      = os.path.expanduser('~/local')        
 
-# 1. location given relative to exec path of this script
-#installDir      = os.path.abspath("./SD_dependencies") 
+# b) location given relative to exec path of this script
+#installDir      = os.path.abspath("../../local1") 
 
-# 2. absolute path
-#installDir      = os.path.abspath("/absolute/path/to/some/other/location") 
+# c) absolute path
+#installDir      = os.path.abspath("/home/tester/Software/local")
+
+#
+# 2. Select packages to install
+#
+
+installLibConfig = True
+installGSL       = True
+installBoost     = True
 
 
 #------------------------------------------------------------------------------
@@ -32,6 +42,8 @@ packageList     = [
                     'gsl-1.16.tar.gz', 
                     'boost_1_59_0_redux.tar.gz'
                   ]
+
+installPackage = [installLibConfig, installGSL, installBoost]
     
     
 #------------------------------------------------------------------------------
@@ -71,16 +83,17 @@ def run_on_shell(cmd):
     
 def download_packages():
     print( 'Checking for missing packages' )
-    for item in packageList:
-        tmpDir = softwareDir + '/' + item
-        if not os.path.exists(tmpDir):
-            print( ' Downloading %s:'%item )
-            tmpURL = baseURL + '/' + item
-            run_on_shell('cd %s && wget -c %s '%(softwareDir, tmpURL))
-            # check if download was successful
+    for i in range(len(packageList)):
+        if installPackage[i]:
+            tmpDir = softwareDir + '/' + packageList[i]
             if not os.path.exists(tmpDir):
-                print("\nERROR: Could not download file '%s'. Exiting."%item)
-                exit(1)
+                print( ' Downloading %s:'%packageList[i] )
+                tmpURL = baseURL + '/' + packageList[i]
+                run_on_shell('cd %s && wget -c %s '%(softwareDir, tmpURL))
+                # check if download was successful
+                if not os.path.exists(tmpDir):
+                    print("\nERROR: Could not download file '%s'. Exiting."%packageList[i])
+                    exit(1)
     
 
 def install_typical_autoconf(srcTarFile, srcDir, configureOptions="", postInstallCommand=None):
@@ -146,33 +159,36 @@ def user_message():
     print('\n All done here.\n\n')
     
     print(' To compile STARDUST edit its Makefile and set the path variables for the libraries accordingly: \n')
-        
-    print('\tGSL_INCL\t= -I%s/include'%installDir)
-    print('\tGSL_LIB \t= -I%s/bin\n'%installDir)
-
-    print('\tCONF_INCL\t= -I%s/include'%installDir)
-    print('\tCONF_LIB \t= -I%s/bin\n'%installDir)
-
-    print('\tBOOST_INCL\t= -I%s/boost_1_59_0_redux\n'%installDir)
+    
+    if installPackage[1]:
+        print('\tGSL_INCL\t= -I%s/include'%installDir)
+        print('\tGSL_LIB \t= -L%s/lib\n'%installDir)
+    if installPackage[0]:
+        print('\tCONF_INCL\t= -I%s/include'%installDir)
+        print('\tCONF_LIB \t= -L%s/lib\n'%installDir)
+    if installPackage[2]:
+        print('\tBOOST_INCL\t= -I%s/boost_1_59_0_redux\n'%installDir)
     
     
-    print(' If you wish to use these libraries with other programs as well, you might want to consider adding')
-    print(' the necessary environment variables permanently.\n')
-    print('\tTo do so, edit your .bashrc/.cshrc/.tcshrc and add the following:\n')
+    #print(' If you wish to use these libraries with other programs as well, you might want to consider adding')
+    #print(' the necessary environment variables permanently.\n')
+    #print('\tTo do so, edit your .bashrc/.cshrc/.tcshrc and add the following:\n')
     
-    print('\tTo the PATH variable:')
-    print('\t\t%s/bin'%installDir)
-    print('\t\t%s/sbin\n'%installDir)
+    #print('\tTo the PATH variable:')
+    #print('\t\t%s/bin'%installDir)
+    #print('\t\t%s/sbin\n'%installDir)
     
-    print('\tTo the LD_LIBRARY_PATH variable:')
-    print('\t\t%s/lib\n'%installDir)    
-    print('\t\t%s/boost_1_59_0_redux\n'%installDir)
+    #print('\tTo the LD_LIBRARY_PATH variable:')
+    #if installPackage[0] or installPackage[1]:
+    #    print('\t\t%s/lib'%installDir)
+    #if installPackage[1]:  
+    #    print('\t\t%s/boost_1_59_0_redux\n'%installDir)
     
-    print('\tTo the PYTHONPATH variable:')
-    if os.listdir('%s/python/lib/python%s/site-packages'%(installDir, pythonVersion)):
-      print('\t\t%s/python/lib/python%s/site-packages\n'%(installDir, pythonVersion))
-    if os.listdir('%s/python/lib64/python%s/site-packages'%(installDir, pythonVersion)):
-      print('\t\t%s/python/lib64/python%s/site-packages\n'%(installDir, pythonVersion))
+    #print('\tTo the PYTHONPATH variable:')
+    #if os.listdir('%s/python/lib/python%s/site-packages'%(installDir, pythonVersion)):
+    #  print('\t\t%s/python/lib/python%s/site-packages\n'%(installDir, pythonVersion))
+    #if os.listdir('%s/python/lib64/python%s/site-packages'%(installDir, pythonVersion)):
+    #  print('\t\t%s/python/lib64/python%s/site-packages\n'%(installDir, pythonVersion))
       
       
     #print('\t\tTODO!!\n')    
@@ -181,8 +197,8 @@ def user_message():
 
     #export PYTHONPATH="/net/hathor/data4/users/krause/pyBEARS/python:${PYTHONPATH}"
   
-    print('\tAdd the SD variable. E.g. for Bash:')
-    print("\t\texport SD='%s'\n"%(installDir))
+    #print('\tAdd the SD variable. E.g. for Bash:')
+    #print("\t\texport SD='%s'\n"%(installDir))
     
 
 #------------------------------------------------------------------------------
