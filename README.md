@@ -46,10 +46,12 @@ CONF_LIB = -L/path/to/libconfig/library_files
 BOOST_INCL = -I/path/to/boost/include_files
 ```
 
-If you choose to install the dependencies by hand, the `LD_LIBRARY_PATH` environment variable needs to be adjusted to include the path to the libconfig library directory.
+If you choose to install the dependencies by hand, the `LD_LIBRARY_PATH` environment variable needs to be adjusted to include the path to the gsl and libconfig library directory.
 We suggest to add the following to your `~/.bashrc`
 ```bash
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/path/to/libconfig/library_files
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/path/to/gsl/library_files
+
 ```
 
 #### Notes on the install script
