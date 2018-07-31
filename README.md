@@ -76,7 +76,7 @@ make clean && make
 
 ## Generating Spectral Energy Distribution files
 
-See `scripts/SED_generator/sed.py` to generate a few simple SEDs
+See `scripts/sed_generator/sed.py` to generate a few simple SEDs.
 
 
 ---
