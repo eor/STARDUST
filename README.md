@@ -1,7 +1,7 @@
 # STARDUST
-STARDUST, which stands for *S*pectrum *T*ransport *A*round *R*a*D*iating *U*niversal *S*ource *T*ype, 
+STARDUST, which stands for **S**pectrum **T**ransport **A**round **R**a**D**iating **U**niversal **S**ource **T**ype, 
 is a cosmological 1D radiative transfer code that is described in detail by [Krause et al. (2018)][1]. 
-An earlier (unpublished) version of the code was first employed in a paper by [Thomas & Zaroubi (2008)][2], 
+An earlier (unpublished) version of the code was employed in a paper by [Thomas & Zaroubi (2008)][2] 
 and it should be noted that the code is primarily based on the theoretical work presented in [Fukugita & Kawasaki (1994)][3].
 
 [1]: http://adsabs.harvard.edu/abs/2018NewA...64....9K
