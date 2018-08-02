@@ -1,7 +1,9 @@
 # STARDUST
 Spectrum Transport Around RaDiating Universal Source Type
 
-A cosmological 1D radiative transfer code, which is primarily based on [1], [2],[3], and [n]. An earlier version was first introduced in [n+1]
+A cosmological 1D radiative transfer code, which is primarily based on the works of [1], [2],[3], and [n]. 
+
+An earlier (unpublished) version of the code was first introduced in [n+1]
 
 #### Rationale:
 
@@ -9,7 +11,8 @@ Cosmological radiative transfer can be an important tool when studying the therm
 intergalactic medium. This includes, for example, the study of the Epoch of Reionization or the computation of the 
 extragalactic ionizing UV background spectrum on large scales, while on smaller scales it is important for e.g. 
 studying the ionizing radiation emanating from a sources embedded in a dark matter halos, such as quasars or population 3 stars. 
-Given a tabulated spectral energy distribution (SED) of a source associated with a dark matter host halo, STARDUST computes the ionization states as well as temperature along a radial grid and produces outputs at user-defined time intervals. 
+Given a tabulated spectral energy distribution (SED) of a source associated with a dark matter host halo, 
+STARDUST computes the ionization states as well as temperature along a radial grid and produces outputs at user-defined time intervals. 
 
 ---
 
@@ -76,7 +79,7 @@ make clean && make
 
 ## Generating Spectral Energy Distribution files
 
-See `scripts/sed_generator/sed.py` to generate a few simple SEDs.
+See `scripts/sed_generator/sed.py` to generate a few simple SEDs. The script can be used as a python package or as a stand alone script. 
 
 
 ---
@@ -108,8 +111,8 @@ Note that if a configuration variable is not set, STARDUST will fall back on a d
 
 ## References
 
-* [1] Fukugita, M & Kawasaki, M. 1994, MNRAS 269, 563
-* [2]
+* [1] [Fukugita, M & Kawasaki, M. 1994, MNRAS 269, 563] (http://adsabs.harvard.edu/abs/1994MNRAS.269..563F)
+* [2] [Krause, F et al. 2018, NewAstronomy 64, 9K](http://adsabs.harvard.edu/abs/2018NewA...64....9K)
 * [3]
 * [n]
 * [n+1]
