@@ -1,9 +1,8 @@
 # STARDUST
-Spectrum Transport Around RaDiating Universal Source Type
-
-A cosmological 1D radiative transfer code, which is primarily based on the works of [1], [2],[3], and [n]. 
-
-An earlier (unpublished) version of the code was first introduced in [n+1]
+STARDUST, which stands for *S*pectrum *T*ransport *A*round *R*a*D*iating *U*niversal *S*ource *T*ype,
+is a cosmological 1D radiative transfer code that is described in detail by Krause et al. (2018), see [1].  
+An earlier (unpublished) version of the code was first employed in a paper by Thomas & Zaroubi (2008), see [2], 
+and it should be noted that the code is primarily based on the theoretical work presented in Fukugita & (1994), see [3].
 
 #### Rationale:
 
@@ -110,10 +109,7 @@ Note that if a configuration variable is not set, STARDUST will fall back on a d
 
 
 ## References
-
-* [1] [Fukugita, M & Kawasaki, M. 1994, MNRAS 269, 563] (http://adsabs.harvard.edu/abs/1994MNRAS.269..563F)
-* [2] [Krause, F et al. 2018, NewAstronomy 64, 9K](http://adsabs.harvard.edu/abs/2018NewA...64....9K)
-* [3]
-* [n]
-* [n+1]
+* [1] [Krause, F. et al. 2018, NewAstronomy 64, 9K](http://adsabs.harvard.edu/abs/2018NewA...64....9K)
+* [2] [Thomas, R.M. & Zaroubi, S. 2008, MNRAS 384, 1080](http://adsabs.harvard.edu/abs/2008MNRAS.384.1080T)
+* [3] [Fukugita, M. & Kawasaki, M. 1994, MNRAS 269, 563](http://adsabs.harvard.edu/abs/1994MNRAS.269..563F)
 
