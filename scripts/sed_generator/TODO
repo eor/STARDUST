@@ -1,0 +1,11 @@
+To Do
+======
+
+
+* move constants, settings, etc to user_settings.py
+
+* reduce code duplication in sed.py
+    * move grid setup to external function
+    
+    
+* include more realistic models    
