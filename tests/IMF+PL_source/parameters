@@ -1,0 +1,7 @@
+Powerlaw index = 1.5
+qsoEfficiency  = 0.1
+
+IMF minimum star mass = 5 M_{sol}
+IMF maximum star mass = 100 M_{sol}
+
+f_{esc} = 0.05

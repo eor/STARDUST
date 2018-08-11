@@ -106,7 +106,7 @@ Note that if a configuration variable is not set, STARDUST will fall back on a d
 ### A star-like SED 
 ...
 
-### Stroemgren sphere test
+### Co-evolution SED
 ...
 
 ### Create a profile catalog
