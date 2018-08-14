@@ -757,12 +757,4 @@ if __name__ == "__main__":
     plot_SED(fileName, logX=True, logY=True)
 
 
-    #----------------------------------------------------------------- 
-    #plot old files
-    #----------------------------------------------------------------- 
-    fileName = "young_stars_new.dat"
-    plot_SED(fileName, logX=True, logY=True)
-
-    fileName = "old_stars_new.dat"
-    plot_SED(fileName, logX=True, logY=True)
 

@@ -1,6 +1,9 @@
 To Do
 ======
 
+* sed.py refactoring
+
+* clean up SANDBOX section of sed.py
 
 * move constants, settings, etc to user_settings.py
 
