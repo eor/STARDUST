@@ -38,8 +38,9 @@ from matplotlib import rc
 import matplotlib as mpl
 from scipy import integrate
 
-# experimental:
-import sed_stellar_mass as SM
+
+import sed_stellar_mass as sm
+import sed_user_settings as us
 
 #-----------------------------------------------------------------  
 # Constants
@@ -54,10 +55,8 @@ sigmaSB = scipy.constants.value("Stefan-Boltzmann constant")   # here: 5.670367e
 #-----------------------------------------------------------------  
 # Cosmological parameters
 #-----------------------------------------------------------------
-# TODO: get these frome the pipeline later
-
-cosmoOmegaM = 0.315              
-cosmoOmegaB = 0.0491  
+cosmoOmegaM = us.cosmoOmegaM              
+cosmoOmegaB = us.cosmoOmegaB
 
 #-----------------------------------------------------------------  
 # Properties of Pop III ZAMS stars.
@@ -89,7 +88,7 @@ pop3M[12], pop3L[12], pop3T[12]  =      5.,   2.870,   4.440
 #-----------------------------------------------------------------  
 # SED for a pure power-law (QSO) source 
 #-----------------------------------------------------------------
-def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N=10000, logGrid=False, qsoEfficiency=1.0):
+def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N=10000, logGrid=False, qsoEfficiency=1.0, silent=False):
   
   
     #print "\nGenerating SED for a power-law like source:\n"
@@ -136,6 +135,15 @@ def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N
 
     bhMass = 1e-4*(cosmoOmegaB/cosmoOmegaM)*haloMass        # haloMass should be given in [M_sun]
     eddLum = 1.26*1e31*(bhMass)*6.241e18                    # conversion from [Joule/s] to [eV/s] 
+
+    if(not silent):
+        print "------------------------------------------------------------------------------------"
+        print "Generating SED for a halo featuring a PL-type source:"
+        print "\tHost halo mass \t\t= %e M_sol"%(haloMass)
+        print "\tPL index \t= %.3f "%(alpha)
+        print "\tblack hole mass    \t= %.3f M_sol"%(bhMass)
+        print "\tEddington luminosity\t= %e eV/s"%(eddLum)
+
 
 
     # integrate to obtain total energy (normalize)
@@ -259,14 +267,16 @@ def generate_SED_stars_BB(haloMass, redshift, starMass=100, eHigh=1.e4, eLow=10.
     intensities = np.array([])
     
     # 1. get stellar mass and number of stars of mass starMass
-    totalStellarMass = SM.compute_stellar_mass( haloMass, redshift, verbose=False )
-    #totalStellarMass = SM.compute_stellar_mass_simple( haloMass, fStar=0.1)
+    totalStellarMass = sm.compute_stellar_mass( haloMass, redshift, verbose=False )
+    #totalStellarMass = sm.compute_stellar_mass_simple( haloMass, fStar=0.1)
     numStars = totalStellarMass/float(starMass)  
     
-    print "-----------------------------------------------------------"
-    print "\nGenerating SED for a number of black-body-like sources:\n"
-    print "Total stellar mass \t= %e"%totalStellarMass
-    print "Number of stars\t\t= %e"%numStars
+    print "------------------------------------------------------------------------------------"
+    print "Generating SED for a halo containing black-body-like sources:"
+    print "\tRedshift \t\t= %.3f"%(redshift)
+    print "\tHost halo mass \t\t= %e M_sol"%(haloMass)
+    print "\tTotal stellar mass \t= %e M_sol"%(totalStellarMass)
+    print "\tNumber of stars\t\t= %e"%(numStars)
     
     energies, intensitiesTmp = generate_SED_single_pop3(starMass=starMass, eHigh=eHigh, eLow=eLow, fileName=None, N=N, logGrid=logGrid, fEsc=fEsc)
     intensities = numStars * intensitiesTmp
@@ -289,7 +299,7 @@ def generate_SED_stars_BB(haloMass, redshift, starMass=100, eHigh=1.e4, eLow=10.
 #-----------------------------------------------------------------   
 def generate_SED_stars_IMF(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=False, 
                            starMassMin=5, starMassMax=500, imfBins=100, imfIndex=2.35, targetSourceAge=10.,fEsc = 0.1,
-                           fileName=None, redux=True):
+                           fileName=None, redux=True, silent=False):
 
 
     # Here we make the following assumptions: 
@@ -308,8 +318,18 @@ def generate_SED_stars_IMF(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=1000,  l
     #magicNumber = 0.01   # TODO find a source or ask Saleem / Fil what to do here
     #totalStellarMass = magicNumber * (cosmoOmegaB/cosmoOmegaM) * haloMass        # haloMass should be given in [M_sun]
 
-    totalStellarMass = SM.compute_stellar_mass( haloMass, redshift, verbose=False )
-    #totalStellarMass = SM.compute_stellar_mass_simple( haloMass, fStar=fStar)
+    totalStellarMass = sm.compute_stellar_mass( haloMass, redshift, verbose=False )
+    #totalStellarMass = sm.compute_stellar_mass_simple( haloMass, fStar=fStar)
+    
+    if(not silent):
+        print "------------------------------------------------------------------------------------"
+        print "Generating SED for a halo featuring black-body-like sources, which follow an IMF:"
+        print "\tRedshift \t\t= %.3f"%(redshift)
+        print "\tHost halo mass \t\t= %e M_sol"%(haloMass)
+        print "\tTotal stellar mass \t= %e M_sol"%(totalStellarMass)
+        print "\tMinimum star mass  \t= %.3f M_sol"%(starMassMin)
+        print "\tMaximum star mass  \t= %.3f M_sol"%(starMassMax)
+    
     
     
     # 2. construct IMF from starMassMin to starMassMax with imfBins and imfIndex
@@ -383,15 +403,41 @@ def generate_SED_IMF_PL(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=2000,  logG
                         fileName=None):
     
     
-    #if (redshift>8.5):
-        #qPL = 0.0
+    print "------------------------------------------------------------------------------------"
+    print "Generating SED for a halo featuring IMF and PL-type sources:"
+    print "\tRedshift \t\t= %.3f"%(redshift)
+    print "\tHost halo mass \t\t= %e M_sol"%(haloMass)
+    print "\tPL index \t= %.3f "%(alpha)
+    print "\tMinimum star mass  \t= %.3f M_sol"%(starMassMin)
+    print "\tMaximum star mass  \t= %.3f M_sol"%(starMassMax)
+   
+    energies_IMF, intensities_IMF = generate_SED_stars_IMF( haloMass, 
+                                                           redshift, 
+                                                           eLow=eLow, 
+                                                           eHigh=eHigh, 
+                                                           N=N,  
+                                                           logGrid=logGrid,
+                                                           starMassMin=starMassMin, 
+                                                           starMassMax=starMassMax,
+                                                           targetSourceAge=10.,
+                                                           fEsc=fEsc,
+                                                           imfBins=imfBins, 
+                                                           imfIndex=imfIndex,
+                                                           fileName=None, 
+                                                           silent=True
+                                                           )
     
-    energies_IMF, intensities_IMF = generate_SED_stars_IMF(haloMass, redshift, eLow=eLow, eHigh=eHigh, 
-                                                           N=N,  logGrid=logGrid,starMassMin=starMassMin, starMassMax=starMassMax,targetSourceAge=10.,fEsc=fEsc,
-                                                           imfBins=imfBins, imfIndex=imfIndex,fileName=None)
     
-    energies_PL, intensities_PL = generate_SED_PL(haloMass, eHigh=eHigh, eLow=eLow, fileName=None, 
-                                                    alpha=alpha, N=N, logGrid=logGrid, qsoEfficiency=qsoEfficiency)
+    energies_PL, intensities_PL = generate_SED_PL( haloMass, 
+                                                  eHigh=eHigh, 
+                                                  eLow=eLow, 
+                                                  fileName=None, 
+                                                  alpha=alpha, 
+                                                  N=N, 
+                                                  logGrid=logGrid, 
+                                                  qsoEfficiency=qsoEfficiency, 
+                                                  silent=True
+                                                  )
     
     # sort energies if they are descending
     if energies_IMF[0]>energies_IMF[-1]:
@@ -421,7 +467,7 @@ def generate_SED_IMF_PL(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=2000,  logG
         exit(1)
     
 #-----------------------------------------------------------------  
-# SEDs in functional form
+# Simple SEDs in functional form
 #-----------------------------------------------------------------
 def SED_power_law(E, alpha):
     
@@ -432,8 +478,7 @@ def SED_black_body(E, T):
 
     expo = E / (k_BeV * T)
     try:        
-        #return (2.0 *m.pi / (c_cgi * c_cgi * h_eV * h_eV * h_eV)) * (E * E * E) / (m.exp(expo) - 1.)
-        return (2.0 *m.pi / (c_cgi * c_cgi * h_eV * h_eV        )) * (E * E * E) / (m.exp(expo) - 1.)
+        return (2.0 * m.pi / (c_cgi * c_cgi * h_eV * h_eV        )) * (E * E * E) / (m.exp(expo) - 1.)
     except OverflowError:
         return 1e-300    
         # for expo > 709, result of m.exp() is too large for python float (= C double)
@@ -578,62 +623,59 @@ def ang2eV(X):
 
 if __name__ == "__main__":
 
-    case = 0
+    case = 2
  
 
     #----------------------------------------------------------------- 
-    # SED paper I comparison
+    # SED comparison for BEARS pipeline paper
     #----------------------------------------------------------------- 
-    if (case==0): 
+    #if (case==0): 
         
         
-        dir_BB_8  = 'BB_8'
+        #dir_BB_8  = 'BB_8'
         
-        #dir_IMF_10 = 'IMF_redux'
-        dir_IMF_10 = 'IMF_redux_fEsc0.10_tmp'
-        dir_IMF_05 = 'IMF_redux_fEsc0.05'
+        ##dir_IMF_10 = 'IMF_redux'
+        #dir_IMF_10 = 'IMF_redux_fEsc0.10_tmp'
+        #dir_IMF_05 = 'IMF_redux_fEsc0.05'
     
-        dir_PL_1_5 = 'PL_alpha1.5'
-        dir_PL_1_0 = 'PL_alpha1.0'
+        #dir_PL_1_5 = 'PL_alpha1.5'
+        #dir_PL_1_0 = 'PL_alpha1.0'
         
-        dir_CE_1_0 = 'PL_alpha1.0_below_z8.5+IMF_redux'
-        dir_CE_1_5 = 'PL_alpha1.5+IMF_redux_fEsc0.05'
+        #dir_CE_1_0 = 'PL_alpha1.0_below_z8.5+IMF_redux'
+        #dir_CE_1_5 = 'PL_alpha1.5+IMF_redux_fEsc0.05'
     
-        M           = 10
-        z           = 8.0
+        #M           = 10
+        #z           = 8.0
     
-        sedFile    ='sed_%s_M%.3f_z%.3f.dat'%('BB',M,z)
+        #sedFile    ='sed_%s_M%.3f_z%.3f.dat'%('BB',M,z)
     
-        fileList =  [dir_BB_8   +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('BB',M,z) ,   
-                     dir_IMF_10 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF',M,z),  
-                     dir_IMF_05 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF',M,z),  
-                     dir_PL_1_5 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('PL',M,z),  
-                     dir_PL_1_0 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('PL',M,z),  
-                     dir_CE_1_5 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF+PL',M,z),  
-                     dir_CE_1_0 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF+PL',M,z),  
-                    ]
+        #fileList =  [dir_BB_8   +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('BB',M,z) ,   
+                     #dir_IMF_10 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF',M,z),  
+                     #dir_IMF_05 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF',M,z),  
+                     #dir_PL_1_5 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('PL',M,z),  
+                     #dir_PL_1_0 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('PL',M,z),  
+                     #dir_CE_1_5 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF+PL',M,z),  
+                     #dir_CE_1_0 +'/'+ 'sed_%s_M%.3f_z%.3f.dat'%('IMF+PL',M,z),  
+                    #]
 
-        legend=['BB 8', 'IMF 10',  'IMF 05',  'PL 1.5', 'PL 1.0', 'CE 1.5', 'CE 1.0']
+        #legend=['BB 8', 'IMF 10',  'IMF 05',  'PL 1.5', 'PL 1.0', 'CE 1.5', 'CE 1.0']
     
-        colors = ['black','blue','blue','green','green','red','red', 'gray']
-        ls     = ['-'    ,  '-', '--', '-', '--', '-', '--', '-', '--',]
+        #colors = ['black','blue','blue','green','green','red','red', 'gray']
+        #ls     = ['-'    ,  '-', '--', '-', '--', '-', '--', '-', '--',]
     
-        outFile =  'SED_comparison_M%.3f_z%.3f.pdf'%(M,z)
+        #outFile =  'SED_comparison_M%.3f_z%.3f.pdf'%(M,z)
         
         
-        plot_SED(fileName=fileList, eHigh=1e4, eLow=10.4, logX=True, logY=True, xLimit=[12,1e4], yLimit=[2e48,8e53], altFileName=outFile, legend=legend, legendLoc=1, colors=colors, lineStyles=ls)
+        #plot_SED(fileName=fileList, eHigh=1e4, eLow=10.4, logX=True, logY=True, xLimit=[12,1e4], yLimit=[2e48,8e53], altFileName=outFile, legend=legend, legendLoc=1, colors=colors, lineStyles=ls)
         
-        exit(0)
-    
-    
-
- 
  
  
     #----------------------------------------------------------------- 
     # BB comparison
     #----------------------------------------------------------------- 
     if (case==1):
+        
+        # variable star mass, z = 9, log M_halo = 11
         z       = 9.
         logM    = 11.0
 
@@ -652,109 +694,84 @@ if __name__ == "__main__":
         generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=starM, eHigh=1.e4, eLow=10.4, fileName=f3, N=1000, logGrid=True)
     
     
-        plot_SED(fileName=[f1,f2,f3], logX=True, logY=True, yLimit=[2e51, 1e57], xLimit=[1e1,1e4], legend=['BB 10','BB 200','BB 700'],legendLoc=1)
+        plot_SED(fileName=[f1,f2,f3], logX=True, logY=True, yLimit=[2e51, 1e57], xLimit=[1e1,1e4], legend=['BB 10','BB 200','BB 700'],legendLoc=1, altFileName="SED_comparison_BB_1.pdf")
     
-    
-        exit(0)
-    
-    #----------------------------------------------------------------- 
-    # comparison
-    #----------------------------------------------------------------- 
-    z       = 7.
-    
-    logM    = 8.0
-    f1 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
-    generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f1, N=1000, logGrid=True)
-    
-    logM    = 10.0
-    f2 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
-    generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f2, N=1000, logGrid=True)
-    
-    logM    = 12.0
-    f3 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
-    generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f3, N=1000, logGrid=True)
-    
-    logM    = 14.0
-    f4 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
-    generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f4, N=1000, logGrid=True)
-    
-    
-    
-    
-    plot_SED(fileName=[f1,f2,f3,f4], logX=True, logY=True, yLimit=[2e47, 5e60], xLimit=[1e1,1e4], legend=['BB M08','BB M10','BB M12','BB M14'],legendLoc=1)
-    
-    plot_SED(fileName=f1, logX=True, logY=True, yLimit=[2e47, 5e60], xLimit=[1e1,1e4], legendLoc=1)
-    
-    exit(0)
-
-    z       = 7.
-    logM    = 10.0
    
-    f1 = 'sed_PL_M%.3f_z%.3f.dat'%( logM, z )
-    f2 = 'sed_IMF_M%.3f_z%.3f.dat'%( logM, z )
-    f3 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
-    f4 = 'sed_IMF+PL_M%.3f_z%.3f.dat'%( logM, z )
-
-
-    generate_SED_PL(haloMass=10**logM, eHigh=1.e4, eLow=10.4, fileName=f1, alpha=1.5, N=1000, logGrid=False, qsoEfficiency=0.1)
-
-
-    generate_SED_stars_IMF(haloMass=10**logM, redshift=z, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=True, 
-                            starMassMin=5, starMassMax=100, imfBins=99, imfIndex=2.35, fileName=f2)
-
-    generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f3, N=1000, logGrid=True)
-
-
-    generate_SED_IMF_PL(haloMass=10**logM, redshift=z, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=True, 
-                        starMassMin=30, starMassMax=100, imfBins=99, imfIndex=2.35,  
-                        alpha=1.0, qsoEfficiency=0.1, qIMF = 1.0, qPL=1.0,
-                        fileName=f4)
-
-    plot_SED(fileName=[f1,f2,f3,f4], logX=True, logY=True, yLimit=[2e47, 5e54], xLimit=[1e1,1e4], legend=['PL','IMF','BB','PL + IMF'],legendLoc=1)
-
-    exit(0)
-
-    #----------------------------------------------------------------- 
-    # test of the IMF SED
-    #----------------------------------------------------------------- 
-    z       = 7.
-    logM    = 8.0
-
-    a = 'SED_stars_M%.3f_z%.3f'%( logM, z )
-
-    generate_SED_stars_IMF(haloMass=10**logM, redshift=z, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=False, 
-                            starMassMin=5, starMassMax=100, imfBins=99, imfIndex=2.35,  
-                            fileName=a)
-    plot_SED(fileName=a, logX=True, logY=True, yLimit=[1e25, 1e55])
-
-
-    exit(0)
-
-    #----------------------------------------------------------------- 
-    # test single star / black body
-    #----------------------------------------------------------------- 
-    fileName = "test_star_M50.dat"
-    generate_SED_single_pop3(starMass=50, eHigh= 1e4, eLow=10.4, fileName=fileName, N=100, logGrid=True)
-    plot_SED(fileName, logX=True, logY=True, yLimit=[1e22, 1e51])
-
-
-    fileName = "test_input_M4.dat"
-    generate_SED_PL(haloMass=1e4, eHigh= 1e4, eLow=10.4, fileName=fileName, N=200, logGrid=True) # 91 - 800,000 Angström
-    plot_SED(fileName, logX=True, logY=True)
-
-    exit(0)
+        
+        # variable host halo mass
+        z       = 7.    
+        logM    = 8.0
+        
+        f1 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
+        generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f1, N=1000, logGrid=True)
+        
+        logM    = 10.0
+        f2 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
+        generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f2, N=1000, logGrid=True)
+        
+        logM    = 12.0
+        f3 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
+        generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f3, N=1000, logGrid=True)
+        
+        logM    = 14.0
+        f4 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
+        generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=200, eHigh=1.e4, eLow=10.4, fileName=f4, N=1000, logGrid=True)
     
-    #----------------------------------------------------------------- 
-    # test QSO
-    #----------------------------------------------------------------- 
-    fileName = "test_input_M14.dat"
-    generate_SED_PL(fileName, haloMass=1e14, eHigh= 1e4, eLow=10.4, N=200, logGrid=True) # 91 - 800,000 Angström
-    plot_SED(fileName, logX=True, logY=True)
+    
+    
+    
+        plot_SED(fileName=[f1,f2,f3,f4], logX=True, logY=True, yLimit=[2e47, 5e60], xLimit=[1e1,1e4], legend=['BB M08','BB M10','BB M12','BB M14'],legendLoc=1, altFileName="SED_comparison_BB_2.pdf")
+    
+        
 
 
-    fileName = "PL_alpha_2.0_new.dat"
-    generate_SED_PL(fileName, haloMass=1e8, eHigh= 1e4, eLow=10.4, N=1000, logGrid=True, alpha=2.0) # 91 - 800,000 Angström
-    plot_SED(fileName, logX=True, logY=True)
+    #----------------------------------------------------------------- 
+    # Comparison of PL, BB, IMF, IMF+PL, const z, const halo mass
+    #----------------------------------------------------------------- 
+    if (case==2):
+
+        z       = 7.
+        logM    = 10.0
+    
+        f1 = 'sed_PL_M%.3f_z%.3f.dat'%( logM, z )
+        f2 = 'sed_IMF_M%.3f_z%.3f.dat'%( logM, z )
+        f3 = 'sed_BB_M%.3f_z%.3f.dat'%( logM, z )
+        f4 = 'sed_IMF+PL_M%.3f_z%.3f.dat'%( logM, z )
+
+
+        generate_SED_PL(haloMass=10**logM, eHigh=1.e4, eLow=10.4, fileName=f1, alpha=1.5, N=1000, logGrid=False, qsoEfficiency=0.1)
+
+
+        generate_SED_stars_IMF(haloMass=10**logM, redshift=z, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=True, 
+                                starMassMin=5, starMassMax=100, imfBins=99, imfIndex=2.35, fileName=f2)
+
+        generate_SED_stars_BB(haloMass=10**logM, redshift=z, starMass=150, eHigh=1.e4, eLow=10.4, fileName=f3, N=1000, logGrid=True)
+
+
+        generate_SED_IMF_PL(haloMass=10**logM, redshift=z, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=True, 
+                            starMassMin=30, starMassMax=100, imfBins=99, imfIndex=2.35,  
+                            alpha=1.0, qsoEfficiency=0.1, 
+                            fileName=f4)
+
+        plot_SED(fileName=[f1,f2,f3,f4], logX=True, logY=True, yLimit=[2e47, 5e54], xLimit=[1e1,1e4], legend=['PL','IMF','BB','PL + IMF'],legendLoc=1, altFileName="SED_comparison_4_types.pdf")
+
+
+
+    #----------------------------------------------------------------- 
+    # Test of the IMF SED
+    #----------------------------------------------------------------- 
+    if (case==3):
+        z       = 7.
+        logM    = 8.0
+
+        a = 'sed_IMF_M%.3f_z%.3f'%( logM, z )
+
+        generate_SED_stars_IMF(haloMass=10**logM, redshift=z, eLow=10.4, eHigh=1.e4, N=1000,  logGrid=False, 
+                                starMassMin=5, starMassMax=100, imfBins=99, imfIndex=2.35,  
+                                fileName=a)
+        plot_SED(fileName=a, logX=True, logY=True, yLimit=[1e25, 1e55], legend='IMF',legendLoc=1, altFileName="SED_IMF_test.pdf")
+
+
 
 
 

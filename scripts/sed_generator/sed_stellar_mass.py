@@ -11,6 +11,7 @@
 # Libs
 #-----------------------------------------------------------------
 import math as m
+import sed_user_settings as us 
 
 #-----------------------------------------------------------------  
 # Cosmological parameters
@@ -18,14 +19,17 @@ import math as m
 # TODO: get these frome the pipeline later
 
 
-cosmoOmegaM = 0.315              
-cosmoOmegaB = 0.0491  
+cosmoOmegaM = us.cosmoOmegaM        
+cosmoOmegaB = us.cosmoOmegaB
 
 #-----------------------------------------------------------------  
 # Compute stellar mass - the cheap way
 #-----------------------------------------------------------------
-def compute_stellar_mass_simple( haloMass, fStar=0.1 ):
-    
+def compute_stellar_mass_simple( haloMass, fStar=0.1 ):    
+        
+    # This is how stellar masses were computed in the 
+    # Thomas & Zaroubi version of STARDUST        
+        
         
     stellarMass = fStar * (cosmoOmegaB/cosmoOmegaM) * haloMass
     
@@ -85,7 +89,7 @@ def compute_stellar_mass( haloMass, redshift, verbose=False ):
     try:        
         divisor =   1.+ m.exp( 10**(-x) )        
     except OverflowError:
-        # if x < -2.849, m.exp( 10**(-x) ) becomes too large (> 1e307)
+        # if x < -2.849, m.exp( 10**(-x) ) becomes too large (>1e307)
         divisor = 1e307
         
     frac    = ( ( m.log10( 1.+m.exp(x) ) )**gamma )/ divisor    
@@ -119,7 +123,7 @@ if __name__ == "__main__":
 
 
     #-----------------------------------------------------------------  
-    # Compare difference for fixed z (change M_halo)
+    # Test run: Compare difference for fixed z (change M_halo)
     #-----------------------------------------------------------------
     
 
@@ -138,11 +142,6 @@ if __name__ == "__main__":
         mStarLog1[i] = m.log10( compute_stellar_mass_simple( 10**mHaloLog[i], fStar) )
         mStarLog2[i] = m.log10( compute_stellar_mass( 10**mHaloLog[i], z) )
         
-        
-        #frac1 = (10**mStarLog1[i])/(10**mHaloLog[i])
-        #frac2 = (10**mStarLog2[i])/(10**mHaloLog[i])
-        
-
 
 
     fig = plt.figure()
@@ -161,7 +160,7 @@ if __name__ == "__main__":
     plt.close(fig)
 
     #-----------------------------------------------------------------  
-    # Compare difference for fixed M (z-evolution)
+    # Test run: Compare difference for fixed M (z-evolution)
     #-----------------------------------------------------------------
 
 
@@ -180,14 +179,14 @@ if __name__ == "__main__":
     fig = plt.figure()
     fig.clear()  
     ax = fig.add_subplot(1,1,1)
-    ax.set_xlabel('redshift')
-    ax.set_ylabel('log stellar mass')
+    ax.set_xlabel('Redshift')
+    ax.set_ylabel('log Stellar mass')
     #ax.set_ylim(1, 1e6)
     #ax.set_yscale('log')
     ax.minorticks_on()
     ax.plot(zList, mStarLog1, lw=2.0, color="blue", label='Simple')
     ax.plot(zList, mStarLog2, lw=2.0, color="red", label='Behroozi++')
-    ax.legend(loc=4)
+    ax.legend(loc=5)
     fig.suptitle('log halo mass = %.3f'%mHaloLogFix)
     fig.savefig('compare_Mstar_M%.3f.png'%mHaloLogFix)
     plt.close(fig)
