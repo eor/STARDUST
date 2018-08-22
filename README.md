@@ -21,15 +21,18 @@ STARDUST computes the ionization states as well as temperature along a radial gr
 
 ---
 
-## Obtaining STARDUST
+## Setup
+
+### Obtaining STARDUST
 
 You can clone the repository with the following command
 ```bash
 git clone https://github.com/eor/STARDUST.git STARDUST
 ```
-Should your system lack `git`, you can alternatively download a zip file of the repository [here](https://github.com/eor/STARDUST/archive/master.zip)
+Should your system lack `git`, you can alternatively download a zip file of the repository [here](https://github.com/eor/STARDUST/archive/master.zip).
 
-## Setup
+### Software dependencies
+
 We assume your system is equiped with the following dependencies:
 * C/C++ compiler
 * make
@@ -39,8 +42,7 @@ We assume your system is equiped with the following dependencies:
 * scipy
 * matplotlib
 
-### Software dependencies
-For STARDUST we furthermore need the following libraries:
+Furthermore, STARDUST needs the following libraries:
 * [GNU Scientific library (GSL)](https://www.gnu.org/software/gsl/) 
 * ODEint, which is part of [Boost](http://www.boost.org/)
 * [libconfig](https://github.com/hyperrealm/libconfig)
