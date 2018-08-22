@@ -21,6 +21,14 @@ STARDUST computes the ionization states as well as temperature along a radial gr
 
 ---
 
+## Obtaining STARDUST
+
+You can clone the repository with the following command
+```bash
+git clone https://github.com/eor/STARDUST.git STARDUST
+```
+Should your system lack `git`, you can alternatively download a zip file of the repository [here](https://github.com/eor/STARDUST/archive/master.zip)
+
 ## Setup
 We assume your system is equiped with the following dependencies:
 * C/C++ compiler
