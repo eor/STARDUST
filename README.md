@@ -129,3 +129,27 @@ Note that if a configuration variable is not set, STARDUST will fall back on a d
 * [Thomas, R.M. & Zaroubi, S. 2008, MNRAS 384, 1080](http://adsabs.harvard.edu/abs/2008MNRAS.384.1080T)
 * [Fukugita, M. & Kawasaki, M. 1994, MNRAS 269, 563](http://adsabs.harvard.edu/abs/1994MNRAS.269..563F)
 
+
+## Copyright and licence
+
+
+STARDUST was created by the following people: Rajat Thomas and Fabian Krause
+
+© 2018 The STARDUST Authors
+
+This programme is free software: you can redistribute it and/or modify it 
+under the terms of the GNU General Public License as published by the Free 
+Software Foundation, either version 3 of the License, or (at your option) any 
+later version.
+
+This programme is distributed in the hope that it will be useful, but **without 
+any warranty**; without even the implied warranty of **merchantability** or **fitness 
+for a particular purpose**. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this programme. If not, see http://www.gnu.org/licenses/.
+
+
+
+
+
