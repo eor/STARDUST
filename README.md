@@ -19,7 +19,7 @@ studying the ionizing radiation emanating from a sources embedded in a dark matt
 Given a tabulated spectral energy distribution (SED) of a source associated with a dark matter host halo, 
 STARDUST computes the ionization states as well as temperature along a radial grid and produces outputs at user-defined time intervals. 
 
----
+
 
 ## Setup
 
@@ -31,7 +31,7 @@ git clone https://github.com/eor/STARDUST.git STARDUST
 ```
 Should your system lack `git`, you can alternatively download a zip file of the repository [here](https://github.com/eor/STARDUST/archive/master.zip).
 
-### Software dependencies
+### Software requirements
 
 We assume your system is equiped with the following dependencies:
 * C/C++ compiler
@@ -90,33 +90,35 @@ make clean && make
 ```
 
 
----
+## Running simulations
 
-## Generating Spectral Energy Distribution files
+To run STARDUST you will need a SED file for the source *and* a configuration file which defines some parameters for the run. Sample SED and configuration files can be found in the `tests` directory and are explained in more detail below. 
 
-See `scripts/sed_generator/sed.py` to generate a few simple SEDs. The script can be used as a python package or as a stand alone script. 
-
-
----
-
-## Example runs 
-
-
-To run STARDUST you will need a SED file and a configuration file. Sample configuration files can be found with the source code or in the *tests* directory. A simulation can be started like this
+Once you have both files, a simulation can be started like this
 ```bash
 user@machine:~/SD_project/$ ./STARDUST my_SD_config 
 ```
 
-Note that if a configuration variable is not set, STARDUST will fall back on a default value for said variable. The defaults can be changed in `src/config_defaults.h`.
+Should a configuration variable is not set in the configuration file, STARDUST will fall back on a default value for said variable. The defaults can be changed in `src/config_defaults.h`. Note that any changes made therein requires a re-compilation of the code.
 
 
-### A power-law-like SED
+
+### Generating simple Spectral Energy Distributions
+
+We provide a script to generate SEDs for some toy source models, which are described in more detail in our BEARS pipeline paper, see [Krause et al. (2018)][1].
+The script, which can also be used as a python package, can be found in `scripts/sed_generator/sed.py`. 
+
+
+## Example runs 
+
+
+### Test 1: A power-law-like SED
 ...
 
-### A star-like SED 
+### Test 2: A star-like SED 
 ...
 
-### Co-evolution SED
+### Test 3: Co-evolution SED
 ...
 
 ### Create a profile catalog
