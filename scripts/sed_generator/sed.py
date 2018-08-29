@@ -267,8 +267,10 @@ def generate_SED_stars_BB(haloMass, redshift, starMass=100, eHigh=1.e4, eLow=10.
     intensities = np.array([])
     
     # 1. get stellar mass and number of stars of mass starMass
+    
     totalStellarMass = sm.compute_stellar_mass( haloMass, redshift, verbose=False )
     #totalStellarMass = sm.compute_stellar_mass_simple( haloMass, fStar=0.1)
+    
     numStars = totalStellarMass/float(starMass)  
     
     print "------------------------------------------------------------------------------------"
@@ -315,8 +317,6 @@ def generate_SED_stars_IMF(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=1000,  l
     intensities = np.array([])
 
     # 1. get stellar mass
-    #magicNumber = 0.01   # TODO find a source or ask Saleem / Fil what to do here
-    #totalStellarMass = magicNumber * (cosmoOmegaB/cosmoOmegaM) * haloMass        # haloMass should be given in [M_sun]
 
     totalStellarMass = sm.compute_stellar_mass( haloMass, redshift, verbose=False )
     #totalStellarMass = sm.compute_stellar_mass_simple( haloMass, fStar=fStar)
@@ -333,6 +333,7 @@ def generate_SED_stars_IMF(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=1000,  l
     
     
     # 2. construct IMF from starMassMin to starMassMax with imfBins and imfIndex
+ 
     # IMF normalization constant
     N0   = (2-imfIndex)*totalStellarMass/(starMassMax**(2-imfIndex)- starMassMin**(2-imfIndex))
     # bin width
@@ -343,14 +344,10 @@ def generate_SED_stars_IMF(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=1000,  l
     MBin = [N0/(2-imfIndex)*( ((i+1)*dBin+starMassMin)**(2-imfIndex)-(i*dBin+starMassMin)**(2-imfIndex) ) for i in range(0,imfBins)]
     
     if (redux):
-        #tTotal = 10    # target time of SD run in Myr
-        tSol   = 1e4   # time of sun of main sequence, in Myr
+        tSol   = 1e4   # time our sun spends on the main sequence, in Myr
         
         tMSList = [  tSol*(cBin[i])**(-2.5) for i in range(0,imfBins)]
     
-        #print cBin
-        #print tMSList 
-        
     # for each bin, compute the SED for a single star in that bin.
     # E.g. take the mass of the bin center as the starMass and use it to 
     # generate a pure black body SED with the function generate_SED_single_pop3
@@ -448,7 +445,7 @@ def generate_SED_IMF_PL(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=2000,  logG
         intensities_PL = intensities_PL[::-1]
         
         
-    # check if the 'energies_*' are identical, then add the two intensity arrays scaled by qIMF and qPL
+    # check if the 'energies_*' are identical, then add the two intensity arrays
     if np.sum(energies_IMF-energies_PL)<1E-5:  # there might be small deviations
       
         # add data
