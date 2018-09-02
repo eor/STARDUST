@@ -18,6 +18,11 @@
 #define Ec2 1e4      
 #endif
 
+
+
+// TODO: add adaptive relError handling to the integration functions, just like we did for the SED integration
+
+
 int table_ion (void){       
 
     printf(" Creating tables: IONIZATION\n");
@@ -42,10 +47,10 @@ int table_ion (void){
     double Max_Log1, Max_Log2;
     double previous = 100.;     /* some relatively large number */
     
-    double absError = 1e-4;     /* integration errors */
-    double relError = 1e-4;
+    double absError = 1e-3;     /* integration errors */
+    double relError = 1e-2;
     
-    size_t intResolution = 100;
+    size_t intResolution = 1000;
 
     l1 = log(HIONIZEeV);
     l2 = log(He1IONIZEeV);
@@ -80,7 +85,7 @@ int table_ion (void){
         if(previous>1.e-100){
             /* Integration */
 //             gsl_integration_qags(&myFunction, l1, l2, absError, relError, 1000, wtable, &result, &error);
-            gsl_integration_cquad(&myFunction, l1, l2, absError, relError, wtable2, &result, &error, &nevals); 
+            gsl_integration_cquad(&myFunction, l1, l2, absError, relError, wtable2, &result, &error, &intResolution); 
             
             //result = Integrate_using_Patterson_adaptive(l1, l2, absError, relError, &tau_e1h1_p1_log, myFunction.params);
             previous = result;
@@ -104,7 +109,8 @@ int table_ion (void){
     for(nHX1=LOWLIM;nHX1<=Max_Log1;nHX1+=TABLERES){ 
         
         nHeX2 = LOWLIM;
-        gsl_integration_qags(&myFunction, l2, l3, absError, relError, intResolution, wtable, &result, &error);
+//         gsl_integration_qags(&myFunction, l2, l3, absError, relError, intResolution, wtable, &result, &error);
+        gsl_integration_cquad(&myFunction, l2, l3, absError, relError, wtable2, &result, &error, &intResolution); 
         
         if(result > 1.e-100)
             previous = 100.;
@@ -138,8 +144,9 @@ int table_ion (void){
     for(nHX13=LOWLIM;nHX13<=Max_Log2;nHX13+=TABLERES){
         
         nHeX2 = LOWLIM;
-        gsl_integration_qags (&myFunction, l3, l4, absError, relError, intResolution, wtable, &result, &error);
-
+         gsl_integration_qags(&myFunction, l3, l4, absError, relError, intResolution, wtable, &result, &error);
+        //gsl_integration_cquad(&myFunction, l3, l4, absError, relError, wtable2, &result, &error, &intResolution); 
+        
         if(result>1.e-100)
             previous = 100.; // re-initialize to arbritary high value
         else
@@ -175,7 +182,9 @@ int table_ion (void){
     for(nHX1=LOWLIM;nHX1<=Max_Log1;nHX1+=TABLERES){ 
         
         nHeX2 = LOWLIM;
-        gsl_integration_qags (&myFunction, l2, l3, absError, relError, intResolution, wtable, &result, &error);
+//         gsl_integration_qags (&myFunction, l2, l3, absError, relError, intResolution, wtable, &result, &error);
+        gsl_integration_cquad(&myFunction, l2, l3, absError, relError, wtable2, &result, &error, &intResolution); 
+        
 
         if(result > 1.e-100)
             previous = 100.;
@@ -208,7 +217,7 @@ int table_ion (void){
     for(nHX13=LOWLIM;nHX13<=Max_Log2;nHX13+=TABLERES){ 
         
         nHeX2 = LOWLIM;
-        gsl_integration_qags (&myFunction, l3, l4, absError, relError, intResolution, wtable, &result, &error);
+        gsl_integration_qags(&myFunction, l3, l4, absError, relError, intResolution, wtable, &result, &error);
 
         if(result > 1.e-100)
             previous = 100.; // re-initialize to arbritary high value
