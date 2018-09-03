@@ -5,7 +5,7 @@
 from sd_plot import multi_plot
 
 fileDir    = '../tests/'
-outFile    = '../plots/test_1_PL_evolution_M11_z7_log.png'        # or png?                 
+outFile    = './test_1_PL_evolution_M11_z7_log.pdf'        # or png?                 
 inputFiles = [ 'test_1_PL_source/test_1_profile_M11.000_z7.000_t1.000.dat', 
                'test_1_PL_source/test_1_profile_M11.000_z7.000_t3.000.dat', 
                'test_1_PL_source/test_1_profile_M11.000_z7.000_t5.000.dat', 
