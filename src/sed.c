@@ -394,7 +394,7 @@ double sed_compute_norm(){
     while(status){
 
         /* if successful, 0 is returned. If the relError is too small, status will be 13 */
-        status     = gsl_integration_qags (&myFunction, lowerLimit , upperLimit, absError, relError, 1000, wnorm, &result, &error);        
+        status     = gsl_integration_qags(&myFunction, lowerLimit , upperLimit, absError, relError, 1000, wnorm, &result, &error);        
         relError  *= 5;
 
         if(status){            

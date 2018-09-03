@@ -116,7 +116,7 @@ file that can be used to ensure the installation is working. Copy or symlink you
 the respective directories and start the runs.
 
 ### Test 1: A power-law-like SED
-Here, the SED was generated using the following code
+Here, the SED was generated using the following code.
 
 ```python
 import sed
@@ -135,7 +135,7 @@ sed.generate_SED_PL( haloMass=10**logM,
 
 
 ### Test 2: A star-like SED 
-Now we use a SED that uses our simple pop 3 model that follows an IMF. It was generated as follows
+Now we use a SED that uses our simple pop 3 model (which follows an IMF). It was generated as follows.
 
 ```python
 import sed
@@ -176,11 +176,13 @@ sed.generate_SED_IMF_PL( haloMass=10**logM, redshift=z,
 ```
 
 
-### Visualizing the simulation results
+### Visualizing simulation results
+Example scripts for plotting the resulting profiles that STARDUST produces can be found in the `scripts` directory, 
+see `sd_plot_time_evolution.py` or  `sd_plot_model_comparison.py` to get started. The `plots` directory contains the thus
+produced plots.
 
 
-
-### Create a profile catalog
+### Creating a profile catalog
 ...
 
 
