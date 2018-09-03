@@ -111,9 +111,12 @@ The script, which can also be used as a python package, can be found in `scripts
 
 ## Example runs 
 
+A number of test cases can be found in the `tests` directory. Each comes with a SED and configuration 
+file that can be used to ensure the installation is working. Copy or symlink your STARDUST binary to 
+the respective directories and start the runs.
 
 ### Test 1: A power-law-like SED
-
+Here, the SED was generated using the following code
 
 ```python
 import sed
@@ -122,33 +125,60 @@ z    = 7.
 logM = 11.0
 f1   = 'sed_PL_M%.3f_z%.3f.dat'%(logM, z)
 
-sed.generate_SED_PL(haloMass=10**logM, 
-                    eHigh=1.e4, eLow=13.6, 
-                    N=1000, logGrid=True,
-                    alpha=1.0,  qsoEfficiency=0.1 
-                    fileName=f1)
+sed.generate_SED_PL( haloMass=10**logM, 
+                     eHigh=1.e4, eLow=13.6, 
+                     N=1000, logGrid=True,
+                     alpha=1.0,  qsoEfficiency=0.1, 
+                     fileName=f1 )
 
 ```
 
 
 ### Test 2: A star-like SED 
+Now we use a SED that uses our simple pop 3 model that follows an IMF. It was generated as follows
+
 ```python
 import sed
 
 z    = 7.
 logM = 11.0
 f2   = 'sed_IMF_M%.3f_z%.3f.dat'%(logM, z)
-sed.generate_SED_stars_IMF(haloMass=10**logM, redshift=z, 
-                           eLow=13.6, eHigh=1.e4, 
-                           N=1000,  logGrid=True, 
-                           starMassMin=5, starMassMax=100, imfBins=99, 
-                           imfIndex=2.35, fEsc=0.1,
-                           targetSourceAge=10.0, fileName=f2)
+
+sed.generate_SED_stars_IMF( haloMass=10**logM, redshift=z, 
+                            eLow=13.6, eHigh=1.e4, 
+                            N=1000,  logGrid=True, 
+                            starMassMin=5, starMassMax=100, imfBins=99, 
+                            imfIndex=2.35, fEsc=0.1,
+                            targetSourceAge=10.0, 
+                            fileName=f2 )
 
 ```
 
 ### Test 3: Co-evolution SED
-...
+For this test we emloy a model that combines SEDs from the first two tests.
+
+```python
+import sed
+
+z    = 7.
+logM = 11.0
+f3   = 'sed_IMF+PL_M%.3f_z%.3f.dat'%( logM, z )
+
+sed.generate_SED_IMF_PL( haloMass=10**logM, redshift=z, 
+                         eLow=13.6, eHigh=1.e4, 
+                         N=1000,  logGrid=True, 
+                         starMassMin=30, starMassMax=100, imfBins=99, 
+                         imfIndex=2.35,  fEsc=0.1,
+                         targetSourceAge=10.0,
+                         alpha=1.0, qsoEfficiency=0.1, 
+                         fileName=f3 )                            
+
+```
+
+
+### Visualizing the simulation results
+
+
 
 ### Create a profile catalog
 ...
