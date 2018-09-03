@@ -113,10 +113,39 @@ The script, which can also be used as a python package, can be found in `scripts
 
 
 ### Test 1: A power-law-like SED
-...
+
+
+```python
+import sed
+
+z    = 7.
+logM = 11.0
+f1   = 'sed_PL_M%.3f_z%.3f.dat'%(logM, z)
+
+sed.generate_SED_PL(haloMass=10**logM, 
+                    eHigh=1.e4, eLow=13.6, 
+                    N=1000, logGrid=True,
+                    alpha=1.0,  qsoEfficiency=0.1 
+                    fileName=f1)
+
+```
+
 
 ### Test 2: A star-like SED 
-...
+```python
+import sed
+
+z    = 7.
+logM = 11.0
+f2   = 'sed_IMF_M%.3f_z%.3f.dat'%(logM, z)
+sed.generate_SED_stars_IMF(haloMass=10**logM, redshift=z, 
+                           eLow=13.6, eHigh=1.e4, 
+                           N=1000,  logGrid=True, 
+                           starMassMin=5, starMassMax=100, imfBins=99, 
+                           imfIndex=2.35, fEsc=0.1,
+                           targetSourceAge=10.0, fileName=f2)
+
+```
 
 ### Test 3: Co-evolution SED
 ...
