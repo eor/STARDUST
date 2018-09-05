@@ -6,8 +6,12 @@ def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=F
     import numpy as np
     import matplotlib.pyplot as plt
     import math
-    from matplotlib import rc
-    rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+    
+    
+    # enable these if you wannt nice looking plots
+    #from matplotlib import rc
+    #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+    
     ## for Palatino and other serif fonts use:
     ##rc('font',**{'family':'serif','serif':['Palatino']})
     ##rc('text', usetex=True)
