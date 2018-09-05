@@ -177,13 +177,14 @@ sed.generate_SED_IMF_PL( haloMass=10**logM, redshift=z,
 
 
 ### Visualizing simulation results
-Example scripts for plotting the resulting STARDUST profiles can be found in the `scripts` directory, 
+Example scripts for plotting the resulting STARDUST profiles can be found in the `scripts/sd_plot` directory, 
 see `sd_plot_time_evolution.py` or  `sd_plot_model_comparison.py` to get started. Note that we also included the two 
 plots produced with these scripts in the `plots` directory. 
 
 
 ### Creating a profile catalog
-TBA
+The `scripts/catalog` directory contains a simple script (`make_sd_catalog.py`) to generate a catalog of STARDUST profiles (e.g. to be used with BEARS). 
+It contains examples on how to create said catalogs with our toy SED generator, see the script (comments) for further details.
 
 
 

@@ -39,6 +39,10 @@ logFile                 = 'log_catalog'
 # SED related
 sourceTypes             = ['BB','PL','IMF','PL+IMF'] # (1), (2), (3), (4)
 
+# Note: the following are not yet processed by the script
+# If you want to change those, add the functionality to the script or
+# change the value in the SD_CONFIG_TEMPLATE file.
+
 eHighDefault            = 1.0e4          # eV
 eLowDefault             = 13.6
 
@@ -177,11 +181,11 @@ def build_catalog(directory, Ncpu, zList, haloMassList, name='default', **kwargs
   
 
 
-def run_SD(OutDir,fileList,i):
+def run_SD(OutDir, fileList, i):
      
-    wait = random.randint(0,120) 
+    wait = random.randint(0, nCPU*4) 
     # SD is I/O heavy in the beginning, which causes high load when launching lots of instaces at once, 
-    # therefor a random wait of max 2 minutes ... until we fix the table issue in SD ¯\_(ツ)_/¯
+    # therefor a random wait to spread out the load ... until we fix the table issue in SD ¯\_(ツ)_/¯
   
     sub.call('sleep %d && cd %s && ./%s  %s '%(wait, OutDir, sdExe, fileList[i]), shell=True)
       
@@ -209,31 +213,31 @@ def cleanup_SD_dir(outDir):
 if __name__ == "__main__":
  
 
-    zList = []
-    mList = []
+    myRedshiftList  = []
+    myMassList      = []
  
-    # desired redshift range
+    # desired redshift range (min, max, step)
     for z in drange(6.0, 8.0, 0.5):
-        zList.append(z)
+        myRedshiftList.append(z)
 
-    # desired log_10 (M_halo/M_sol) range
+    # desired log_10 (M_halo/M_sol) range (min, max, step)
     for m in drange(9, 13, 0.5):
-        mList.append(m)
+        myMassList.append(m)
         
 
     # example for a power-law type source catalog    
-    #build_catalog('./', nCPU, zList=zList, haloMassList=mList, name='myCatalog_PL', eHigh=eHighDefault, eLow=eLowDefault, source='PL', alpha=1.5)    
+    #build_catalog('./', nCPU, zList=myRedshiftList, haloMassList=myMassList, name='myCatalog_PL', eHigh=eHighDefault, eLow=eLowDefault, source='PL', alpha=1.5)    
     
 
     # example black body type catalog
-    #build_catalog('./', nCPU, zList=zList, haloMassList=mList, name='myCatalog_BB_200',     eHigh=eHighDefault, eLow=eLowDefault, source='BB', starMass=200.0, fEsc=.10)
+    #build_catalog('./', nCPU, zList=myRedshiftList, haloMassList=myMassList, name='myCatalog_BB_200',     eHigh=eHighDefault, eLow=eLowDefault, source='BB', starMass=200.0, fEsc=.10)
     
 
     # example IMF source catalog
-    #build_catalog('./', nCPU, zList=zList, haloMassList=mList, name='IMF_fEsc0.10', eHigh=eHighDefault, eLow=eLowDefault, source='IMF', starMassMin=5.0, starMassMax=100.0, fEsc=.10,logGrid=True)
+    #build_catalog('./', nCPU, zList=myRedshiftList, haloMassList=myMassList, name='IMF_fEsc0.10', eHigh=eHighDefault, eLow=eLowDefault, source='IMF', starMassMin=5.0, starMassMax=100.0, fEsc=.10,logGrid=True)
    
     # example for a co-evolution catalog
-    #build_catalog('./', nCPU, zList=zList, haloMassList=mList, name='PL_alpha1.5+IMF_redux_fEsc0.05', eHigh=eHighDefault, eLow=eLowDefault, source='IMF+PL', alpha=1.5, starMassMin=5.0, starMassMax=100.0, fEsc=0.05, logGrid=True)
+    #build_catalog('./', nCPU, zList=myRedshiftList, haloMassList=myMassList, name='PL_alpha1.5+IMF_redux_fEsc0.05', eHigh=eHighDefault, eLow=eLowDefault, source='IMF+PL', alpha=1.5, starMassMin=5.0, starMassMax=100.0, fEsc=0.05, logGrid=True)
 
 
 
