@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=False, legends=[], showLegend=True, doColor=True, colors=None, ls=None):
+def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=False, legends=[], showLegend=True, ncolsLegend=4, doColor=True, colors=None, ls=None):
   
     import numpy as np
     import matplotlib.pyplot as plt
@@ -10,7 +10,7 @@ def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=F
     rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
     ## for Palatino and other serif fonts use:
     ##rc('font',**{'family':'serif','serif':['Palatino']})
-    rc('text', usetex=True)
+    ##rc('text', usetex=True)
     
     rows = 4
     columns = 2
@@ -125,13 +125,13 @@ def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=F
             for j in range(0,columns):
                 
                 if linestyle == '-':
-                    axarr[i,j].plot( data[1], data[(i+1)*columns+j], linestyle, lw=1.8, color=lineColor, label=r'$\textrm{%s}$'%(tmpLegend) )
+                    axarr[i,j].plot( data[1], data[(i+1)*columns+j], linestyle, lw=1.8, color=lineColor, label=r'$\mathrm{%s}$'%(tmpLegend) )
 
                 if linestyle=='--':    
-                    axarr[i,j].plot( data[1], data[(i+1)*columns+j], linestyle, lw=1.8, dashes=(9, 2), color=lineColor, label=r'$\textrm{%s}$'%(tmpLegend) )
+                    axarr[i,j].plot( data[1], data[(i+1)*columns+j], linestyle, lw=1.8, dashes=(9, 2), color=lineColor, label=r'$\mathrm{%s}$'%(tmpLegend) )
                     
                 if linestyle=='-.':
-                    axarr[i,j].plot( data[1], data[(i+1)*columns+j], linestyle, lw=1.8, dashes=(1, 2, 8, 2), color=lineColor, label=r'$\textrm{%s}$'%(tmpLegend) )
+                    axarr[i,j].plot( data[1], data[(i+1)*columns+j], linestyle, lw=1.8, dashes=(1, 2, 8, 2), color=lineColor, label=r'$\mathrm{%s}$'%(tmpLegend) )
 
 
 
@@ -170,7 +170,7 @@ def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=F
     f.subplots_adjust(hspace=plotdistY)
     f.subplots_adjust(wspace=plotdistX)
     if showLegend:
-        lgd = plt.legend(loc='upper center', bbox_to_anchor=(-0.1, -0.20), ncol=7, fontsize=10)#, fancybox=True, shadow=True)
+        lgd = plt.legend(loc='upper center', bbox_to_anchor=(-0.1, -0.20), ncol=ncolsLegend, fontsize=10)#, fancybox=True, shadow=True)
         #plt.minorticks_on()
         #plt.savefig('example_plot.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
         plt.savefig(outFile, bbox_extra_artists=(lgd,), bbox_inches='tight')

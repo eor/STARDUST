@@ -60,7 +60,7 @@ int main(int argc, char **argv){
      table_temp();
      table_compton(); 
      
-     read_tables();
+     table_read_all();
 
     /***************************************************************
      * main run happens here

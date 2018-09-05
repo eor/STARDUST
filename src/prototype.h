@@ -94,7 +94,7 @@ int table_temp (void );
 int table_compton (void );
          
 /* table reading routine */
-void read_tables(void );
+void table_read_all(void );
          
 /**Prototypes for function to make the tables of the integrals**/
 

@@ -11,7 +11,7 @@
 #include "table_settings.h"
 #include "log.h"
 
-void read_tables(void){
+void table_read_all(void){
  
     /***************************************************************
     * NOTE: 
