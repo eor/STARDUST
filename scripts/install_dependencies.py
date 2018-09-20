@@ -216,19 +216,24 @@ if __name__ == "__main__":
     print("Handling autoconf components")
     
     # gsl
-    if not os.path.exists( '%s/lib/libgsl.a'%installDir ):
-        install_typical_autoconf(srcTarFile='gsl-1.16.tar.gz', srcDir='gsl-1.16')
+    if installPackage[1]:
+        if not os.path.exists( '%s/lib/libgsl.a'%installDir ):
+            install_typical_autoconf(srcTarFile='gsl-1.16.tar.gz', srcDir='gsl-1.16')
+
+
 
     # libconfig
-    if not os.path.exists( '%s/lib/libconfig.a'%installDir ):
-        install_typical_autoconf(srcTarFile='libconfig-1.5.tar.gz', srcDir='libconfig-1.5')
+    if installPackage[0]:
+        if not os.path.exists( '%s/lib/libconfig.a'%installDir ):
+            install_typical_autoconf(srcTarFile='libconfig-1.5.tar.gz', srcDir='libconfig-1.5')
 
     # 2. OTHER COMPONENTS 
     print("Handling other components")
  
     # boost_1_59_0_redux
-    if not os.path.exists( '%s/boost_1_59_0_redux'%installDir ):
-        install_boost(srcTarFile='boost_1_59_0_redux.tar.gz', srcDir='../boost_1_59_0_redux', pkgName='Boost (reduced)')
+    if installPackage[2]:
+        if not os.path.exists( '%s/boost_1_59_0_redux'%installDir ):
+            install_boost(srcTarFile='boost_1_59_0_redux.tar.gz', srcDir='../boost_1_59_0_redux', pkgName='Boost (reduced)')
 
 
     # 3. FINISH
