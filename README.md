@@ -99,7 +99,7 @@ Once you have both files, a simulation can be started like this
 user@machine:~/SD_project/$ ./STARDUST my_SD_config 
 ```
 
-Should a configuration variable is not set in the configuration file, STARDUST will fall back on a default value for said variable. The defaults can be changed in `src/config_defaults.h`. Note that any changes made therein requires a re-compilation of the code.
+If a configuration variable is not set in the configuration file, STARDUST will fall back on a default value for said variable. The defaults can be changed in `src/config_defaults.h`. Note that any changes made therein requires a re-compilation of the code.
 
 
 
