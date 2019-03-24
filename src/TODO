@@ -1,4 +1,7 @@
 
+* Prepare for choice of density profile / file input
+
+
 * refactorization of variable names
 	- everything related to integrals / tables
 	- physical constants
@@ -24,8 +27,6 @@
 
 * Prepare for choice of UVB spectrum / file input
 
-
-* Prepare for choice of density profile / file input
 
 
 * refactor Findz function
