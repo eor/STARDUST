@@ -21,6 +21,7 @@ int rt_check_is_last_time_step(double, double);
  * config.c - config related
  ***************************************************************/
 void config_load_from_file(char *fileName);
+void config_set_grid_points();
 
 /***************************************************************
  * SED-related functions
@@ -40,6 +41,11 @@ double sed_get_value(double );
 
 
 double sed_estimate_stroemgren_radius( double redshift, double time );
+
+/***************************************************************
+ * density-related functions
+ ***************************************************************/
+void density_read_file(char *densityFileName);
 
 /***************************************************************
  * logging

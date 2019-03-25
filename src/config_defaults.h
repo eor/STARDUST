@@ -8,7 +8,7 @@
 /* paths */
 #define CONFIG_DEFAULT_PATH_OUTDIR      "."
 #define CONFIG_DEFAULT_PATH_SED         "SAMPLE_SED.dat"
-#define CONFIG_DEFAULT_PATH_DENSITY     "\0"
+#define CONFIG_DEFAULT_PATH_DENSITY     ""
 #define CONFIG_DEFAULT_PATH_ID          ""
 
 

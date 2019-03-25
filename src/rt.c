@@ -151,11 +151,7 @@ void rt_main_run(){
     double  startRadius = myConfig.settingsRStart;          // in [kpc]. Everything before this radius is assumed to be ionized.
     double  T_CMB0      = myConfig.cosmoTCMB;
     
-    /* Number of grids you want to compute for. Eg: 1500Kpc/radialStep */
-    numGridPoints = (int) roundf( (maxRadius - startRadius)/ radialStep) + 1;      
-    printf(" Total number of radial grid points: %d\n", numGridPoints);
-    
-    
+
      /* ODE-related */ 
     double absErrorODE  = 1e-5;
     double relErrorODE  = 1e-5;
@@ -163,11 +159,7 @@ void rt_main_run(){
     double tEndODE      = timeStep;
     double dtODE        = 0.1 * tEndODE;
    
-    /***************************************************************
-     * allocate required memory for the computing grids
-     ***************************************************************/
-    
-    memory_allocate_all();     
+
         
     /***************************************************************
      * Main redshift loop starts here
@@ -197,7 +189,7 @@ void rt_main_run(){
 
         /* 
          * Due to the fact that light can only propagate as far as d=(\Delta t)*c,
-         * we introduce a grid index, iGridTmpLimit and solve the RT only for radii
+         * we introduce one additional grid index, iGridTmpLimit, and only solve the RT only for radii
          * corresponding to indices <= iGridTmpLimit. As the sources ages, i.e.
          * srcAge increases, iGridTmpLimit will increase as well.
          */ 
@@ -213,20 +205,21 @@ void rt_main_run(){
          ***************************************************************/
         while (isLastTimestep == 0 || srcAge>=myConfig.sourceLifetime){    
 
-            startTime = clock(); 
-              
-              
-            iGridTmpLimit += deltaGrid;    
-            if (iGridTmpLimit > numGridPoints) iGridTmpLimit = numGridPoints;    /* sanity check */         
-         
-               
+            startTime = clock();
+
+
+            iGridTmpLimit += deltaGrid;
+            if (iGridTmpLimit > numGridPoints) iGridTmpLimit = numGridPoints;    /* sanity check */
+
+
             if(DEBUG)printf("DEBUG: z = %.3f \t srcAge = %.3f Myr\t iGridTmpLimit = %d \t numGridPoints = %d \n", z, srcAge, iGridTmpLimit, numGridPoints);
-  
+
+
             /***************************************************************
              * Loop over radii starts here
-             ***************************************************************/              
-            for(iGrid = 0; iGrid < iGridTmpLimit; iGrid++){               
-                
+             ***************************************************************/
+            for(iGrid=0; iGrid<iGridTmpLimit; iGrid++){
+
                 /* calculate current radius */
                 radius = startRadius + (iGrid) * radialStep;                          
             
@@ -247,13 +240,7 @@ void rt_main_run(){
                 nHeX2 = log(nHeX2); 
                 nHX13 = log(nHX13); 
                 
-                // check if values are within the range provided by our tables 
-//                 if(  nHX1 > (UPLIM1 - 3 * TABLERES) || nHeX2 > (UPLIM1 - 3 * TABLERES) || nHX13 > (UPLIM2 - 3 * TABLERES)  ){
-//                     
-//                     nHX1  = UPLIM1 - 4 * TABLERES;
-//                     nHeX2 = UPLIM1 - 4 * TABLERES;
-//                     nHX13 = UPLIM2 - 4 * TABLERES;
-//                 }
+
                 if( nHX1 > (UPLIM1 - 3 * TABLERES) ) nHX1  = UPLIM1 - 4 * TABLERES;  
                 
                 if( nHeX2 > (UPLIM1 - 3 * TABLERES) ) nHeX2 = UPLIM1 - 4 * TABLERES;
@@ -285,12 +272,13 @@ void rt_main_run(){
 #endif          
                       
                 // load values of fuku integrals into global struct (needed within the ODE solver)    
-                params.fe1h1  = fuku_e1h1[iGrid];
-                params.fehe1  = fuku_ehe1[iGrid];
-                params.fehe2  = fuku_ehe2[iGrid]; 
-                params.intH1  = integral_H1[iGrid];
-                params.intHe1 = integral_He1[iGrid];
-                params.intHe2 = integral_He2[iGrid]; 
+                params.fe1h1   = fuku_e1h1[iGrid];
+                params.fehe1   = fuku_ehe1[iGrid];
+                params.fehe2   = fuku_ehe2[iGrid];
+                params.intH1   = integral_H1[iGrid];
+                params.intHe1  = integral_He1[iGrid];
+                params.intHe2  = integral_He2[iGrid];
+                params.localOD = over_densities[iGrid];
 
                 
                 // setting up initial conditions for the ODE solver 
@@ -403,19 +391,11 @@ void rt_main_run(){
 
                 x_HeI[iGrid]    = 1.0 - x_HeII[iGrid] - x_HeIII[iGrid];
                 x_HeI[iGrid]    = GSL_MAX_DBL( x_HeI[iGrid], 1.e-15 );
-//                 x_HeI[iGrid]    = GSL_MIN_DBL( x_HeI[iGrid], 1.0 ); 
-                
+
                 // update n_H1 and n_He1:                
-                n_H1[iGrid]  = n_H0  * OverDensity * pow3(1 + z) * x_HI[iGrid] ;
-                n_He1[iGrid] = n_He0 * OverDensity * pow3(1 + z) * x_HeI[iGrid];
+                n_H1[iGrid]  = n_H0  * over_densities[iGrid] * pow3(1 + z) * x_HI[iGrid] ;
+                n_He1[iGrid] = n_He0 * over_densities[iGrid] * pow3(1 + z) * x_HeI[iGrid];
                 
-//                 if (iGrid ==0) printf("--> n_H1[iGrid] = %e, x_HI[iGrid] = %e, x_HII[iGrid] = %e\n", n_H1[iGrid], x_HI[iGrid], x_HII[iGrid] );
-
-
-                //n_He3[iGrid]   = n_He0 * OverDensity * pow3(1 + z) - n_He2[iGrid] -  n_He1[iGrid];        
-
-                //ne[iGrid]      = n_H2[iGrid] + n_He2[iGrid] + 2.0 * n_He3[iGrid];
-                //x_HI[iGrid]     = 1.0 - x_HII[iGrid]; //1.0 - n_H2[iGrid] / ( n_H0 * OverDensity * pow3(1 + z) );
 
 #ifdef STROEMGRENTEST
 
@@ -487,28 +467,32 @@ void rt_main_run(){
                 
                 
                 double tmpR = 0.0;
-                
+
+#ifdef SHORTPROFILES
                 for(i=0;i<iGridTmpLimit;i++){
-                    
+#else
+                for(i=0;i<numGridPoints;i++){
+#endif
+
                     /* Conversion to fractions */
-                    //x_HII[i]        = n_H2[i]  / ( n_H0  * OverDensity * pow3(1 + z) );
+                    //x_HII[i]        = n_H2[i]  / ( n_H0  * over_densities[i] * pow3(1 + z) );
                     #ifdef STROEMGRENTEST
                     x_HeI[i]       = 0.0;           // necessary because n_He0 = 0.
                     x_HeII[i]      = 0.0;
                     x_HeIII[i]     = 0.0;
                     #else
-                    /*x_HeI[i]       = n_He1[i] / ( n_He0 * OverDensity * pow3(1 + z) );
-                    x_HeII[i]       = n_He2[i] / ( n_He0 * OverDensity * pow3(1 + z) );
-                    x_HeIII[i]       = n_He3[i] / ( n_He0 * OverDensity * pow3(1 + z) );
+                    /*x_HeI[i]       = n_He1[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
+                    x_HeII[i]       = n_He2[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
+                    x_HeIII[i]       = n_He3[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
                     */
                     
-                    ne[i] = (1.0-x_HI[i])*n_H0*OverDensity*pow3(1+z)+(x_HeII[i]+2*x_HeIII[i])*n_He0*OverDensity*pow3(1+z);
+                    ne[i] = (1.0-x_HI[i])*n_H0*over_densities[i]*pow3(1+z)+(x_HeII[i]+2*x_HeIII[i])*n_He0*over_densities[i]*pow3(1+z);
                     #endif
                     
                     /* compute spin and brightness temperatures */
                     kappa   =  3.1e-11 * pow (T_e[i], .357) * exp (-32. / T_e[i]);
                 
-                    C_H     = x_HI[i]*n_H0*OverDensity*pow3(1+z)*kappa;//(n_H0 * OverDensity * pow3((1 + z)) - n_H2[i]) * kappa;
+                    C_H     = x_HI[i]*n_H0*over_densities[i]*pow3(1+z)*kappa;//(n_H0 * over_densities[i] * pow3((1 + z)) - n_H2[i]) * kappa;
 
                     gamma_e = pow (10., (-9.607 + .5 * log10 (T_e[i]) * exp(-log10(pow (T_e[i], 4.5) / 1800))));
                     
@@ -516,7 +500,7 @@ void rt_main_run(){
 
                     gamma_p = 3.2 * kappa;
                     
-                    C_p     = x_HII[i]*(n_H0*OverDensity*pow3(1+z)) * gamma_p;
+                    C_p     = x_HII[i]*(n_H0*over_densities[i]*pow3(1+z)) * gamma_p;
 
                     ypara   = hnu21_k * (C_H + C_e + C_p) / (EINSTEIN_A * T_e[i]);
                     
@@ -616,7 +600,7 @@ void rt_initialize_grids(double zSrcTurnOn){
         x_HeII[i]       = 0.0;
         x_HeIII[i]      = 0.0; 
         ne[i]           = 0.0;
-        n_H1[i]         = n_H0  * pow3(1.+zSrcTurnOn) * OverDensity; // TODO NFW or other density profiles here 
+        n_H1[i]         = n_H0  * pow3(1.+zSrcTurnOn) * over_densities[i]; // TODO NFW or other density profiles here
 #ifdef STROEMGRENTEST
         
         x_HI[i]         = 1.0 - 1.2e-3; 
@@ -627,7 +611,7 @@ void rt_initialize_grids(double zSrcTurnOn){
 #else
         x_HI[i]         = 1.0;            
         x_HII[i]        = 0.0;        
-        n_He1[i]        = n_He0 * pow3(1.+zSrcTurnOn) * OverDensity;
+        n_He1[i]        = n_He0 * pow3(1.+zSrcTurnOn) * over_densities[i];
         x_HeI[i]        = 1.0; 
         T_e[i]          = T_CMB0 * pow2(1+zSrcTurnOn) / (1 + zTkinEQTCMB);
 #endif            

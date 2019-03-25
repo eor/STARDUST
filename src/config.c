@@ -23,7 +23,7 @@ void config_load_from_file(char *fileName){
     /* paths */
     char const *pathOutDirDefault   = CONFIG_DEFAULT_PATH_OUTDIR; 
     char const *pathSEDDefault      = CONFIG_DEFAULT_PATH_SED;
-    char const *pathDensityDefault  = CONFIG_DEFAULT_PATH_DENSITY;      // for future use
+    char const *pathDensityDefault  = CONFIG_DEFAULT_PATH_DENSITY;
     char const *pathIDDefault       = CONFIG_DEFAULT_PATH_ID;
     
     /* simulation */
@@ -145,9 +145,7 @@ void config_load_from_file(char *fileName){
             printf("\tpathID \t\t = %s  (not set, using default value)\n", myConfig.pathID);      
         }        
        
-       
-       
-       
+
         printf("\n");       
         
         /* Simulation parameters */
@@ -181,15 +179,7 @@ void config_load_from_file(char *fileName){
             myConfig.sourceLifetime = sourceLifetimeDefault;
             printf("\tsourceLifetime \t = %f (not set, using default value)\n",myConfig.sourceLifetime);
         } 
-       
-        /* sourceEfficiency */ 
-//         if (config_lookup_float(&cfg, "simulation.sourceEfficiency", &myConfig.sourceEfficiency)){
-//             printf("\tsourceEfficiency = %f\n", myConfig.sourceEfficiency);
-//         }else{
-//             myConfig.sourceEfficiency = sourceEfficiencyDefault;
-//             printf("\tsourceEfficiency = %f (not set, using default value)\n",myConfig.sourceEfficiency);
-//         }       
-        
+
         /* haloMass */      
         if (config_lookup_float(&cfg, "simulation.haloMass", &myConfig.haloMass)){
             printf("\thaloMass \t = %f\n", myConfig.haloMass);
@@ -198,22 +188,7 @@ void config_load_from_file(char *fileName){
             printf("\thaloMass \t = %f (not set, using default value)\n",myConfig.haloMass);
         }   
         
-        /* haloMassHigh */     
-//         if (config_lookup_float(&cfg, "simulation.haloMassHigh", &myConfig.haloMassHigh)){
-//             printf("\thaloMassHigh \t = %f\n", myConfig.haloMassHigh);
-//         }else{
-//             myConfig.haloMassHigh = haloMassHighDefault;
-//             printf("\thaloMassHigh \t = %f (not set, using default value)\n",myConfig.haloMassHigh);
-//         }        
-        
-        /* haloMassStride */   
-//         if (config_lookup_float(&cfg, "simulation.haloMassStride", &myConfig.haloMassStride)){
-//             printf("\thaloMassStride \t = %f\n", myConfig.haloMassStride);
-//         }else{
-//             myConfig.haloMassStride = haloMassStrideDefault;
-//             printf("\thaloMassStride \t = %f (not set, using default value)\n",myConfig.haloMassStride);
-//         }
-        
+
         /* redshiftLow */      
         if (config_lookup_float(&cfg, "simulation.redshiftLow", &myConfig.redshiftLow)){
             printf("\tredshiftLow \t = %f\n", myConfig.redshiftLow);
@@ -334,17 +309,7 @@ void config_load_from_file(char *fileName){
         // now we can set the short, handier, global: 
         DEBUG = myConfig.settingsDebug;
         
-//      the user should not touch this        
-//         /* settingsNEQS */  
-//         int settingsNEQSTmp = 0; 
-//         if (config_lookup_int(&cfg, "settings.settingsNEQS",&settingsNEQSTmp)){
-//             myConfig.settingsNEQS = settingsNEQSTmp;
-//             printf("\tsettingsNEQS \t = %d\n",myConfig.settingsNEQS);    
-//         }else{
-//             myConfig.settingsNEQS = settingsNEQSDefault;
-//             printf("\tsettingsNEQS \t = %d (not set, using default value)\n",myConfig.settingsNEQS);
-//         }  
-        
+
         /* settingsRMax */  
         if (config_lookup_float(&cfg, "settings.settingsRMax", &myConfig.settingsRMax)){
             printf("\tsettingsRMax \t = %f\n", myConfig.settingsRMax);
@@ -392,5 +357,18 @@ void config_load_from_file(char *fileName){
 
   /* Free the configuration */
   config_destroy(&cfg);
+
+}
+
+/* function that sets the global numGridPoints variable */
+void config_set_grid_points(){
+
+    double  radialStep  = myConfig.settingsDeltaR;          // Spatial resolution of the simulation in [kpc]
+    double  maxRadius   = myConfig.settingsRMax;            // Maximum radius radially away from the radiating source in [kpc]
+    double  startRadius = myConfig.settingsRStart;          // in [kpc]. Everything before this radius is assumed to be ionized.
+
+    /* Number of grids you want to compute for. Eg: 1500Kpc/radialStep */
+    numGridPoints = (int) roundf( (maxRadius - startRadius)/ radialStep) + 1;
+    printf(" Total number of radial grid points: %d\n", numGridPoints);
 
 }

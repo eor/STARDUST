@@ -22,40 +22,41 @@ void memory_allocate_all(void){
     int i;
 
 
-    ne           = (double*) malloc(sizeof(double) * numGridPoints);    
-    n_H1         = (double*) malloc(sizeof(double) * numGridPoints);    
-    n_He1        = (double*) malloc(sizeof(double) * numGridPoints);    
-    n_H2         = (double*) malloc(sizeof(double) * numGridPoints);    
-    n_He2        = (double*) malloc(sizeof(double) * numGridPoints);    
-    n_He3        = (double*) malloc(sizeof(double) * numGridPoints);    
-    T_e          = (double*) malloc(sizeof(double) * numGridPoints);    
-    T_spin       = (double*) malloc(sizeof(double) * numGridPoints);    
-    T_brig       = (double*) malloc(sizeof(double) * numGridPoints);
+    ne              = (double*) malloc(sizeof(double) * numGridPoints);
+    n_H1            = (double*) malloc(sizeof(double) * numGridPoints);
+    n_He1           = (double*) malloc(sizeof(double) * numGridPoints);
+    n_H2            = (double*) malloc(sizeof(double) * numGridPoints);
+    n_He2           = (double*) malloc(sizeof(double) * numGridPoints);
+    n_He3           = (double*) malloc(sizeof(double) * numGridPoints);
+    T_e             = (double*) malloc(sizeof(double) * numGridPoints);
+    T_spin          = (double*) malloc(sizeof(double) * numGridPoints);
+    T_brig          = (double*) malloc(sizeof(double) * numGridPoints);
     
-    x_HI         = (double*) malloc(sizeof(double) * numGridPoints);        
-    x_HII        = (double*) malloc(sizeof(double) * numGridPoints);
-    x_HeI        = (double*) malloc(sizeof(double) * numGridPoints);
-    x_HeII       = (double*) malloc(sizeof(double) * numGridPoints);
-    x_HeIII      = (double*) malloc(sizeof(double) * numGridPoints);
+    x_HI            = (double*) malloc(sizeof(double) * numGridPoints);
+    x_HII           = (double*) malloc(sizeof(double) * numGridPoints);
+    x_HeI           = (double*) malloc(sizeof(double) * numGridPoints);
+    x_HeII          = (double*) malloc(sizeof(double) * numGridPoints);
+    x_HeIII         = (double*) malloc(sizeof(double) * numGridPoints);
+
+    over_densities  =  (double*) malloc(sizeof(double) * numGridPoints);
+
+    fuku_e1h1       = (double*) malloc(sizeof(double) * numGridPoints);
+    fuku_ehe1       = (double*) malloc(sizeof(double) * numGridPoints);
+    fuku_ehe2       = (double*) malloc(sizeof(double) * numGridPoints);
+
+    integral_H1     = (double*) malloc(sizeof(double) * numGridPoints);
+    integral_He1    = (double*) malloc(sizeof(double) * numGridPoints);
+    integral_He2    = (double*) malloc(sizeof(double) * numGridPoints);
+
+    comp_integ1     = (double*) malloc(sizeof(double) * numGridPoints);
+    comp_integ2     = (double*) malloc(sizeof(double) * numGridPoints);
     
 
-    fuku_e1h1    = (double*) malloc(sizeof(double) * numGridPoints); 
-    fuku_ehe1    = (double*) malloc(sizeof(double) * numGridPoints); 
-    fuku_ehe2    = (double*) malloc(sizeof(double) * numGridPoints);    
-
-    integral_H1  = (double*) malloc(sizeof(double) * numGridPoints); 
-    integral_He1 = (double*) malloc(sizeof(double) * numGridPoints); 
-    integral_He2 = (double*) malloc(sizeof(double) * numGridPoints); 
-
-    comp_integ1  = (double*) malloc(sizeof(double) * numGridPoints); 
-    comp_integ2  = (double*) malloc(sizeof(double) * numGridPoints);
-    
-
-    xa           = (double*) malloc(sizeof(double) * INTERPOINTS); 
-    nHx1a        = (double*) malloc(sizeof(double) * INTERPOINTS); 
-    nHex2a       = (double*) malloc(sizeof(double) * INTERPOINTS); 
-    nHx13a       = (double*) malloc(sizeof(double) * INTERPOINTS); 
-    ya           = (double*) malloc(sizeof(double) * INTERPOINTS);
+    xa              = (double*) malloc(sizeof(double) * INTERPOINTS);
+    nHx1a           = (double*) malloc(sizeof(double) * INTERPOINTS);
+    nHex2a          = (double*) malloc(sizeof(double) * INTERPOINTS);
+    nHx13a          = (double*) malloc(sizeof(double) * INTERPOINTS);
+    ya              = (double*) malloc(sizeof(double) * INTERPOINTS);
     
 
     yP2a = (double**) malloc(sizeof(double*) * INTERPOINTS);
@@ -70,7 +71,7 @@ void memory_allocate_all(void){
     outFile = (char*) malloc( sizeof(char) * 256);
     
     
-    totalMemoryAlloc += 22 * sizeof(double) * numGridPoints;  
+    totalMemoryAlloc += 23 * sizeof(double) * numGridPoints;
     totalMemoryAlloc += 5  * sizeof(double) * INTERPOINTS;   
     totalMemoryAlloc += 2  * sizeof(double) * INTERPOINTS * INTERPOINTS;
     totalMemoryAlloc +=      sizeof(char)   * 256;
@@ -115,7 +116,9 @@ void memory_free_all(void){
     free(x_HII);  
     free(x_HeI); 
     free(x_HeII); 
-    free(x_HeIII); 
+    free(x_HeIII);
+
+    free(over_densities);
 
     free(fuku_e1h1);
     free(fuku_ehe1);

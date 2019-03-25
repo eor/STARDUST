@@ -103,6 +103,9 @@ extern double lamcons;
  * computing grids
  ***************************************************************/
 
+/* array to store the background overdensity along the LOS */
+extern double *over_densities;
+
 /* An array that stores the free-electron densities at every grid */
 extern double *ne;
 
@@ -126,6 +129,7 @@ extern double *x_HI, *x_HII,  *x_HeI, *x_HeII, *x_HeIII;
 
 /* The spin and brightness temperatures at grid locations */
 extern double *T_spin, *T_brig;
+
 
 
 /***************************************************************
@@ -156,7 +160,8 @@ extern struct ode_params{
     double intH1;    /*    integral_H1[iGrid]   */
     double intHe1;   /*    integral_He1[iGrid]  */
     double intHe2;   /*    integral_He2[iGrid]  */
-    
+    double localOD;  /*   over_densities[iGrid] */
+
 } params;
 /* params used at a given radius includes the following:
  *

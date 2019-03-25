@@ -1,8 +1,6 @@
 struct ode_system_derivatives
 {
-    
-    
-    
+
 //     int param;
 //     ode_system_derivatives( int param ) : m_param( param ) {}
     
@@ -18,6 +16,7 @@ struct ode_system_derivatives
         double integralH1   = (params.intH1);    /*    integral_H1[iGrid]   */
         double integralHe1  = (params.intHe1);   /*    integral_He1[iGrid]  */
         double integralHe2  = (params.intHe2);   /*    integral_He2[iGrid]  */
+        double localOD      = (params.localOD); /*     over_densities[iGrid] */
         
         double y0 = y[0]; 
         double y1 = y[1];
@@ -35,8 +34,8 @@ struct ode_system_derivatives
         
         y3 = find_max( y3, 0.0 ); // T_e     
        
-        double nH  = n_H0   * OverDensity * pow3(1 + z);
-        double nHe = n_He0  * OverDensity * pow3(1 + z);
+        double nH  = n_H0   * localOD * pow3(1 + z);
+        double nHe = n_He0  * localOD * pow3(1 + z);
         double ne  = y0 * nH + (y1 + 2*y2) * nHe;
         
         double n_Hn, n_Hen;
@@ -113,12 +112,6 @@ struct ode_system_derivatives
         psi_He2 =  5.54e-17 * pow(y3, -.397) * pow(1 + pow(y3 / 1e5, .5), -1.) * exp(-4.73e5 / y3);
         
 
-
-  //      n_Hn  = n_H0  * OverDensity * pow3(1 + z) - y0;
-  //      n_Hen = n_He0 * OverDensity * pow3(1 + z) - y1 - y2;
-    
-    
-    
  
         /* ---Explicitly regularize ---------- */
         #ifdef STROEMGRENTEST

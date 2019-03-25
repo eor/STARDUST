@@ -40,17 +40,25 @@ int main(int argc, char **argv){
     fileName[fileNameLength] = '\0';  
     
     config_load_from_file(fileName);     
-    
+    config_set_grid_points();
     log_start();
+
+
+
+    /***************************************************************
+     * allocate required memory for the computing grids
+     ***************************************************************/
+
+    memory_allocate_all();
     
     /***************************************************************
-     * read SED         
+     * read SED & over densities
      ***************************************************************/
 
     sed_read_file(myConfig.pathSED);
-    
-    // TODO: read UVB spectrum file     
-    // TODO: read background density file
+    density_read_file(myConfig.pathDensity);
+
+     // TODO: read UVB spectrum file
 
     /***************************************************************
      * pre-compute integrals         

@@ -22,7 +22,7 @@ struct global_config myConfig;
 /***************************************************************
  * SED related
  ***************************************************************/
-double  *Lambda, *Energy;
+double  *Lambda, *Energy;  // TODO: change this!
 int     type = 2;
 
 
@@ -55,6 +55,9 @@ double lamcons;
 /***************************************************************
  * computing grids
  ***************************************************************/
+
+/* array to store the background overdensity along the LOS */
+double *over_densities;
 
 /* An array that stores the free-electron densities at every grid */
 double *ne;

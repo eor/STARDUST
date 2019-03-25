@@ -52,13 +52,9 @@ struct ode_system_jacobi
         double fehe2        = (params.fehe2);   /*    fuku_ehe2[iGrid]     */        
         double integralH1   = (params.intH1);   /*    integral_H1[iGrid]   */        
         double integralHe1  = (params.intHe1);   /*    integral_He1[iGrid]  */        
-        double integralHe2  = (params.intHe2);   /*    integral_He2[iGrid]  */        
+        double integralHe2  = (params.intHe2);   /*    integral_He2[iGrid]  */
+        double localOD      = (params.localOD); /*     over_densities[iGrid] */
                 
-/*      double y0 = y[0];         
-        double y1 = y[1];        
-        double y2 = y[2];        
-        double y3 = y[3];  */      
-        
         /* For all terms in equation-(26) of Fukugita & Kawasaki (1994) */
         double dTa2h2, dTb1h1;
 
@@ -71,7 +67,6 @@ struct ode_system_jacobi
         double dTwhe2;
         double dTpsih1, dTpsihe1, dTpsihe2;
         double dTthetaff;
-
 
         double n_e,n_Hn, n_Hen;
 
@@ -136,15 +131,15 @@ struct ode_system_jacobi
 
         //---eq(B26) Ref(2)
         psi_He1 = 9.1e-27 * pow (y[3], -.1687) * pow (1 + pow (y[3] / 1e5, .5), -1.) * exp (-1.31e4 / y[3]) * (1.0 * y[0] + 1.0 * y[1] + 2.0 * y[2])
-                    * y[1] / (n_He0 * OverDensity * pow ((1 + z), 3.0) - y[1]);
+                    * y[1] / (n_He0 * localOD * pow ((1 + z), 3.0) - y[1]);
 
         //---eq(B27) Ref(2)
         psi_He2 = 5.54e-17 * pow (y[3], -.397) * pow (1 + pow (y[3] / 1e5, .5), -1.) * exp (-4.73e5 / y[3]);
 
 
         // densities
-        n_Hn    = n_H0  * OverDensity * pow3( 1. + z ) - y[0];
-        n_Hen   = n_He0 * OverDensity * pow3( 1. + z ) - y[1] - y[2];
+        n_Hn    = n_H0  * localOD * pow3( 1. + z ) - y[0];
+        n_Hen   = n_He0 * localOD * pow3( 1. + z ) - y[1] - y[2];
         n_e     = y[0] + y[1] + 2*y[2];
 
 #ifdef STROEMGRENTEST
@@ -158,7 +153,7 @@ struct ode_system_jacobi
      * We are using pre-computed derivatives (found with MATHEMATICA) 
      * ported to ANSI C.
      * 
-     * TODO: code refactorization ^^
+     * TODO: code refactoring ^^
      * 
      */
 
@@ -171,14 +166,11 @@ struct ode_system_jacobi
 
 
 
-  dTbhe1 =
-    -3.7631e-14 / (exp (285300. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2)) +
-    6.79014e-6 / (exp (285300. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
+  dTbhe1 = -3.7631e-14 / (exp (285300. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2))
+           +6.79014e-6 / (exp (285300. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                   pow (y[3], 1.5)) + 1.19e-11 / (exp (285300. / y[3]) * (1 +
                                                                    0.003162 *
-                                                                   pow (y[3],
-                                                                        0.5))
-                                              * pow (y[3], 0.5));
+                                                                   pow (y[3], 0.5))  * pow (y[3], 0.5));
 
 
 
