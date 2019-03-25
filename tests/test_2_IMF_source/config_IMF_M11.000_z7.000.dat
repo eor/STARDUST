@@ -7,7 +7,7 @@
 paths = {
     pathOutDir          = "./";
     pathSED             = "sed_IMF_M11.000_z7.000.dat";
-    pathDensity         = "";                 /* file with density profile (not yet implemented) */
+    pathDensity         = "";                 /* file with density profile (leave empty for default) */
     pathID              = "test_2"            /* unique id for log files, tables, etc */
 };
 
