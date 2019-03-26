@@ -19,6 +19,7 @@ OPT += -DRKDOPRI5
 #OPT += -DFIREHOSEDEBUG
 OPT += -DMAKETABLES
 
+#OPT += -DSHORTPROFILES
 
 
 #----------------------------------------------------------------------
@@ -39,7 +40,7 @@ OPTIONS  = $(OPTIMIZE) $(OPT)
 EXEC     = STARDUST
 
 OBJS     = main.o utils.o log.o config.o allvars.o \
-           functions.o sed.o table_read.o  \
+           functions.o sed.o density.o table_read.o  \
            table_ion.o table_temp.o table_compton.o \
            memory.o interpolation.o rt.o
 
