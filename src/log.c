@@ -23,9 +23,8 @@ void log_start(){
      
     char *tmpPath = NULL;         
          
-    if(DEBUG){   
-        
-        
+    if(DEBUG){
+
         if( !asprintf(&tmpPath, "%s/%s_M%.3f_z%.3f_%s", myConfig.pathOutDir, myConfig.pathID, myConfig.haloMass, myConfig.redshiftLow, debugLogFile ) ){
 
             log_error("asprintf failed");
@@ -106,8 +105,6 @@ void log_close(){
 }
 
 
-
-
 void log_time(int type){
     
     time_t timeNow;
@@ -118,7 +115,7 @@ void log_time(int type){
     timeInfo = localtime(&timeNow);
     
     if (type==1){
-        // debug case
+        // type == 1 is the debug case
         log_debug("Time stamp: %s", asctime (timeInfo) );
     }   
     else{

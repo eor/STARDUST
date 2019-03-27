@@ -16,7 +16,7 @@
 /***************************************************************
  * STARDUST version
  ***************************************************************/
-#define SD_VERSION 0.123
+#define SD_VERSION 0.1234
 
 /***************************************************************
  * config struct
@@ -33,11 +33,10 @@ extern struct global_config{
     double  sourceELow;
     double  sourceEHigh;     
     double  sourceLifetime;  
-//     double  sourceEfficiency;
-        
+
     double  haloMass;
     
-    double  redshiftLow;     
+    double  redshiftLow;        // to be removed at some point
     double  redshiftHigh;    
     double  redshiftStride;      
     

@@ -26,7 +26,7 @@ char* utils_concat_path(char *dir, char *file){
     
     int lenPrefix = strlen(myConfig.pathID);
     
-    char *result = (char*) malloc( sizeof(char) * (  strlen(dir)   +1   +lenPrefix   +1   +strlen(file)   +1 ) ); 
+    char *result = (char*) malloc( sizeof(char) * ( strlen(dir) + 1 + lenPrefix +1 + strlen(file) + 1 ) );
     // +1 for "/" 
     // +1 for "_"
     // +1 for the zero-terminator
@@ -36,9 +36,7 @@ char* utils_concat_path(char *dir, char *file){
     strcat(result,  myConfig.pathID);
     strcat(result, "_");
     strcat(result, file);
-    
 
-    
     return result;
     
 }
@@ -48,9 +46,9 @@ char* utils_concat_path(char *dir, char *file){
  * given directory and filename this function returns a full path
  ***************************************************************/
 char* utils_concat_path_noID(char *dir, char *file){
-    
-    
-    char *result = (char*) malloc( sizeof(char) * (strlen(dir)+1+strlen(file)+1 ) ); 
+
+
+    char *result = (char*) malloc( sizeof(char) * ( strlen(dir) + 1 + strlen(file) + 1 ) );
     // +1 for "/" and +1 for the zero-terminator
     
     strcpy(result, dir);

@@ -124,8 +124,8 @@ void table_read_all(void){
 
  /* end of temporary*/ 
 
-    gsl_matrix_fscanf(fp_e1h1_p1,tmpe1h1_p1);
-    gsl_matrix_get_col(e1h1_p1,tmpe1h1_p1,1);
+    gsl_matrix_fscanf(fp_e1h1_p1, tmpe1h1_p1);
+    gsl_matrix_get_col(e1h1_p1, tmpe1h1_p1, 1);
 
     gsl_matrix_fscanf(fp_e1h1_p2,tmpe1h1_p2);  
     gsl_matrix_get_col(e1h1_p2,tmpe1h1_p2,2); 

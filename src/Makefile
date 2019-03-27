@@ -17,7 +17,6 @@ OPT += -DRKDOPRI5
 # Only touch if you know what you are doing
 #OPT += -DSTROEMGRENTEST
 #OPT += -DFIREHOSEDEBUG
-OPT += -DMAKETABLES
 
 #OPT += -DSHORTPROFILES
 
