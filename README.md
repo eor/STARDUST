@@ -199,7 +199,7 @@ It contains examples on how to create said catalogs with our toy SED generator, 
 
 STARDUST was created by the following people: Rajat Thomas and Fabian Krause
 
-© 2018-2019 The STARDUST Authors
+© 2018-2020 The STARDUST Authors
 
 This programme is free software: you can redistribute it and/or modify it 
 under the terms of the GNU General Public License as published by the Free 
