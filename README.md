@@ -196,7 +196,6 @@ It contains examples on how to create said catalogs with our toy SED generator, 
 
 ## Copyright and licence
 
-
 STARDUST was created by the following people: Rajat Thomas and Fabian Krause
 
 © 2018-2020 The STARDUST Authors
