@@ -3,14 +3,14 @@
 * refactorization of variable names
 	- everything related to integrals / tables
 	- physical constants
-	
+		
 
 * remove last remnants of ifdef hell
 
 
 * refactor function names 
 	- more explicit names
-	- conform to naming scheme
+	- conform to naming scheme (which one?)
 
 
 * distibute functions in functions.c to more appropriate files, change function names accordingly
