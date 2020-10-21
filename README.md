@@ -212,7 +212,3 @@ for a particular purpose**. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with 
 this programme. If not, see http://www.gnu.org/licenses/.
 
-
-
-
-
