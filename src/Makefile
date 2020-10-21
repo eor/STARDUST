@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
-# If you modify any of these options, make sure     
-# to recompile the code by typing "make clean; make".      
-#                                                                      
+# If you modify any of these options, make sure
+# to recompile the code by typing "make clean; make".
+#
 #----------------------------------------------------------------------
 
 
