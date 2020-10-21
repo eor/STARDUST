@@ -63,7 +63,7 @@ void density_read_file(char *densityFileName){
     /* Get line SEDLineCount */
     while(!feof(fp)){
         if( !fscanf(fp,"%le\n",&tmp)){
-            printf(" Error. Could not read from file '%s'. Exiting.\n", densityLineCount);
+            printf(" Error. Could not read from file '%d'. Exiting.\n", densityLineCount);
             exit(1);
 
         }
