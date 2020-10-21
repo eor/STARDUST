@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
 import subprocess as sub
@@ -12,10 +12,10 @@ import sys
 #
 
 # a) location given relative to  home dir
-installDir      = os.path.expanduser('~/local')        
+installDir      = os.path.expanduser('~/local')
 
 # b) location given relative to exec path of this script
-#installDir      = os.path.abspath("../../local1") 
+#installDir      = os.path.abspath("../../local1")
 
 # c) absolute path
 #installDir      = os.path.abspath("/home/tester/Software/local")
@@ -33,18 +33,17 @@ installBoost     = True
 # Global variables
 #------------------------------------------------------------------------------
 
-softwareDir     = installDir+'/dl' 
+softwareDir     = installDir+'/dl'
 pythonVersion   = '.'.join(sys.version.split('.')[0:2])
 
 baseURL         = 'http://www.astro.rug.nl/~krause/static/STARDUST/'
 packageList     = [
-                    'libconfig-1.5.tar.gz',         
-                    'gsl-1.16.tar.gz', 
+                    'libconfig-1.5.tar.gz',
+                    'gsl-1.16.tar.gz',
                     'boost_1_59_0_redux.tar.gz'
                   ]
 
 installPackage = [installLibConfig, installGSL, installBoost]
-    
 
 #------------------------------------------------------------------------------
 # Functions
@@ -148,10 +147,11 @@ def set_paths():
         os.environ["LD_LIBRARY_PATH"] = "%s/lib/"%installDir
     
     os.environ["SD"] = "%s"%installDir
-    if os.environ.get("PYTHONPATH") != None:
-        os.environ["PYTHONPATH"] = '%s/python/lib/python%s/site-packages:%s/python/lib64/python%s/site-packages:'%( installDir, pythonVersion, installDir, pythonVersion  ) + os.environ.get("PYTHONPATH")
-    else:
-        os.environ["PYTHONPATH"] = '%s/python/lib/python%s/site-packages:%s/python/lib64/python%s/site-packages'%( installDir, pythonVersion, installDir, pythonVersion  ) 
+    
+    # if os.environ.get("PYTHONPATH") != None:
+    #     os.environ["PYTHONPATH"] = '%s/python/lib/python%s/site-packages:%s/python/lib64/python%s/site-packages:'%( installDir, pythonVersion, installDir, pythonVersion  ) + os.environ.get("PYTHONPATH")
+    # else:
+    #     os.environ["PYTHONPATH"] = '%s/python/lib/python%s/site-packages:%s/python/lib64/python%s/site-packages'%( installDir, pythonVersion, installDir, pythonVersion  ) 
     #os.environ["HDF5_DIR"] = "%s"%installDir
     
     
