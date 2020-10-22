@@ -37,7 +37,7 @@ We assume your system is equiped with the following dependencies:
 * C/C++ compiler
 * make
 * wget
-* Python 2.7 
+* Python 2.7 ... 3.x coming soon 
 * numpy
 * scipy
 * matplotlib
