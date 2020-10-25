@@ -28,7 +28,7 @@ simulation = {
 settings = { /* general settings */
 
 
-    settingsDebug       = 1;                  /* 1 or 0 */
+    settingsDebug       = 0;                  /* 1 or 0 */
 
     settingsRStart      = 0.1;                /* IGM is considered ionized from 0 to this radius in kpc */	
     settingsRMax        = 1500.0;             /* Maximum radius radially away from source in kpc */
