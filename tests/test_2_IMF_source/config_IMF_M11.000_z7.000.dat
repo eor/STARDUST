@@ -40,17 +40,16 @@ settings = { /* general settings */
 };
 
 
-cosmology = {
-    cosmoOmegaM         = 0.315;              # Total matter density 
-    cosmoOmegaL         = 0.685;              # Dark energy / cosmological constant 
-    cosmoOmegaB         = 0.0491;             # Baryon density
-    cosmoH0             = 67.31;              # Hubble parameter at z = 0
-    cosmoH100           = 0.6731;             # Hubble / 100
-    cosmoSigma8         = 0.829;              # power spectrum normalization    
-    cosmoTauThom        = 0.078;              # Optical depth of Thomson scattering
-    cosmoTCMB           = 2.731;              # CMB temperature [K] at z = 0
+ cosmology = {
+     cosmoOmegaM         = 0.3089;              # Total matter density
+     cosmoOmegaL         = 0.6911;              # Dark energy / cosmological constant
+     cosmoOmegaB         = 0.0486;              # Baryon density
+     cosmoH0             = 67.74 ;              # Hubble parameter [km/sec/Mpc] at z = 0
+     cosmoH100           = 0.6774;              # Hubble / 100
+     cosmoSigma8         = 0.8159;              # power spectrum normalization
+     cosmoTauThom        = 0.066 ;              # Optical depth of Thomson scattering
+     cosmoTCMB           = 2.731 ;              # CMB temperature [K] at z = 0
 
-}; 
+ };
 
-    
 
