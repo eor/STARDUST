@@ -3,7 +3,7 @@
 #ifndef CONFIG_DEFAULTS_H
 
 #define CONFIG_DEFAULTS_H
-    
+
 
 /* paths */
 #define CONFIG_DEFAULT_PATH_OUTDIR      "."
@@ -25,13 +25,13 @@
 
 
 /* cosmology - defaults are from Planck results XIII, 2015, TT+lowP (Table 4) */
-#define CONFIG_DEFAULT_COSMO_OMEGA_M    0.315        //  Total matter density 
-#define CONFIG_DEFAULT_COSMO_OMEGA_L    0.685        //  Dark energy / cosmological constant
-#define CONFIG_DEFAULT_COSMO_OMEGA_B    0.0491       //  Baryon density
-#define CONFIG_DEFAULT_COSMO_H0         67.31        //  Hubble parameter [km/sec/Mpc] at z = 0
-#define CONFIG_DEFAULT_COSMO_H100       0.6731       //  Hubble parameter / 100
-#define CONFIG_DEFAULT_COSMO_SIGMA8     0.829        //  power spectrum normalization    
-#define CONFIG_DEFAULT_COSMO_TAU_THOM   0.078        //  Optical depth of Thomson scattering
+#define CONFIG_DEFAULT_COSMO_OMEGA_M    0.3089        //  Total matter density
+#define CONFIG_DEFAULT_COSMO_OMEGA_L    0.6911        //  Dark energy / cosmological constant
+#define CONFIG_DEFAULT_COSMO_OMEGA_B    0.0486       //  Baryon density
+#define CONFIG_DEFAULT_COSMO_H0         67.74        //  Hubble parameter [km/sec/Mpc] at z = 0
+#define CONFIG_DEFAULT_COSMO_H100       0.6774       //  Hubble parameter / 100
+#define CONFIG_DEFAULT_COSMO_SIGMA8     0.8159        //  power spectrum normalization
+#define CONFIG_DEFAULT_COSMO_TAU_THOM   0.066        //  Optical depth of Thomson scattering (not used in calculations right now)
 #define CONFIG_DEFAULT_COSMO_TCMB0      2.731        //  CMB temperature at z = 0
 
 
@@ -43,5 +43,5 @@
 #define CONFIG_DEFAULT_SETTINGS_DELTA_T 0.01        // float, Myr
 #define CONFIG_DEFAULT_SETTINGS_WRITE_T 1.0         // float, Myr (write interval)
 
-    
-#endif    
+
+#endif
