@@ -10,7 +10,7 @@
 
 * refactor function names 
 	- more explicit names
-	- conform to naming scheme (which one?)
+	- conform to naming scheme (filename_function_name)
 
 
 * distibute functions in functions.c to more appropriate files, change function names accordingly
@@ -42,7 +42,7 @@
 
 * logging
 	- logs should be closed when code breaks/exits before finishing a simulation
-	- write the error message to the log  for good measure
+	- write the error message to the log for good measure
 
 
 * config 
