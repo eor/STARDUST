@@ -34,7 +34,7 @@ Should your system lack `git`, you can alternatively download a zip file of the 
 
 ### Software requirements
 
-We assume your system is equiped with the following dependencies:
+We assume your system is equipped with the following dependencies:
 * C/C++ compiler
 * make
 * wget
