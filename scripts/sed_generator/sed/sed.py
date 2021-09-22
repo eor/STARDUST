@@ -91,36 +91,35 @@ def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N
 
     # 0. SANITY CHECKS
     # we assume that energies will be given in eV
-    if(eHigh<eLow):
+    if eHigh < eLow:
         tmp = eLow
         eLow = eHigh
         eHigh = tmp
         
     # 1.  SET UP ARRAYS
-    energies       = np.array([])
-    intensities    = np.array([])       # basically SED without normalization    
+    energies = np.array([])
+    intensities = np.array([])       # basically SED without normalization
   
     # fill energies array    
-    if(logGrid):
+    if logGrid :
         # create energies along a logarithmic grid, so that eLow*C**(N-1) = eHigh
         C = m.pow(eHigh/eLow,1./(N-1))	
         energies = np.append(energies,eLow)	
         for i in range(1,N):
             eTmp = energies[i-1]*C
-            energies = np.append(energies,eTmp)
-  
+            energies = np.append(energies, eTmp)
     else:
         # create a linear wavelength grid, so that eLow + C*(N-1) = eHigh
-        C        = (eHigh-eLow)/(N-1.)
-        energies = np.append(energies,eLow)
+        C = (eHigh-eLow)/(N-1.)
+        energies = np.append(energies, eLow)
         for i in range(1,N):
-            eTmp     = energies[i-1]+C
-            energies = np.append(energies,eTmp)
+            eTmp = energies[i-1]+C
+            energies = np.append(energies, eTmp)
   
     # compute energies    
-    for i in range (0, N):
-        tmp            = SED_power_law(energies[i], alpha)
-        intensities    = np.append( intensities, tmp ) 
+    for i in range(0, N):
+        tmp = SED_power_law(energies[i], alpha)
+        intensities = np.append(intensities, tmp)
 
 
     # 2. NORMALIZATION
@@ -130,14 +129,13 @@ def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N
     bhMass = 1e-4*(cosmoOmegaB/cosmoOmegaM)*haloMass        # haloMass should be given in [M_sun]
     eddLum = 1.26*1e31*(bhMass)*6.241e18                    # conversion from [Joule/s] to [eV/s] 
 
-    if(not silent):
+    if not silent:
         print("------------------------------------------------------------------------------------")
         print("Generating SED for a halo featuring a PL-type source:")
         print("\tHost halo mass \t\t= %e M_sol"%(haloMass))
         print("\tPL index \t= %.3f "%(alpha))
         print("\tblack hole mass    \t= %.3f M_sol"%(bhMass))
         print("\tEddington luminosity\t= %e eV/s"%(eddLum))
-
 
     # integrate to obtain total energy (normalize)
     sed4Norm    = np.array([])
@@ -164,7 +162,6 @@ def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N
     # 3 WRITE DATA
     if(fileName):
         write_data(fileName, energies, intensities)
-
 
     return energies, intensities
 
@@ -402,7 +399,7 @@ def generate_SED_IMF_PL(haloMass, redshift, eLow=10.4, eHigh=1.e4, N=2000,  logG
                                                            logGrid=logGrid,
                                                            starMassMin=starMassMin, 
                                                            starMassMax=starMassMax,
-                                                           targetSourceAge=10.,
+                                                           targetSourceAge=targetSourceAge,
                                                            fEsc=fEsc,
                                                            imfBins=imfBins, 
                                                            imfIndex=imfIndex,
