@@ -120,7 +120,7 @@ the respective directories and start the runs.
 Here, the SED was generated using the following code.
 
 ```python
-import sed
+from sed import sed
 
 z    = 7.
 logM = 11.0
@@ -139,7 +139,7 @@ sed.generate_SED_PL( haloMass=10**logM,
 Now we use a SED that uses our simple pop 3 model (which follows an IMF). It was generated as follows.
 
 ```python
-import sed
+from sed import sed
 
 z    = 7.
 logM = 11.0
@@ -159,7 +159,7 @@ sed.generate_SED_stars_IMF( haloMass=10**logM, redshift=z,
 For this test we emloy a model that combines SEDs from the first two tests.
 
 ```python
-import sed
+from sed import sed
 
 z    = 7.
 logM = 11.0
@@ -199,7 +199,7 @@ It contains examples on how to create said catalogs with our toy SED generator, 
 
 STARDUST was created by the following people: Rajat Thomas and Fabian Krause
 
-© 2018-2021 The STARDUST Authors
+© 2018 - 2021 The STARDUST Authors
 
 This programme is free software: you can redistribute it and/or modify it 
 under the terms of the GNU General Public License as published by the Free 

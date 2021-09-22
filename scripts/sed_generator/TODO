@@ -1,21 +1,17 @@
 To Do
 ======
 
-* sed.py refactoring
-
+* PEP 8 refactoring throughout!!!
 
 * move function default args to sed_user_settings?
 
 * reduce code duplication in sed.py
-    * move grid setup to external function
+
+* move grid setup to external function
     
-    
-* add more realistic models to our collection of toy models (possibly via cloudy)
+   
+* add more realistic models to our collection of toy models (possibly via Bagpipes)
 
 
 
 
-DONE
-======
-
-* clean up SANDBOX section of sed.py
