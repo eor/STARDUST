@@ -77,12 +77,14 @@ LIBS     =  -lconfig $(CONF_LIB) $(CONF_INCL) -lgsl -lgslcblas -lm  $(GSL_LIB) $
 .cpp.o:
 	$(CPP) -c $< -o $@ $(CPPFLAGS)
 
+all: $(EXEC)
+
 $(EXEC): $(OBJS) 
 	$(CPP) $(OBJS) $(LIBS)  -o $(EXEC)  
 
 $(OBJS): $(INCL) 
 
-
+.PHONY: clean
 clean:
 	rm -f $(OBJS) $(EXEC)
 
