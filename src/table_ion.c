@@ -7,8 +7,6 @@
 #include "table_settings.h"
 #include "constants.h"
 
-
-
 #include "prototype.h"
 #include "allvars.h"
 #include "log.h"
@@ -77,19 +75,18 @@ int table_ion (void){
     myFunction.function = &tau_e1h1_p1_log;
     myFunction.params = 0;
 
-//     size_t nevals =1000;
     size_t nevals = intResolution;
     
     for( nHX1=LOWLIM; nHX1<=Max_Log1; nHX1+=TABLERES){
         
         if(previous>1.e-100){
-            /* Integration */
-//             gsl_integration_qags(&myFunction, l1, l2, absError, relError, 1000, wtable, &result, &error);
-            gsl_integration_cquad(&myFunction, l1, l2, absError, relError, wtable2, &result, &error, &intResolution); 
-            
-            //result = Integrate_using_Patterson_adaptive(l1, l2, absError, relError, &tau_e1h1_p1_log, myFunction.params);
+
+            gsl_integration_cquad(&myFunction, l1, l2, absError, relError, wtable2, &result, &error, &intResolution);
+
             previous = result;
+
             fprintf(fpTau, "%e \t %e \n", nHX1, previous);
+
         }else{            
             fprintf(fpTau, "%e \t %e\n", nHX1, 1.e-100);            
         }      
@@ -106,10 +103,10 @@ int table_ion (void){
     myFunction.function = &tau_e1h1_p2_log;
     myFunction.params = 0;
      
-    for(nHX1=LOWLIM;nHX1<=Max_Log1;nHX1+=TABLERES){ 
+    for(nHX1=LOWLIM; nHX1<=Max_Log1; nHX1+=TABLERES){
         
         nHeX2 = LOWLIM;
-//         gsl_integration_qags(&myFunction, l2, l3, absError, relError, intResolution, wtable, &result, &error);
+
         gsl_integration_cquad(&myFunction, l2, l3, absError, relError, wtable2, &result, &error, &intResolution); 
         
         if(result > 1.e-100)
@@ -121,10 +118,10 @@ int table_ion (void){
            
            if(previous>1.e-100){
                 previous = result;
-                fprintf(fpTau,"%e \t %e \t %e \n",nHX1,nHeX2,previous);
+                fprintf(fpTau,"%e \t %e \t %e \n", nHX1, nHeX2, previous);
             }      
             else
-                fprintf(fpTau,"%e \t %e \t %e \n",nHX1,nHeX2,1.e-100);
+                fprintf(fpTau,"%e \t %e \t %e \n", nHX1, nHeX2, 1.e-100);
            
         }        
     }

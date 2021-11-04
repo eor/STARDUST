@@ -6,7 +6,7 @@
  * input SED).  
  * 
  * Originally written by Rajat Mani Thomas (2005). 
- * Currently maintained by someone else.
+ * Currently maintained by Fabian Krause.
  * 
  ***************************************************************/
 
@@ -84,7 +84,7 @@ int main(int argc, char **argv){
     
     log_close();
     
-    printf("\n Run completed successfully. Exiting here.\n\n");
+    printf("\n Run completed successfully. Exiting.\n\n");
     
     return 0;    
         

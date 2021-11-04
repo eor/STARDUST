@@ -47,20 +47,19 @@ double time_from_redshift(double z, void * pars){
 /***************************************************************
  * return the redshift for a particular time
  ***************************************************************/
-double Findz (double rshift, void * params){
+double Findz (double redshift, void * params){
 
 
     struct Findz_params *p = (struct Findz_params *) params;
 
-    double CummTime = p->cummtime;
-    CummTime *= MYR;
-    double z_of_src = p->zsrc;
+    double cumulative_time = p->cumulative_source_lifetime;
+    cumulative_time *= MYR;
+    double redshift_of_source = p->switchon_source_redshift;
  
-    double Hubb;
-    Hubb = myConfig.cosmoH0 * KM2CM / MPC;     
+    double Hubb = myConfig.cosmoH0 * KM2CM / MPC;
  
-    if (rshift == z_of_src)
-        return (CummTime - 0.);
+    if (redshift == redshift_of_source)
+        return (cumulative_time - 0.);  // this should be a redshift
     else{
         
         gsl_integration_workspace *wbal = gsl_integration_workspace_alloc (1000);
@@ -71,14 +70,14 @@ double Findz (double rshift, void * params){
         Func.function = &time_from_redshift;
         Func.params = 0;
 
-        gsl_integration_qags (&Func, rshift, z_of_src, 0, 1e-7, 1000, wbal, &result, &error);
+        gsl_integration_qags (&Func, redshift, redshift_of_source, 0, 1e-7, 1000, wbal, &result, &error);
         
         //TODO: relErr absErr, different use rk8 instead of qags, 
         //      catch errors as in sed norm
 
         gsl_integration_workspace_free (wbal);
 
-        return (CummTime - (result / Hubb));
+        return (cumulative_time - (result / Hubb));
 
     }// else statement not needed, fk
 }
@@ -100,10 +99,19 @@ double hubble (double z){
 
 
 /***************************************************************
- * functions to calculate various cross-sections
+ * Functions to calculate various cross-sections
+ *
+ *  They take in photon energy in eV and return hydrogen or helium
+ *  ionisation cross-section in cm^2.
+ *  Based on Fukugita, M. & Kawasaki, M. 1994, MNRAS 269, 563,
+ *  equations B13 - B16
+ *
+ *  The functions below are optimised by Rajat to be faster than
+ *  the paper functions.
  ***************************************************************/
 double cross_sec_e1h1(double E){
-    /* ?? HI (n=1 --> free) */ 
+    /* HI (n=1 --> free) */
+
     double sig_0,F,E0,x,y,y0,y1,yw,yaa,p,Mb;
     
     Mb      = 1.e-18;

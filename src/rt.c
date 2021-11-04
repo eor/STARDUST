@@ -203,14 +203,12 @@ void rt_main_run(){
         /***************************************************************
          * Time loop starts here
          ***************************************************************/
-        while (isLastTimestep == 0 || srcAge>=myConfig.sourceLifetime){    
+        while (isLastTimestep == 0 || srcAge >= myConfig.sourceLifetime){
 
             startTime = clock();
 
-
             iGridTmpLimit += deltaGrid;
             if (iGridTmpLimit > numGridPoints) iGridTmpLimit = numGridPoints;    /* sanity check */
-
 
             if(DEBUG)printf("DEBUG: z = %.3f \t srcAge = %.3f Myr\t iGridTmpLimit = %d \t numGridPoints = %d \n", z, srcAge, iGridTmpLimit, numGridPoints);
 
@@ -218,7 +216,7 @@ void rt_main_run(){
             /***************************************************************
              * Loop over radii starts here
              ***************************************************************/
-            for(iGrid=0; iGrid<iGridTmpLimit; iGrid++){
+            for(iGrid=0; iGrid < iGridTmpLimit; iGrid++){
 
                 /* calculate current radius */
                 radius = startRadius + (iGrid) * radialStep;                          
@@ -233,9 +231,7 @@ void rt_main_run(){
                 }               
 
                 nHX13 = (nHX1 + 64. * nHeX2);       /* The factor of 64 is basically sigma_HeII/sigma_HI */
-                //nHX13 = (nHX1 + 2. * nHeX2);      /* The factor of 2 is basically sigma_HeII/sigma_HI */                    
-                
-                
+
                 nHX1  = log(nHX1);                  /* values are tabulated as LOG in the tables, therefore  */    
                 nHeX2 = log(nHeX2); 
                 nHX13 = log(nHX13); 
@@ -301,7 +297,7 @@ void rt_main_run(){
                 
 #ifdef RKDOPRI5
                 
-                size_t numStepsODE = integrate_adaptive( make_dense_output< runge_kutta_dopri5< vector_type > >( absErrorODE , relErrorODE ) ,
+                size_t numStepsODE = integrate_adaptive( make_dense_output < runge_kutta_dopri5 <vector_type>>( absErrorODE , relErrorODE ),
                                                         ode_system_derivatives() , y , tStartODE , tEndODE , dtODE 
                                                      );
 #endif       
@@ -486,7 +482,8 @@ void rt_main_run(){
                     x_HeIII[i]       = n_He3[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
                     */
                     
-                    ne[i] = (1.0-x_HI[i])*n_H0*over_densities[i]*pow3(1+z)+(x_HeII[i]+2*x_HeIII[i])*n_He0*over_densities[i]*pow3(1+z);
+                    ne[i] = (1.0 - x_HI[i]) * n_H0 * over_densities[i] * pow3(1+z)
+                            + (x_HeII[i] + 2 * x_HeIII[i]) * n_He0*over_densities[i] * pow3(1+z);
                     #endif
                     
                     /* compute spin and brightness temperatures */
@@ -540,8 +537,8 @@ void rt_main_run(){
 
             z_lo = 4.0, z_hi = zSrcTurnOn;          /* limits within which to look for z  */
 
-            findzparams.cummtime = srcAge;
-            findzparams.zsrc = zSrcTurnOn;
+            findzparams.cumulative_source_lifetime = srcAge;
+            findzparams.switchon_source_redshift = zSrcTurnOn;
 
             gsl_root_fsolver_set (s_Findz, &F_Findz, z_lo, z_hi);
             
@@ -600,7 +597,7 @@ void rt_initialize_grids(double zSrcTurnOn){
         x_HeII[i]       = 0.0;
         x_HeIII[i]      = 0.0; 
         ne[i]           = 0.0;
-        n_H1[i]         = n_H0  * pow3(1.+zSrcTurnOn) * over_densities[i]; // TODO NFW or other density profiles here
+        n_H1[i]         = n_H0  * pow3(1. + zSrcTurnOn) * over_densities[i]; // TODO NFW or other density profiles here
 #ifdef STROEMGRENTEST
         
         x_HI[i]         = 1.0 - 1.2e-3; 
@@ -611,9 +608,9 @@ void rt_initialize_grids(double zSrcTurnOn){
 #else
         x_HI[i]         = 1.0;            
         x_HII[i]        = 0.0;        
-        n_He1[i]        = n_He0 * pow3(1.+zSrcTurnOn) * over_densities[i];
+        n_He1[i]        = n_He0 * pow3(1. + zSrcTurnOn) * over_densities[i];
         x_HeI[i]        = 1.0; 
-        T_e[i]          = T_CMB0 * pow2(1+zSrcTurnOn) / (1 + zTkinEQTCMB);
+        T_e[i]          = T_CMB0 * pow2(1. + zSrcTurnOn) / (1. + zTkinEQTCMB);
 #endif            
 
         T_spin[i]       = 0.0;
@@ -632,7 +629,7 @@ void rt_initialize_grids(double zSrcTurnOn){
 }
 
 /***************************************************************
- * Check if we are in the last time stell
+ * Check if we are in the final time step
  ***************************************************************/
 int rt_check_is_last_time_step(double srcAge, double timeStep){
     

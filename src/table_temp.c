@@ -293,17 +293,17 @@ int table_temp(void){
 /*******************************E1H1*************************************/
 double temp_e1h1_p1_log(double egamm,void * params)
 {
-  egamm = exp(egamm);
- double nHx1;
- nHx1 = exp(nHX1);
+    egamm = exp(egamm);
+    double nHx1;
+    nHx1 = exp(nHX1);
 
- double decay_term,F_e1h1;
- F_e1h1=cross_sec_e1h1(egamm);
+    double decay_term, F_e1h1;
+    F_e1h1=cross_sec_e1h1(egamm);
 
- decay_term = exp(-(nHx1*F_e1h1)*drKpc);
- 
- return egamm*(egamm-estart)*F_e1h1*sed_get_value(egamm)*decay_term/egamm; 
- /* returning Function to be integrated*/
+    decay_term = exp(-(nHx1*F_e1h1)*drKpc);
+
+    return egamm * (egamm-estart) * F_e1h1 * sed_get_value(egamm) * decay_term / egamm;
+    /* returning Function to be integrated*/
  
 }
 

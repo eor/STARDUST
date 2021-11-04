@@ -1,6 +1,7 @@
 
 
 * refactorization of variable names
+	- use more consistent variable and function naming scheme!!!	
 	- everything related to integrals / tables
 	- physical constants
 		

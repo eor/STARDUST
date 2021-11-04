@@ -16,7 +16,7 @@
 /***************************************************************
  * STARDUST version
  ***************************************************************/
-#define SD_VERSION 0.1234
+#define SD_VERSION 0.12345
 
 /***************************************************************
  * config struct
@@ -174,8 +174,8 @@ extern struct ode_params{
 /* Structure used by Findz function to locate a particular redshift */
 extern struct Findz_params{
     
-    double cummtime; /* time since the source has turned ON */
-    double zsrc;   /* redshift at which the source turns ON */
+    double cumulative_source_lifetime; /* time since the source has turned ON */
+    double switchon_source_redshift;   /* redshift at which the source turns ON */
     
 } findzparams;
 

@@ -114,7 +114,7 @@ struct ode_params params;
  */
 
 
-/* Parametres passed to the Findz function in function.c */
+/* Parameters passed to the Findz function in function.c */
 struct Findz_params findzparams;
 
 
