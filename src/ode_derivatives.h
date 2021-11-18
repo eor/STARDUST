@@ -49,7 +49,7 @@ struct ode_system_derivatives
         double zeta_H1, zeta_He1, zeta_He2;
         double eta_H2, eta_He2, eta_He3;
         double psi_H1, psi_He1, psi_He2;
-        double theta_ff, w_He2, mucon = 1.24;
+        double theta_ff, w_He2, mu = 1.24;       // mu = mean molecular weight
         
         double T_CMB0 = myConfig.cosmoTCMB;
         
@@ -149,6 +149,11 @@ struct ode_system_derivatives
         
         double srH  = 1.0/(1.0 + 4*(0.15/1.9));  // species ratio
         double srHe = 1.0/((1.9/0.15) + 4);      // species ratio
+
+        // the species ratios correspond to the fraction n_H/n_B and n_He/n_B,
+        // where n_H and n_He are the number densities of all hydrogen and helium, respectively
+        // and n_B is the number density of all baryons. The redshift dependence for these values cancels out.
+
         
         /* eq(36) in Ref [2] */
         dydt[3] = ( ((1-y0)*srH * integralH1 + (1.0-y1-y2)*srHe * integralHe1 + y1*srHe * integralHe2)
@@ -158,8 +163,8 @@ struct ode_system_derivatives
                     - ( ne * (psi_H1 * (1.0-y0)*srH + psi_He1 * (1.0-y1-y2) * srHe + psi_He2 * y1 * srHe) ) 
                     - (y3 - T_CMB0 * (1 + z)) * lamcons * ne 
                     - theta_ff * (y0*srH + y1*srHe + 4 * y2*srHe) * ne
-                    - 7.5 * hubble (z) * k_BeV * y3  / mucon
-                 ) * mucon / (k_BeV  * 1.5);
+                    - 7.5 * hubble (z) * k_BeV * y3  / mu
+                 ) * mu / (k_BeV  * 1.5);
  
                  
         // use [dt] = Myr instead of seconds
