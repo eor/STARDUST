@@ -54,7 +54,7 @@
 /* Kpc-->cms */
 #define KPC  3.086e21  
 
-/* kilometres to centimetres converstion */
+/* kilometres to centimetres conversion */
 #define KM2CM  1.0e5
 
 /* Million year-->seconds */
@@ -75,7 +75,7 @@
 /* Mass of SUN [grams] */
 #define MSUNCGS  1.99e33 
 
-/* Gravitaional constant [cm^3 grams^-1 s^-2] */
+/* Gravitational constant [cm^3 grams^-1 s^-2] */
 #define GRAVCONST  6.67e-8               
 
 /* Integral Blackbody [erg cm^-2 K-4 sec^-1] */

@@ -49,7 +49,7 @@ struct ode_system_derivatives
         double zeta_H1, zeta_He1, zeta_He2;
         double eta_H2, eta_He2, eta_He3;
         double psi_H1, psi_He1, psi_He2;
-        double thetaff, w_He2, mucon = 1.24;
+        double theta_ff, w_He2, mucon = 1.24;
         
         double T_CMB0 = myConfig.cosmoTCMB;
         
@@ -79,7 +79,7 @@ struct ode_system_derivatives
         zhe2 = 1.9e-3 * pow(y3, -1.5) * exp(-4.7e5 / y3) * (1 + 0.3 * exp(-9.4e4 / y3));
         
         /* eq(B28) in Ref [2] */
-        thetaff = 1.42e-27 * 1.1 * pow(y3, .5); // for T between 1e4-1e8K, gaunt factor is between 1.1 and 1.5
+        theta_ff = 1.42e-27 * 1.1 * pow(y3, .5); // for T between 1e4-1e8K, gaunt factor is between 1.1 and 1.5
         
         /* eq(B17) in Ref [2] */
         zeta_H1 = 1.27e-21 * pow(y3, .5) * pow(1 + pow(y3 / 1.e5, .5), -1.) * exp(-1.58e5 / y3);    
@@ -157,7 +157,7 @@ struct ode_system_derivatives
                     - w_He2 * y2 * srHe * ne  
                     - ( ne * (psi_H1 * (1.0-y0)*srH + psi_He1 * (1.0-y1-y2) * srHe + psi_He2 * y1 * srHe) ) 
                     - (y3 - T_CMB0 * (1 + z)) * lamcons * ne 
-                    - thetaff * (y0*srH + y1*srHe + 4 * y2*srHe) * ne 
+                    - theta_ff * (y0*srH + y1*srHe + 4 * y2*srHe) * ne
                     - 7.5 * hubble (z) * k_BeV * y3  / mucon
                  ) * mucon / (k_BeV  * 1.5);
  

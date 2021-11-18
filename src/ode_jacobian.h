@@ -56,17 +56,17 @@ struct ode_system_jacobi
         double localOD      = (params.localOD); /*     over_densities[iGrid] */
                 
         /* For all terms in equation-(26) of Fukugita & Kawasaki (1994) */
-        double dTa2h2, dTb1h1;
+        double dT_a2h2, dT_b1h1;
 
         /* For all terms in equation-(29 & 30) of Fukugita & Kawasaki (1994) */
-        double dTbhe1, dTbhe2, dTahe2, dTahe3, dTzhe2;
+        double dT_bhe1, dT_bhe2, dT_ahe2, dT_ahe3, dT_zhe2;
 
         /* For all terms in equation-(36) of Fukugita & Kawasaki (1994) */
-        double dTzetah1, dTzetahe1, dTzetahe2;
-        double dTetah2, dTetahe2, dTetahe3;
-        double dTwhe2;
-        double dTpsih1, dTpsihe1, dTpsihe2;
-        double dTthetaff;
+        double dT_zetah1, dT_zetahe1, dT_zetahe2;
+        double dT_etah2, dT_etahe2, dT_etahe3;
+        double dT_whe2;
+        double dT_psih1, dT_psihe1, dT_psihe2;
+        double dT_thetaff;
 
         double n_e,n_Hn, n_Hen;
 
@@ -157,16 +157,16 @@ struct ode_system_jacobi
      * 
      */
 
-    dTa2h2 = -3.29657e-10 / pow (y[3], 1.8);
+    dT_a2h2 = -3.29657e-10 / pow (y[3], 1.8);
 
 
-    dTb1h1 = -9.24966e-14 / ( exp (157800. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5) , 2) )    
+    dT_b1h1 = -9.24966e-14 / ( exp (157800. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5) , 2) )
              +9.2313e-6   / (exp (157800. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) 
              * pow(y[3], 1.5)) + 2.925e-11 / ( exp(157800. / y[3]) * (1 + 0.0031622 * pow (y[3], 0.5)) * pow (y[3], 0.5) );
 
 
 
-  dTbhe1 = -3.7631e-14 / (exp (285300. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2))
+  dT_bhe1 = -3.7631e-14 / (exp (285300. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2))
            +6.79014e-6 / (exp (285300. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                   pow (y[3], 1.5)) + 1.19e-11 / (exp (285300. / y[3]) * (1 +
                                                                    0.003162 *
@@ -174,7 +174,7 @@ struct ode_system_jacobi
 
 
 
-  dTbhe2 =
+  dT_bhe2 =
     -8.9808e-15 / (exp (631500. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2)) +
     3.58692e-6 / (exp (631500. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                   pow (y[3],
@@ -184,9 +184,9 @@ struct ode_system_jacobi
 
 
 
-  dTahe2 = -9.5295e-11 / pow (y[3], 1.6353);
+  dT_ahe2 = -9.5295e-11 / pow (y[3], 1.6353);
 
-  dTahe3 =
+  dT_ahe3 =
     -9.3634e-10 / ((1 + 0.000024 * pow (y[3], 0.7)) * pow (y[3], 1.7)) -
     2.2386e-14 / (pow (1 + 0.00002390881249475094 * pow (y[3], 0.7), 2) *
                   pow (y[3], 1.));
@@ -194,7 +194,7 @@ struct ode_system_jacobi
 
 
 
-  dTzhe2 = 53.58 / (exp (564000. / y[3]) * pow (y[3], 3.5)) +
+  dT_zhe2 = 53.58 / (exp (564000. / y[3]) * pow (y[3], 3.5)) +
     (893. * (1 + 0.3 / exp (94000. / y[3]))) / (exp (470000. / y[3]) *
                                              pow (y[3],
                                                   3.5)) - (0.00285 * (1 +
@@ -207,7 +207,7 @@ struct ode_system_jacobi
 
 
 
-  dTzetah1 =
+  dT_zetah1 =
     -2.0080e-24 / (exp (158000. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2)) +
     2.0066e-16 / (exp (158000. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                   pow (y[3],
@@ -220,7 +220,7 @@ struct ode_system_jacobi
 
 
 
-  dTzetahe1 =
+  dT_zetahe1 =
     -1.4831e-24 / (exp (285000. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2)) +
     2.6733e-16 / (exp (285000. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                   pow (y[3],
@@ -232,7 +232,7 @@ struct ode_system_jacobi
 
 
 
-  dTzetahe2 =
+  dT_zetahe2 =
     -7.8266e-25 / (exp (631000. / y[3]) * pow (1 + 0.003162 * pow (y[3], 0.5), 2)) +
     3.12345e-16 / (exp (631000. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                    pow (y[3],
@@ -244,22 +244,22 @@ struct ode_system_jacobi
 
 
 
-  dTetah2 =
+  dT_etah2 =
     7.7631e-27 / ((1 + 0.0000631 * pow (y[3], 0.7)) * pow (y[3], 0.7)) -
     1.1429e-30 / (pow (1 + 0.0000631 * pow (y[3], 0.7), 2) *
                   pow (y[3], 5.5511e-17));
 
 
-  dTetahe2 = 5.65285e-27 / pow (y[3], 0.6353);
+  dT_etahe2 = 5.65285e-27 / pow (y[3], 0.6353);
 
 
-  dTetahe3 =
+  dT_etahe3 =
     4.156e-26 / ((1 + 0.000024 * pow (y[3], 0.7)) * pow (y[3], 0.7)) -
     2.31865e-30 / (pow (1 + 0.000024 * pow (y[3], 0.7), 2) * pow (y[3], 5.551e-17));
 
 
 
-  dTwhe2 = 3.4968e-9 / (exp (564000. / y[3]) * pow (y[3], 3.5)) +
+  dT_whe2 = 3.4968e-9 / (exp (564000. / y[3]) * pow (y[3], 3.5)) +
     (5.828e-8 * (1 + 0.3 / exp (94000. / y[3]))) /
     (exp (470000. / y[3]) * pow (y[3], 3.5)) -
     (1.86e-13 * (1 + 0.3 / exp (94000. / y[3]))) / (exp (470000. / y[3]) *
@@ -267,7 +267,7 @@ struct ode_system_jacobi
 
 
 
-  dTpsih1 =
+  dT_psih1 =
     8.85e-14 / (exp (118000. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                 pow (y[3],
                      2)) - 1.18585e-21 / (exp (118000. / y[3]) * pow (1 +
@@ -279,7 +279,7 @@ struct ode_system_jacobi
 
 
 
-  dTpsihe1 = 1.1921e-22 / (exp (13100. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
+  dT_psihe1 = 1.1921e-22 / (exp (13100. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                            pow (y[3],
                                 2.1687)) -
     1.53517e-27 / (exp (13100. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
@@ -296,7 +296,7 @@ struct ode_system_jacobi
 
 
 
-  dTpsihe2 =
+  dT_psihe2 =
     2.62042e-11 / (exp (473000. / y[3]) * (1 + 0.003162 * pow (y[3], 0.5)) *
                    pow (y[3],
                         2.397)) - 2.12e-17 / (exp (473000. / y[3]) * (1 +
@@ -310,14 +310,14 @@ struct ode_system_jacobi
 
 
 
-  dTthetaff = 7.1e-28 / pow (y[3], 0.5);
+  dT_thetaff = 7.1e-28 / pow (y[3], 0.5);
 
 
   /* End of computing derivatives of complicated functions */
 
 
-/* Computing terms correspoding to the FIRST row of the Jacobian 
-     i.e., J[1][1] =d/dnH2(d/dt nH2); J[1][2]=d/dnHe2(d/dt nH2)
+/* Computing terms corresponding to the FIRST row of the Jacobian
+     i.e., J[1][1] =d/dnH2(d/dT_ nH2); J[1][2]=d/dnHe2(d/dt nH2)
            J[1][3] =d/dnHe3(d/dt nH2); J[1][4]=d/dT(d/dt nH2)
 */
 
@@ -329,10 +329,10 @@ struct ode_system_jacobi
 
     dnHe3_nH2eq     = 2 * dnHe2_nH2eq;
 
-    dT_nH2eq        = dTb1h1 * n_e * n_Hn - dTa2h2 * n_e * y[0];
+    dT_nH2eq        = dT_b1h1 * n_e * n_Hn - dT_a2h2 * n_e * y[0];
 
 
-  /* Computing terms correspoding to the SECOND row of the Jacobian 
+  /* Computing terms corresponding to the SECOND row of the Jacobian
      i.e., J[2][1] =d/dnH2(d/dt nHe2); J[2][2]=d/dnHe2(d/dt nHe2)
      J[2][3] =d/dnHe3(d/dt nHe2); J[2][4]=d/dT(d/dt nHe2)
    */
@@ -348,11 +348,11 @@ struct ode_system_jacobi
                       - 2 * y[1] *(bhe2 + ahe2 + zeta_He2) 
                       + 2 * ahe3 * y[2] + ahe3 * n_e;
 
-    dT_nHe2eq = n_e * (dTbhe1 * n_Hen - dTbhe2 * y[1] - dTahe2 * y[1]
-                        + dTahe3 * y[2] - dTzhe2 * y[1]);
+    dT_nHe2eq = n_e * (dT_bhe1 * n_Hen - dT_bhe2 * y[1] - dT_ahe2 * y[1]
+                        + dT_ahe3 * y[2] - dT_zhe2 * y[1]);
 
 
-  /* Computing terms correspoding to the THIRD row of the Jacobian 
+  /* Computing terms corresponding to the THIRD row of the Jacobian
      i.e., J[3][1] =d/dnH2(d/dt nHe3); J[3][2]=d/dnHe2(d/dt nHe3)
      J[3][3] =d/dnHe3(d/dt nHe3); J[3][4]=d/dT(d/dt nHe3)
    */
@@ -365,10 +365,10 @@ struct ode_system_jacobi
 
     dnHe3_nHe3eq = 2 * dnH2_nHe3eq - ahe3 * n_e;
 
-    dT_nHe3eq    = n_e * (dTbhe2 * y[1] - ahe3 * y[2]);
+    dT_nHe3eq    = n_e * (dT_bhe2 * y[1] - ahe3 * y[2]);
 
 
-  /* Computing terms correspoding to the FOURTH row of the Jacobian 
+  /* Computing terms corresponding to the FOURTH row of the Jacobian
      i.e., J[4][1] =d/dnH2(d/dt T); J[4][2]=d/dnHe2(d/dt T)
      J[4][3] =d/dnHe3(d/dt T); J[4][4]=d/dT(d/dt T)
    */
@@ -413,11 +413,11 @@ struct ode_system_jacobi
 
 
 
-    dT_Teq =    - (n_e * (dTzetah1 * n_Hn + dTzetahe1 * n_Hen + dTzetahe2 * y[1])) 
-                - (n_e * (dTetah2 * y[0] + dTetahe2 * y[1] + dTetahe3 * y[2])) 
+    dT_Teq =    - (n_e * (dT_zetah1 * n_Hn + dT_zetahe1 * n_Hen + dT_zetahe2 * y[1]))
+                - (n_e * (dT_etah2 * y[0] + dT_etahe2 * y[1] + dT_etahe3 * y[2]))
                 - n_e * w_He2 * y[2] 
-                - (n_e * (dTpsih1 * n_Hn + dTpsihe1 * n_Hen + dTpsihe2 * y[1])) 
-                - lamcons * n_e - dTthetaff * (y[0] + y[1] + 4 * y[2]) * n_e 
+                - (n_e * (dT_psih1 * n_Hn + dT_psihe1 * n_Hen + dT_psihe2 * y[1]))
+                - lamcons * n_e - dT_thetaff * (y[0] + y[1] + 4 * y[2]) * n_e
                 - 7.5 * hubble (z) * (k_BeV * nB0 * pow ((1 + z), 3.0) / mucon);
 
                 

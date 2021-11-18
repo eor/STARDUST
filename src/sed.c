@@ -405,7 +405,7 @@ double sed_compute_norm(){
         }
     }
 
-    gsl_set_error_handler(oldErrorHandler); // reset error handler (might be unneccessary).
+    gsl_set_error_handler(oldErrorHandler); // reset error handler (might be unnecessary).
     gsl_integration_workspace_free (wnorm);
 
     if(DEBUG){
@@ -436,7 +436,7 @@ double sed_estimate_stroemgren_radius( double redshift, double time ){
       // find ionized volume
       double volume = ionPhotonN / density; 
 
-      // volumen [cm^3] --> radius [kpc]
+      // volume [cm^3] --> radius [kpc]
       double radius = pow(0.75 * volume / 3.14, 1./3.) / KPC;
       
       return radius;  

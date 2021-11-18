@@ -48,7 +48,7 @@ double drKpc = KPC;
 /* Square of the clumping factor */
 float OverDensity = 1.;
 
-/* Just a constant evaluted in rt.c */
+/* Just a constant evaluated in rt.c */
 double lamcons;
 
 
@@ -96,7 +96,7 @@ double radius;
 /* Current redshift */
 double z;
 
-/* Value of the redshift at the previous timestep */
+/* Value of the redshift at the previous time step */
 double zPrevious;
 
 /* column densities */

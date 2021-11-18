@@ -116,10 +116,6 @@ void rt_main_run(){
      ***************************************************************/
     
     /* physics */
-//     double l1 = log(HIONIZEeV);
-//     double l2 = log(He1IONIZEeV);
-//     double l3 = log(He2IONIZEeV);
-//     double l4 = log(myConfig.sourceEHigh);
 
     double hnu21_k = 0.068;         // this should go into constants.h
     double C_H, C_e, C_p;
@@ -267,7 +263,9 @@ void rt_main_run(){
                 
 #endif          
                       
-                // load values of fuku integrals into global struct (needed within the ODE solver)    
+                // load values of fukugita integrals into global struct (needed within the ODE solver)
+                // fe*:  ionisation rates
+                // int*: heating rates
                 params.fe1h1   = fuku_e1h1[iGrid];
                 params.fehe1   = fuku_ehe1[iGrid];
                 params.fehe2   = fuku_ehe2[iGrid];
