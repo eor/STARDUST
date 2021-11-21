@@ -1,8 +1,5 @@
 struct ode_system_derivatives
 {
-
-//     int param;
-//     ode_system_derivatives( int param ) : m_param( param ) {}
     
     
     void operator()( const vector_type &y , vector_type &dydt , double /* t */ )
@@ -10,33 +7,25 @@ struct ode_system_derivatives
 
         
         
-        double fe1h1        = (params.fe1h1);    /*    fuku_e1h1[iGrid]     */
-        double fehe1        = (params.fehe1);    /*    fuku_ehe1[iGrid]     */
-        double fehe2        = (params.fehe2);    /*    fuku_ehe2[iGrid]     */
-        double integralH1   = (params.intH1);    /*    integral_H1[iGrid]   */
-        double integralHe1  = (params.intHe1);   /*    integral_He1[iGrid]  */
-        double integralHe2  = (params.intHe2);   /*    integral_He2[iGrid]  */
-        double localOD      = (params.localOD); /*     over_densities[iGrid] */
+        double integral_ionisation_rate_H_I     = (params.fe1h1);    //    fuku_e1h1[iGrid]
+        double integral_ionisation_rate_He_I    = (params.fehe1);    //    fuku_ehe1[iGrid]
+        double integral_ionisation_rate_He_II   = (params.fehe2);    //    fuku_ehe2[iGrid]
+        double integral_heating_rate_H_I        = (params.intH1);    //    integral_H1[iGrid]
+        double integral_heating_rate_He_I       = (params.intHe1);   //    integral_He1[iGrid]
+        double integral_heating_rate_He_II      = (params.intHe2);   //    integral_He2[iGrid]
+        double local_over_density               = (params.localOD);  //     over_densities[iGrid]
         
         double y0 = y[0]; 
         double y1 = y[1];
         double y2 = y[2];
         double y3 = y[3];
-        
-        
-        
-        // sanity checks. number densities and T_e should not be negative    
-        //y0 = find_max( y0, 0. ); // n_H_II        
-        //y1 = find_max( y1, 0. ); // n_He_II         
-        //y2 = find_max( y2, 0. ); // n_He_III    
-        
-        //printf("y3=%f\t",y3);
-        
-        y3 = find_max( y3, 0.0 ); // T_e     
+
+
+        y3 = find_max( y3, 0.0 );   // T_e sanity check. should not be negative
        
-        double nH  = n_H0   * localOD * pow3(1 + z);
-        double nHe = n_He0  * localOD * pow3(1 + z);
-        double ne  = y0 * nH + (y1 + 2*y2) * nHe;
+        double n_H  = n_H0   * local_over_density * pow3(1 + z);
+        double n_He = n_He0  * local_over_density * pow3(1 + z);
+        double ne  = y0 * n_H + (y1 + 2*y2) * n_He;
         
         double n_Hn, n_Hen;
 
@@ -106,7 +95,7 @@ struct ode_system_derivatives
         psi_H1 = 7.5e-19 * pow(1 + pow(y3 / 1e5, .5), -1.) * exp(-1.18e5 / y3);
         
         /* eq(B26) in Ref [2] */
-        psi_He1 = 9.1e-27 * pow(y3, -.1687) * pow(1 + pow(y3 / 1e5, .5),-1.) * exp(-1.31e4 / y3) * ne * y1*nHe;  
+        psi_He1 = 9.1e-27 * pow(y3, -.1687) * pow(1 + pow(y3 / 1e5, .5),-1.) * exp(-1.31e4 / y3) * ne * y1*n_He;
         
         /* eq(B27) in Ref [2] */
         psi_He2 =  5.54e-17 * pow(y3, -.397) * pow(1 + pow(y3 / 1e5, .5), -1.) * exp(-4.73e5 / y3);
@@ -118,22 +107,22 @@ struct ode_system_derivatives
         n_Hen       = 0.0;
         psi_He1     = 0.0; 
         psi_He2     = 0.0; 
-        integralHe1 = 0.0;
-        integralHe2 = 0.0;
-        fehe1       = 0.0;
-        fehe2       = 0.0;
+        integral_heating_rate_He_I = 0.0;
+        integral_heating_rate_He_II = 0.0;
+        integral_ionisation_rate_He_I       = 0.0;
+        integral_ionisation_rate_He_II       = 0.0;
         #endif    
 
         /* --------------------------------- */
 
 
-        R1c = b1h1 * ne + fe1h1;
+        R1c = b1h1 * ne + integral_ionisation_rate_H_I;
 
         /* eq(26) in Ref [2] */
-        dydt[0] = R1c * (1-y0) - a2h2 * ne*ne/nH;
+        dydt[0] = R1c * (1-y0) - a2h2 * ne*ne/n_H;
   
         /* eq(29) in Ref [2] */
-        dydt[1] =   (1.0-y1-y2) * fehe1 
+        dydt[1] =   (1.0-y1-y2) * integral_ionisation_rate_He_I
                     + bhe1 * ne * (1.0-y1-y2) 
                     - bhe2 * ne * y1 
                     - ahe2 * ne * y1 
@@ -141,7 +130,7 @@ struct ode_system_derivatives
                     - zhe2 * ne * y1;
         
         /* eq(30) in Ref [2] */
-        dydt[2] =   y1 * fehe2 
+        dydt[2] =   y1 * integral_ionisation_rate_He_II
                     + bhe2 * ne * y1 
                     - ahe3 * ne * y2;
         
@@ -156,7 +145,10 @@ struct ode_system_derivatives
 
         
         /* eq(36) in Ref [2] */
-        dydt[3] = ( ((1-y0)*srH * integralH1 + (1.0-y1-y2)*srHe * integralHe1 + y1*srHe * integralHe2)
+        dydt[3] = (  ( (1-y0) * srH        * integral_heating_rate_H_I
+                      + (1.0-y1-y2) * srHe * integral_heating_rate_He_I
+                      + y1 * srHe          * integral_heating_rate_He_II
+                      )
                     - (ne * (zeta_H1 * (1.0-y0) * srH + zeta_He1 * (1.0-y1-y2) * srHe + zeta_He2 * y1 *srHe)) 
                     - (ne * (eta_H2 * y0 * srH + eta_He2 * y1 *srHe + eta_He3 * y2 * srHe)) 
                     - w_He2 * y2 * srHe * ne  

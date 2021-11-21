@@ -22,19 +22,17 @@ OPT += -DRKDOPRI5
 
 
 #----------------------------------------------------------------------
-# Here, select compile environment for the target machine.  
+# Here, select compile environment for the target machine.
 # Follow example below.
 #----------------------------------------------------------------------
 
-CC       = gcc               # sets the C-compiler
+CC       = gcc     # sets the C-compiler
 
 CPP      = g++
 
-#OPTIMIZE = -O2 -Wall -g  # sets optimization and warning flags
 OPTIMIZE = -O2 -g  # sets optimization and warning flags
 
-OPTIONS  = $(OPTIMIZE) $(OPT) 
-#OPTIONS  = $(OPTIMIZE) $(OPT) -Wunused-but-set-variable
+OPTIONS  = $(OPTIMIZE) $(OPT)
 
 EXEC     = STARDUST
 
@@ -61,7 +59,7 @@ BOOST_INCL = -I${HOME}/local/boost_1_59_0_redux
 
 
 CFLAGS   = $(OPTIONS) $(GSL_INCL) $(BOOST_INCL) $(CONF_INCL)
-CPPFLAGS = 
+CPPFLAGS =
 
 
 LIBS     =  -lconfig $(CONF_LIB) $(CONF_INCL) -lgsl -lgslcblas -lm  $(GSL_LIB) $(GSL_INCL)  $(BOOST_INCL)

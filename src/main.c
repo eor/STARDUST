@@ -33,16 +33,15 @@ int main(int argc, char **argv){
     * read config file & start logging
     ***************************************************************/   
    
-    int  fileNameLength = strlen(argv[1]);
-    char fileName[fileNameLength];
+    size_t  len = strlen(argv[1]);
+    char    file_name[len];
     
-    strncpy(fileName,argv[1],fileNameLength); 
-    fileName[fileNameLength] = '\0';  
+    strncpy(file_name, argv[1], len);
+    file_name[len] = '\0';
     
-    config_load_from_file(fileName);     
+    config_load_from_file(file_name);
     config_set_grid_points();
     log_start();
-
 
 
     /***************************************************************
