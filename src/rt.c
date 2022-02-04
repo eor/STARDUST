@@ -179,9 +179,6 @@ void rt_main_run(){
         /* A constant used in the temperature evolution part of the ODE. Used in the Compton cooling term. eq B29 in [2],  */
         lamcons = 4 * k_BeV * (M_PI * M_PI / 15) * pow3( (k_B * T_CMB0 * (1 + z) * 2 * M_PI / (PLANCKCONSTCGS * LIGHTVEL)) ) 
                     * (k_B * T_CMB0 * (1 + z) / (MASSELECTRON * LIGHTVEL * LIGHTVEL)) * LIGHTVEL * THOMSON_ELEC_CROSS;
-        
-                    //what about n_e and (T - T_CMB*(1+z)) ???? --> those are multiplied in the solver equation      // TODO: maybe clean this up?
-                    
 
         /* 
          * Due to the fact that light can only propagate as far as d=(\Delta t)*c,
