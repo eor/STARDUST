@@ -1,0 +1,47 @@
+# Build artifacts
+src/*.o
+src/STARDUST
+*.o
+*.out
+
+# Generated tables (table_ion.c / table_temp.c / table_compton.c)
+#   These are precomputed at startup from the current config + SED.
+#   They are run-specific outputs, not source, and can be large.
+table_ion_*.dat
+table_temp_*.dat
+table_comp1_*.dat
+table_comp2_*.dat
+
+# Run logs (see log.c: log_start() names these <pathID>_M..._z..._log_*)
+*log_debug*
+*log_main*
+
+# Simulation outputs
+#   Profile/output files written by rt.c during a run.
+*_profile.dat
+outFile*
+
+# Dependency builds (scripts/install_dependencies.py target)
+#   Only relevant if --prefix is pointed inside the repo.
+#   Default is ~/local, which is outside the repo and doesn't need ignoring.
+#   Listed here as a safety net in case that ever changes.
+/local/
+
+# Apptainer build output
+*.sif
+*.sandbox/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*~
