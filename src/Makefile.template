@@ -1,0 +1,122 @@
+#----------------------------------------------------------------------
+# This is a TEMPLATE, not the Makefile make actually reads.
+#
+# Copy it once:
+#     cp Makefile.template Makefile
+#
+# then edit the library paths in your copy of Makefile to match your
+# system (see ../docs/SETUP.md).
+
+# Your edited Makefile is ignored by git (see ../.gitignore), to
+# prevent git conflicts, which also means you won't automatically
+# pick up future changes to this template.
+#
+# If you modify any options in your copy, make sure to recompile:
+#     make clean && make
+#
+# See ../docs/SETUP.md for instructions on installing GSL, libconfig,
+# and Boost.
+#----------------------------------------------------------------------
+
+
+# Select ODE solver
+
+OPT += -DRKDOPRI5
+#OPT += -DROSENBROCK4
+#OPT += -DEULER
+#OPT += -DRK78
+#OPT += -DBS
+
+
+# Only touch if you know what you are doing
+#OPT += -DSTROEMGRENTEST
+#OPT += -DFIREHOSEDEBUG
+
+#OPT += -DSHORTPROFILES
+
+
+#----------------------------------------------------------------------
+# Here, select compile environment for the target machine.
+# Follow example below.
+#----------------------------------------------------------------------
+
+CC       = gcc     # sets the C-compiler
+
+CPP      = g++
+
+CPPSTD   = -std=gnu++17
+
+OPTIMIZE = -O2 -g  # sets optimization and warning flags
+
+OPTIONS  = $(OPTIMIZE) $(OPT)
+
+EXEC     = STARDUST
+
+OBJS     = main.o utils.o log.o config.o allvars.o \
+           functions.o sed.o density.o table_read.o  \
+           table_ion.o table_temp.o table_compton.o \
+           memory.o interpolation.o rt.o
+
+INCL     = allvars.h prototype.h  Makefile
+
+#----------------------------------------------------------------------
+# Library paths
+#
+# Defaults below assume libraries installed under $HOME/local (the
+# layout used by scripts/install_dependencies.py for HPC environments
+# without module support / root access). Adjust as needed:
+#
+#   - macOS + Homebrew:        use `brew --prefix gsl` etc. (see
+#                               ../docs/SETUP.md scenario A)
+#   - HPC with Lmod modules:   use the paths/env vars your modules
+#                               export, e.g. $EBROOTGSL (see
+#                               ../docs/SETUP.md scenario B)
+#   - HPC, no modules/root:    run scripts/install_dependencies.py,
+#                               which prints the lines to use here
+#                               (see ../docs/SETUP.md scenario C)
+#   - HPC with Apptainer:      see stardust.def + docs/SETUP.md
+#                               scenario D -- builds via apt inside the
+#                               container, no path overrides needed
+#----------------------------------------------------------------------
+
+
+# Libraries
+# path to GSL includes and libraries
+GSL_INCL = -I${HOME}/local/include
+GSL_LIB  = -L${HOME}/local/lib
+
+# path to libconfig includes and libraries
+CONF_INCL= -I${HOME}/local/include
+CONF_LIB = -L${HOME}/local/lib
+
+# path to boost includes
+BOOST_INCL = -I${HOME}/local/boost_1_91_0
+
+
+CFLAGS   = $(OPTIONS) $(GSL_INCL) $(BOOST_INCL) $(CONF_INCL)
+CPPFLAGS =
+
+
+LIBS     =  -lconfig $(CONF_LIB) $(CONF_INCL) -lgsl -lgslcblas -lm  $(GSL_LIB) $(GSL_INCL)  $(BOOST_INCL)
+
+
+# Implicit Rules
+.SUFFIXES: .o .c .cpp
+
+.c.o:
+	$(CPP) -c $< -o $*.o $(CFLAGS)
+
+.cpp.o:
+	$(CPP) -c $< -o $@ $(CPPFLAGS)
+
+all: $(EXEC)
+
+$(EXEC): $(OBJS) 
+	$(CPP) $(OBJS) $(LIBS)  -o $(EXEC)  
+
+$(OBJS): $(INCL) 
+
+.PHONY: clean
+clean:
+	rm -f $(OBJS) $(EXEC)
+

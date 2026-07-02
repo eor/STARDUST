@@ -4,6 +4,9 @@ src/STARDUST
 *.o
 *.out
 
+# Local Makefile (copied from Makefile.template)
+src/Makefile
+
 # Generated tables (table_ion.c / table_temp.c / table_compton.c)
 #   These are precomputed at startup from the current config + SED.
 #   They are run-specific outputs, not source, and can be large.
