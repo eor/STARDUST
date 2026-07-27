@@ -1,0 +1,22 @@
+# Conda environment for STARDUST's Python helper scripts:
+#   - scripts/sed_generator/  (SED generation)
+#   - scripts/sd_plot/        (plotting STARDUST profiles)
+#   - scripts/catalog/        (building catalogs of runs)
+#
+# The STARDUST binary itself has no Python dependency -- this is only for the
+# helper scripts. The scripts need numpy, scipy and matplotlib.
+#
+# Create and activate:
+#   conda env create -f environment.yml
+#   conda activate stardust
+#
+# (scripts/install_dependencies.py installs the C libraries, GSL/libconfig/Boost,
+#  and is unrelated to this environment.)
+name: stardust
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.12
+  - numpy
+  - scipy
+  - matplotlib

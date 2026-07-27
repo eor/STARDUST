@@ -17,47 +17,62 @@
 #include "log.h"
 
 /***************************************************************
- * given directory and filename this function returns a full path
+ * Build "dir/file", or "dir/pathID_file" path if
+ * myConfig.pathID is set.
+ *
+ * Caller owns the returned buffer and must free() it.
  ***************************************************************/
-char* utils_concat_path(char *dir, char *file){
-    
-    // we insert the config parameter given in pathID in front of
-    // the filename.
-    
-    int lenPrefix = strlen(myConfig.pathID);
-    
-    char *result = (char*) malloc( sizeof(char) * ( strlen(dir) + 1 + lenPrefix +1 + strlen(file) + 1 ) );
-    // +1 for "/" 
-    // +1 for "_"
-    // +1 for the zero-terminator
-    
+char* utils_concat_path(const char *dir, const char *file){
+
+    int havePathID = (myConfig.pathID[0] != '\0');
+
+    size_t len = strlen(dir) + 1 /* "/" */ + strlen(file) + 1 /* '\0' */;
+    if (havePathID){
+        len += strlen(myConfig.pathID) + 1; /* pathID + "_" */
+    }
+
+    char *result = (char*) malloc(sizeof(char) * len);
+    if (!result){
+        printf("ERROR: utils_concat_path: malloc failed for '%s/%s'. Exiting.\n", dir, file);
+        exit(1);
+    }
+
     strcpy(result, dir);
     strcat(result, "/");
-    strcat(result,  myConfig.pathID);
-    strcat(result, "_");
+    if (havePathID){
+        strcat(result, myConfig.pathID);
+        strcat(result, "_");
+    }
     strcat(result, file);
 
     return result;
-    
 }
 
 
 /***************************************************************
- * given directory and filename this function returns a full path
+ * Build "dir/file" path, ignoring myConfig.pathID entirely.
+ *
+ * Kept only for the existing calls in rt.c that explicitly want
+ * the no-pathID behaviour regardless of whether pathID is set. New
+ * code should just call utils_concat_path(), which now does the
+ * right thing in both cases.
+ * TODO: remove!
  ***************************************************************/
-char* utils_concat_path_noID(char *dir, char *file){
+char* utils_concat_path_noID(const char *dir, const char *file){
 
+    size_t len = strlen(dir) + 1 /* "/" */ + strlen(file) + 1 /* '\0' */;
 
-    char *result = (char*) malloc( sizeof(char) * ( strlen(dir) + 1 + strlen(file) + 1 ) );
-    // +1 for "/" and +1 for the zero-terminator
-    
+    char *result = (char*) malloc(sizeof(char) * len);
+    if (!result){
+        printf("ERROR: utils_concat_path_noID: malloc failed for '%s/%s'. Exiting.\n", dir, file);
+        exit(1);
+    }
+
     strcpy(result, dir);
     strcat(result, "/");
-    
     strcat(result, file);
-    
-    return result;    
 
+    return result;
 }
 
 

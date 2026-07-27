@@ -30,6 +30,11 @@ settings = { /* general settings */
 
     settingsDebug       = 0;                  /* 1 or 0 */
 
+    # Stroemgren-sphere test: runtime option (replaces the old STROEMGRENTEST compile flag).
+    # settingsStroemgrenTest = 0;    # 1 = enable test mode, 0 = normal run
+    # stroemgrenPeakE        = 13.6;  # eV, lower edge of the top-hat test SED
+    # stroemgrenWidth        = 1.0;   # eV, width of the top-hat test SED
+
     settingsRStart      = 0.1;                /* IGM is considered ionized from 0 to this radius in kpc */	
     settingsRMax        = 1500.0;             /* Maximum radius radially away from source in kpc */
 

@@ -21,8 +21,7 @@ void config_load_from_file(char *fileName){
     
     
     /* paths */
-    char const *pathOutDirDefault   = CONFIG_DEFAULT_PATH_OUTDIR; 
-    char const *pathSEDDefault      = CONFIG_DEFAULT_PATH_SED;
+    char const *pathOutDirDefault   = CONFIG_DEFAULT_PATH_OUTDIR;
     char const *pathDensityDefault  = CONFIG_DEFAULT_PATH_DENSITY;
     char const *pathIDDefault       = CONFIG_DEFAULT_PATH_ID;
     
@@ -48,7 +47,11 @@ void config_load_from_file(char *fileName){
     double  cosmoTCMBDefault        = CONFIG_DEFAULT_COSMO_TCMB0;       //  CMB temperature at z = 0
     
     /* general setting */
-    int     settingsDebugDefault    = CONFIG_DEFAULT_SETTINGS_DEBUG;       
+    int     settingsDebugDefault    = CONFIG_DEFAULT_SETTINGS_DEBUG;
+
+    int     settingsStroemgrenTestDefault = CONFIG_DEFAULT_SETTINGS_STROEMGREN_TEST;
+    double  stroemgrenPeakEDefault        = CONFIG_DEFAULT_STROEMGREN_PEAK_E;
+    double  stroemgrenWidthDefault        = CONFIG_DEFAULT_STROEMGREN_WIDTH;
     
     double  settingsRMaxDefault     = CONFIG_DEFAULT_SETTINGS_RMAX;     // kpc    
     double  settingsRStartDefault   = CONFIG_DEFAULT_SETTINGS_RSTART;    
@@ -112,15 +115,18 @@ void config_load_from_file(char *fileName){
             printf("\tpathOutDir \t = %s  (not set, using default value)\n", myConfig.pathOutDir);      
         }
         
-       /* pathSED */
+       /* pathSED - mandatory. A run without a source SED is meaningless, so
+        * there is no default: abort loudly if the key is missing. */
         const char *pathSEDTmp;
         if (config_lookup_string(&cfg, "paths.pathSED", &pathSEDTmp)){
             strcpy(myConfig.pathSED, pathSEDTmp);
-            myConfig.pathSED[strlen(pathSEDTmp)] = '\0'; 
+            myConfig.pathSED[strlen(pathSEDTmp)] = '\0';
             printf("\tpathSED \t = %s\n", myConfig.pathSED);
         }else{
-            strcpy(myConfig.pathSED, pathSEDDefault);
-            printf("\tpathSED \t = %s  (not set, using default value)\n", myConfig.pathSED);      
+            printf("\n ERROR: 'paths.pathSED' is not set in the config file.\n");
+            printf(" A source SED is required and there is no meaningful default. Exiting.\n");
+            config_destroy(&cfg);
+            exit(1);
         }
 
         /* pathDensity */
@@ -158,19 +164,20 @@ void config_load_from_file(char *fileName){
             printf("\tsourceELow \t = %e (not set, using default value)\n",myConfig.sourceELow);
         }       
        
-       /* sourceEHigh */  
+       /* sourceEHigh
+        * Fall back to the default in BOTH cases: key present but at/below the
+        * HeII ionization threshold, OR key entirely absent. The original code
+        * had no else for the absent case, leaving sourceEHigh uninitialised -
+        * this controls the SED's upper integration limit, so a garbage value
+        * could silently corrupt a run. */
         double tmpSourceEHigh = 0.0;
-        if (config_lookup_float(&cfg, "simulation.sourceEHigh",&tmpSourceEHigh)){
-            
-            if (tmpSourceEHigh > He2IONIZEeV){
-                myConfig.sourceEHigh = tmpSourceEHigh;
-                printf("\tsourceEHigh \t = %e\n", myConfig.sourceEHigh); 
-            }else{
-                myConfig.sourceEHigh = sourceEHighDefault;
-                printf("\tsourceEHigh \t = %e (not set or too small, using default value)\n",myConfig.sourceEHigh);
-            
-            }
-        }   
+        if (config_lookup_float(&cfg, "simulation.sourceEHigh", &tmpSourceEHigh) && tmpSourceEHigh > He2IONIZEeV){
+            myConfig.sourceEHigh = tmpSourceEHigh;
+            printf("\tsourceEHigh \t = %e\n", myConfig.sourceEHigh);
+        }else{
+            myConfig.sourceEHigh = sourceEHighDefault;
+            printf("\tsourceEHigh \t = %e (not set or too small, using default value)\n", myConfig.sourceEHigh);
+        }
         
         /* sourceLifetime */   
         if (config_lookup_float(&cfg, "simulation.sourceLifetime", &myConfig.sourceLifetime)){
@@ -306,11 +313,49 @@ void config_load_from_file(char *fileName){
             printf("\tsettingsDebug \t = %d (not set, using default value)\n",myConfig.settingsDebug);
         }       
         
-        // now we can set the short, handier, global: 
+        // now we can set the short, handier, global:
         DEBUG = myConfig.settingsDebug;
-        
 
-        /* settingsRMax */  
+
+        /* settingsStroemgrenTest (runtime replacement for the STROEMGRENTEST flag) */
+        int settingsStroemgrenTestTmp = 0;
+        if (config_lookup_int(&cfg, "settings.settingsStroemgrenTest", &settingsStroemgrenTestTmp)){
+
+            if(settingsStroemgrenTestTmp!=0 && settingsStroemgrenTestTmp!=1){
+                myConfig.settingsStroemgrenTest = settingsStroemgrenTestDefault;
+                printf("\tsettingsStroemgrenTest \t = %d (entered value is out of range, falling back on default value)\n",myConfig.settingsStroemgrenTest);
+            }else{
+                myConfig.settingsStroemgrenTest = settingsStroemgrenTestTmp;
+                printf("\tsettingsStroemgrenTest \t = %d\n",myConfig.settingsStroemgrenTest);
+            }
+
+        }else{
+            myConfig.settingsStroemgrenTest = settingsStroemgrenTestDefault;
+            printf("\tsettingsStroemgrenTest \t = %d (not set, using default value)\n",myConfig.settingsStroemgrenTest);
+        }
+
+        /* In Strömgren test mode helium is switched off entirely, so the total
+         * helium density is zeroed (reproduces the old '#define n_He0 0.0'). */
+        n_He0 = myConfig.settingsStroemgrenTest ? 0.0 : N_HE0_PHYS;
+
+        /* stroemgrenPeakE / stroemgrenWidth: shape of the top-hat test SED.
+         * Only meaningful when settingsStroemgrenTest = 1. */
+        if (config_lookup_float(&cfg, "settings.stroemgrenPeakE", &myConfig.stroemgrenPeakE)){
+            printf("\tstroemgrenPeakE \t = %f\n", myConfig.stroemgrenPeakE);
+        }else{
+            myConfig.stroemgrenPeakE = stroemgrenPeakEDefault;
+            printf("\tstroemgrenPeakE \t = %f (not set, using default value)\n", myConfig.stroemgrenPeakE);
+        }
+
+        if (config_lookup_float(&cfg, "settings.stroemgrenWidth", &myConfig.stroemgrenWidth)){
+            printf("\tstroemgrenWidth \t = %f\n", myConfig.stroemgrenWidth);
+        }else{
+            myConfig.stroemgrenWidth = stroemgrenWidthDefault;
+            printf("\tstroemgrenWidth \t = %f (not set, using default value)\n", myConfig.stroemgrenWidth);
+        }
+
+
+        /* settingsRMax */
         if (config_lookup_float(&cfg, "settings.settingsRMax", &myConfig.settingsRMax)){
             printf("\tsettingsRMax \t = %f\n", myConfig.settingsRMax);
         }else{

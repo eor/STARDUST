@@ -1,0 +1,43 @@
+# ---------------------------------------------------------------------------
+# Build artifacts
+# ---------------------------------------------------------------------------
+src/*.o
+src/STARDUST
+
+# The user's local Makefile is copied from Makefile.template and edited with
+# site-specific library paths; only the template is tracked (see docs/SETUP.md).
+/src/Makefile
+
+# ---------------------------------------------------------------------------
+# STARDUST run outputs (generated at runtime, named "<pathID>_...")
+# ---------------------------------------------------------------------------
+# Precomputed integral tables
+*_table_*.dat
+# Radial profile outputs
+*_profile_*.dat
+# Fuku integral debug dumps
+*log_fuku_integrals*
+#
+# NOTE: run logs are named "<pathID>_..._log_main" / "_log_debug". They are
+# intentionally NOT ignored here, because the tests/ directories ship reference
+# "*_log_main" files that must stay tracked. Delete stray run logs by hand, or
+# add a per-directory rule if you run simulations outside tests/.
+
+# ---------------------------------------------------------------------------
+# Apptainer / Singularity build outputs
+# ---------------------------------------------------------------------------
+*.sif
+*.sandbox/
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+
+# ---------------------------------------------------------------------------
+# Editors / OS
+# ---------------------------------------------------------------------------
+.idea/
+.vscode/
+.DS_Store

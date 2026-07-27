@@ -34,7 +34,7 @@ def multi_plot(inputFiles, outFile, xLimits, ylimits, logT=False, logFractions=F
         
         
     f, axarr = plt.subplots(rows, columns, sharex=True, sharey=False, figsize=(10,15))
-    xlabel = '$r\, [\mathrm{kpc}]$'
+    xlabel = r'$r\, [\mathrm{kpc}]$'
 
 
     # labels for fractions

@@ -1,0 +1,79 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+# ---------------------------------------------------------------------------
+# Apptainer/Singularity definition file for STARDUST.
+#
+# Build (from the repository root, on a machine with internet access and
+# root or --fakeroot):
+#
+#     apptainer build stardust.sif stardust.def
+#
+# Run:
+#
+#     apptainer run stardust.sif <path/to/config.cfg>
+#
+# See docs/SETUP.md, scenario D, for details.
+# ---------------------------------------------------------------------------
+
+%files
+    src      /opt/STARDUST/src
+    scripts  /opt/STARDUST/scripts
+    tests    /opt/STARDUST/tests
+    docs     /opt/STARDUST/docs
+    README.md /opt/STARDUST/README.md
+    LICENSE   /opt/STARDUST/LICENSE
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update
+
+    # STARDUST's three dependencies are all standard Ubuntu packages:
+    #   libgsl-dev     - GSL (interpolation, integration, ODE root-finder)
+    #   libconfig-dev  - libconfig (reads the run's .cfg file)
+    #   libboost-dev   - Boost headers (only Boost.odeint is used, header-only)
+    # plus a C++ toolchain.
+    apt-get install -y --no-install-recommends \
+        g++ make \
+        libgsl-dev libconfig-dev libboost-dev \
+        ca-certificates
+
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+
+    # Build STARDUST. The apt packages install GSL/libconfig/Boost into the
+    # system include/lib paths, so we override the Makefile's default path
+    # variables (which point at ~/local for the source-build workflow) with
+    # empty values -- the compiler and linker find the system paths on their
+    # own.
+    cd /opt/STARDUST/src
+    cp Makefile.template Makefile
+    make GSL_INCL= GSL_LIB= CONF_INCL= CONF_LIB= BOOST_INCL=
+
+    # Make the binary available on PATH for `apptainer exec`/`shell`.
+    ln -sf /opt/STARDUST/src/STARDUST /usr/local/bin/STARDUST
+
+%environment
+    export LC_ALL=C
+    export PATH=/opt/STARDUST/src:$PATH
+
+%runscript
+    exec /opt/STARDUST/src/STARDUST "$@"
+
+%help
+    STARDUST -- cosmological 1D radiative transfer code.
+
+    Run a simulation (config path is resolved on the host; Apptainer binds your
+    current working directory by default):
+
+        apptainer run stardust.sif <path/to/config.cfg>
+
+    Example, from the repository root:
+
+        apptainer run stardust.sif tests/test_1_PL_source/config_PL_M11.000_z7.000.dat
+
+    Open a shell inside the container (binary + Python scripts available):
+
+        apptainer shell stardust.sif
+
+    The STARDUST source, scripts, tests and docs live under /opt/STARDUST.

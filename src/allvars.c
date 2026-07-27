@@ -22,8 +22,12 @@ struct global_config myConfig;
 /***************************************************************
  * SED related
  ***************************************************************/
-double  *Lambda, *Energy;  // TODO: change this!
-int     type = 2;
+double  *photonEnergy;   // photon energy grid [eV]      (SED x-axis; was misnamed "Lambda")
+double  *sedLuminosity;   // spectral luminosity [eV/s/eV] (SED y-axis; was misnamed "Energy")
+
+/* Total helium number density at z=0 [cm^-3]. Default is the physical value;
+ * config.c overrides it to 0.0 when Strömgren test mode is enabled. */
+double  n_He0 = N_HE0_PHYS;
 
 
 /***************************************************************

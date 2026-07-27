@@ -103,15 +103,15 @@ struct ode_system_derivatives
 
  
         /* ---Explicitly regularize ---------- */
-        #ifdef STROEMGRENTEST
-        n_Hen       = 0.0;
-        psi_He1     = 0.0; 
-        psi_He2     = 0.0; 
-        integral_heating_rate_He_I = 0.0;
-        integral_heating_rate_He_II = 0.0;
-        integral_ionisation_rate_He_I       = 0.0;
-        integral_ionisation_rate_He_II       = 0.0;
-        #endif    
+        if (myConfig.settingsStroemgrenTest){
+            n_Hen       = 0.0;
+            psi_He1     = 0.0;
+            psi_He2     = 0.0;
+            integral_heating_rate_He_I = 0.0;
+            integral_heating_rate_He_II = 0.0;
+            integral_ionisation_rate_He_I       = 0.0;
+            integral_ionisation_rate_He_II       = 0.0;
+        }
 
         /* --------------------------------- */
 
@@ -172,10 +172,10 @@ struct ode_system_derivatives
         
         
         
-        #ifdef STROEMGRENTEST
-        // no Helium (1,2) & constant Temperature (3)
-        dydt[1] = dydt[2] = dydt[3] = 0.0;
-        #endif             
+        if (myConfig.settingsStroemgrenTest){
+            // no Helium (1,2) & constant Temperature (3)
+            dydt[1] = dydt[2] = dydt[3] = 0.0;
+        }
         
     
         

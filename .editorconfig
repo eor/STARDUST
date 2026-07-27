@@ -1,0 +1,30 @@
+# EditorConfig (https://editorconfig.org) -- keeps future edits consistent with
+# the existing STARDUST style without reformatting the current code base.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C/C++ sources: 4-space indent (the prevailing style in src/)
+[*.{c,h,cpp,hpp}]
+indent_style = space
+indent_size = 4
+
+[*.py]
+indent_style = space
+indent_size = 4
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Makefiles require real tabs for recipe lines
+[Makefile*]
+indent_style = tab
+
+# Markdown: trailing whitespace is significant (two spaces = hard line break)
+[*.md]
+trim_trailing_whitespace = false

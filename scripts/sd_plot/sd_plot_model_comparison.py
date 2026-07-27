@@ -15,12 +15,12 @@ inputFiles = [ 'test_1_PL_source/test_1_profile_M11.000_z7.000_t5.000.dat',
               ] 
 
 
-labels     = ['PL\ source, t = 5 Myr',
-              'PL\ source, t = 10 Myr',
-              'IMF\ source, t = 5 Myr',
-              'IMF\ source, t = 10 Myr',
-              'IMF+PL\ source, t = 5 Myr',
-              'IMF+PL\ source, t = 10 Myr',
+labels     = [r'PL\ source, t = 5 Myr',
+              r'PL\ source, t = 10 Myr',
+              r'IMF\ source, t = 5 Myr',
+              r'IMF\ source, t = 10 Myr',
+              r'IMF+PL\ source, t = 5 Myr',
+              r'IMF+PL\ source, t = 10 Myr',
              ]
 
 
@@ -35,11 +35,11 @@ ylimits    = [[1e-6,1.1], [1e-6,1.1], [1e-6,1.1], [1e-6,1.1], [1e-6,1.1], [-0.2,
 for i in range(0,len(inputFiles)):
   inputFiles[i] = fileDir + inputFiles[i]
 
-print inputFiles
+print(inputFiles)
 
 multi_plot(inputFiles, outFile, rLimits, ylimits, logT=True, logFractions=True, legends=labels,showLegend=True, ncolsLegend=3, colors=colors, ls=ls)
 
-print "all done"
+print("all done")
 
 
 
