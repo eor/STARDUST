@@ -26,9 +26,12 @@ void config_set_grid_points();
 /***************************************************************
  * SED-related functions
  ***************************************************************/
-void sed_read_file(char *SEDFileName);
+void sed_read_file(const char *SEDFileName);
 
 double sed_compute_norm();
+
+// build / free the module-level cached SED interpolation splines
+void sed_free_spline();
 
 // Calculates the normalization of the SED 
 // double Norm (double );       
@@ -146,8 +149,8 @@ double compton_heating2_p4(double ,void * params);
  ***************************************************************/
 
 /* contruct paths */
-char* utils_concat_path(char *dir, char *file);
-char* utils_concat_path_noID(char *dir, char *file);
+char* utils_concat_path(const char *dir, const char *file);
+char* utils_concat_path_noID(const char *dir, const char *file);
 
 /* fallback help */
 void utils_print_help();    
@@ -165,6 +168,9 @@ void interpolation(double, double, double ,double );
 
 /* The 2-D interpolation routine */
 void interpolation_2D(double*, double*, double** , int , int , double , double , double *);
+
+/* free the cached interpolation splines (called at shutdown) */
+void interpolation_free();
 
 /***************************************************************
  * etc

@@ -131,8 +131,10 @@ void memory_free_all(void){
     free(comp_integ1);
     free(comp_integ2);
 
-    free(Lambda);
-    free(Energy);
+    sed_free_spline();
+    interpolation_free();
+    free(photonEnergy);
+    free(sedLuminosity);
 
     free(outFile);
 

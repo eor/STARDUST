@@ -7,7 +7,8 @@
 
 /* paths */
 #define CONFIG_DEFAULT_PATH_OUTDIR      "."
-#define CONFIG_DEFAULT_PATH_SED         "SAMPLE_SED.dat"
+/* No default for pathSED: a run without an SED is meaningless, so the code
+ * now aborts if paths.pathSED is not set (see config.c). */
 #define CONFIG_DEFAULT_PATH_DENSITY     ""
 #define CONFIG_DEFAULT_PATH_ID          ""
 
@@ -37,6 +38,12 @@
 
 /* general settings */
 #define CONFIG_DEFAULT_SETTINGS_DEBUG   0           // int 0,1
+
+/* Strömgren-sphere test mode (runtime replacement for the STROEMGRENTEST flag) */
+#define CONFIG_DEFAULT_SETTINGS_STROEMGREN_TEST 0   // int 0,1
+#define CONFIG_DEFAULT_STROEMGREN_PEAK_E        13.6 // float, eV (lower edge of top-hat SED)
+#define CONFIG_DEFAULT_STROEMGREN_WIDTH         1.0  // float, eV (width of top-hat SED)
+
 #define CONFIG_DEFAULT_SETTINGS_RMAX    1000.0      // float, kpc
 #define CONFIG_DEFAULT_SETTINGS_RSTART  1.0         // float, kpc
 #define CONFIG_DEFAULT_SETTINGS_DELTA_R 0.1         // float, kpc

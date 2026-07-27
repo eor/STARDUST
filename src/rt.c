@@ -246,19 +246,12 @@ void rt_main_run(){
                 // Interpolate the table to obtain the params.* values below 
                 interpolation(nHX1, nHeX2, nHX13, radius); 
 
-#ifdef STROEMGRENTEST                
-                // experimental: override for small radii
-                // limit max value of integrals for small radii
-                //if (fuku_e1h1[iGrid] > 8e-13) fuku_e1h1[iGrid] = 8e-13;
-                
-#else                
-                if (fuku_e1h1[iGrid] > 1e-11) fuku_e1h1[iGrid] = 1e-11;
-                if (fuku_ehe1[iGrid] > 1e-11) fuku_ehe1[iGrid] = 1e-11;
-                if (fuku_ehe2[iGrid] > 1e-11) fuku_ehe2[iGrid] = 1e-11;
-                
-                
-                
-#endif          
+                // clamp max value of integrals for small radii (skipped in Strömgren test mode)
+                if (!myConfig.settingsStroemgrenTest){
+                    if (fuku_e1h1[iGrid] > 1e-11) fuku_e1h1[iGrid] = 1e-11;
+                    if (fuku_ehe1[iGrid] > 1e-11) fuku_ehe1[iGrid] = 1e-11;
+                    if (fuku_ehe2[iGrid] > 1e-11) fuku_ehe2[iGrid] = 1e-11;
+                }
                       
                 // load values of fukugita integrals into global struct (needed within the ODE solver)
                 // fe*:  ionisation rates
@@ -352,17 +345,16 @@ void rt_main_run(){
                 T_e[iGrid]      = y[3];
                 
                 
-#ifdef STROEMGRENTEST    
-                if (isnan(x_HII[iGrid]) || isinf(x_HII[iGrid]) ){
-                
-                    // check if gas should be ionized. If yes, set x_HII = 1                    
-                    double radiusEst = sed_estimate_stroemgren_radius( z , srcAge + timeStep );
-                    
-                    if (radius < 0.8 * radiusEst) x_HII[iGrid] = 1.0;
-                   
-                }     
-                
-#endif                
+                if (myConfig.settingsStroemgrenTest){
+                    if (isnan(x_HII[iGrid]) || isinf(x_HII[iGrid]) ){
+
+                        // check if gas should be ionized. If yes, set x_HII = 1
+                        double radiusEst = sed_estimate_stroemgren_radius( z , srcAge + timeStep );
+
+                        if (radius < 0.8 * radiusEst) x_HII[iGrid] = 1.0;
+
+                    }
+                }
 
                 
                 // check for numerical instabilities, to regularize the solutions if necessary 
@@ -388,13 +380,12 @@ void rt_main_run(){
                 n_He1[iGrid] = n_He0 * over_densities[iGrid] * pow3(1 + z) * x_HeI[iGrid];
                 
 
-#ifdef STROEMGRENTEST
-
-                x_HeI[iGrid]   = 0.0;
-                x_HeII[iGrid]  = 0.0;
-                x_HeIII[iGrid] = 0.0;        
-                T_e[iGrid]     = STROEMGRENTEMP; 
-#endif  
+                if (myConfig.settingsStroemgrenTest){
+                    x_HeI[iGrid]   = 0.0;
+                    x_HeII[iGrid]  = 0.0;
+                    x_HeIII[iGrid] = 0.0;
+                    T_e[iGrid]     = STROEMGRENTEMP;
+                }
        
             }  
             /***************************************************************
@@ -467,19 +458,19 @@ void rt_main_run(){
 
                     /* Conversion to fractions */
                     //x_HII[i]        = n_H2[i]  / ( n_H0  * over_densities[i] * pow3(1 + z) );
-                    #ifdef STROEMGRENTEST
-                    x_HeI[i]       = 0.0;           // necessary because n_He0 = 0.
-                    x_HeII[i]      = 0.0;
-                    x_HeIII[i]     = 0.0;
-                    #else
-                    /*x_HeI[i]       = n_He1[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
-                    x_HeII[i]       = n_He2[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
-                    x_HeIII[i]       = n_He3[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
-                    */
-                    
-                    ne[i] = (1.0 - x_HI[i]) * n_H0 * over_densities[i] * pow3(1+z)
-                            + (x_HeII[i] + 2 * x_HeIII[i]) * n_He0*over_densities[i] * pow3(1+z);
-                    #endif
+                    if (myConfig.settingsStroemgrenTest){
+                        x_HeI[i]       = 0.0;           // necessary because n_He0 = 0.
+                        x_HeII[i]      = 0.0;
+                        x_HeIII[i]     = 0.0;
+                    }else{
+                        /*x_HeI[i]       = n_He1[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
+                        x_HeII[i]       = n_He2[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
+                        x_HeIII[i]       = n_He3[i] / ( n_He0 * over_densities[i] * pow3(1 + z) );
+                        */
+
+                        ne[i] = (1.0 - x_HI[i]) * n_H0 * over_densities[i] * pow3(1+z)
+                                + (x_HeII[i] + 2 * x_HeIII[i]) * n_He0*over_densities[i] * pow3(1+z);
+                    }
                     
                     /* compute spin and brightness temperatures */
                     kappa   =  3.1e-11 * pow (T_e[i], .357) * exp (-32. / T_e[i]);
@@ -553,10 +544,10 @@ void rt_main_run(){
             
 
             
-            /* for the Strömgen sphere test we want a static Universe */
-            #ifdef STROEMGRENTEST
+            /* for the Strömgren sphere test we want a static Universe */
+            if (myConfig.settingsStroemgrenTest){
                 z = zPrevious = zSrcTurnOn = zList[zIndex];
-            #endif    
+            }
          
             /* determine time spent for this step and add it to the total */
             exeTimeCount += ((double) clock() - startTime) / (60.0 * CLOCKS_PER_SEC);
@@ -593,20 +584,19 @@ void rt_initialize_grids(double zSrcTurnOn){
         x_HeIII[i]      = 0.0; 
         ne[i]           = 0.0;
         n_H1[i]         = n_H0  * pow3(1. + zSrcTurnOn) * over_densities[i]; // TODO NFW or other density profiles here
-#ifdef STROEMGRENTEST
-        
-        x_HI[i]         = 1.0 - 1.2e-3; 
-        x_HII[i]        = 1.2e-3;           // Illiev 1 test
-        x_HeI[i]        = 0.0;
-        T_e[i]          = STROEMGRENTEMP;
-        n_He1[i]        = 0.0;
-#else
-        x_HI[i]         = 1.0;            
-        x_HII[i]        = 0.0;        
-        n_He1[i]        = n_He0 * pow3(1. + zSrcTurnOn) * over_densities[i];
-        x_HeI[i]        = 1.0; 
-        T_e[i]          = T_CMB0 * pow2(1. + zSrcTurnOn) / (1. + zTkinEQTCMB);
-#endif            
+        if (myConfig.settingsStroemgrenTest){
+            x_HI[i]         = 1.0 - 1.2e-3;
+            x_HII[i]        = 1.2e-3;           // Illiev 1 test
+            x_HeI[i]        = 0.0;
+            T_e[i]          = STROEMGRENTEMP;
+            n_He1[i]        = 0.0;
+        }else{
+            x_HI[i]         = 1.0;
+            x_HII[i]        = 0.0;
+            n_He1[i]        = n_He0 * pow3(1. + zSrcTurnOn) * over_densities[i];
+            x_HeI[i]        = 1.0;
+            T_e[i]          = T_CMB0 * pow2(1. + zSrcTurnOn) / (1. + zTkinEQTCMB);
+        }
 
         T_spin[i]       = 0.0;
         T_brig[i]       = 0.0;

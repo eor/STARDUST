@@ -142,11 +142,11 @@ struct ode_system_jacobi
         n_Hen   = n_He0 * localOD * pow3( 1. + z ) - y[1] - y[2];
         n_e     = y[0] + y[1] + 2*y[2];
 
-#ifdef STROEMGRENTEST
-        n_Hen = 0.0;
-        psi_He1 = 0.0;
-        psi_He2 = 0.0;
-#endif    
+        if (myConfig.settingsStroemgrenTest){
+            n_Hen = 0.0;
+            psi_He1 = 0.0;
+            psi_He2 = 0.0;
+        }
     
     
     /* Here is gets messy. 
@@ -464,12 +464,12 @@ struct ode_system_jacobi
     
     
     
-#ifdef STROEMGRENTEST
-        J( 0 , 1 ) = J( 0 , 2 ) = J( 0 , 3 ) = 0.0;
-        J( 1 , 0 ) = J( 1 , 1 ) = J( 1 , 2 ) = J( 1 , 3 ) = 0.0;
-        J( 2 , 0 ) = J( 2 , 1 ) = J( 2 , 2 ) = J( 2 , 3 ) = 0.0;
-        J( 3 , 1 ) = J( 3 , 2 ) = 0.0;
-#endif    
+        if (myConfig.settingsStroemgrenTest){
+            J( 0 , 1 ) = J( 0 , 2 ) = J( 0 , 3 ) = 0.0;
+            J( 1 , 0 ) = J( 1 , 1 ) = J( 1 , 2 ) = J( 1 , 3 ) = 0.0;
+            J( 2 , 0 ) = J( 2 , 1 ) = J( 2 , 2 ) = J( 2 , 3 ) = 0.0;
+            J( 3 , 1 ) = J( 3 , 2 ) = 0.0;
+        }
 
     
     

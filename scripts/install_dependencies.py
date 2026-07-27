@@ -26,6 +26,7 @@ import shutil
 import subprocess
 import sys
 import urllib.request
+import urllib.error
 
 # ----------------------------------------------------------------------
 # Versions / sources -- bump these as needed
@@ -53,7 +54,11 @@ BOOST_URL = (
 
 def run(cmd, cwd=None):
     print(f"  > {cmd}")
-    subprocess.run(cmd, shell=True, check=True, cwd=cwd)
+    try:
+        subprocess.run(cmd, shell=True, check=True, cwd=cwd)
+    except subprocess.CalledProcessError as e:
+        sys.exit(f"\nERROR: command failed (exit {e.returncode}):\n  {cmd}\n"
+                 f"See the output above for details.")
 
 
 def have_tool(name):
@@ -77,60 +82,72 @@ def check_prereqs():
 def download(url, dest_dir):
     fname = url.rsplit("/", 1)[-1]
     dest = os.path.join(dest_dir, fname)
-    if os.path.exists(dest):
+    if os.path.exists(dest) and os.path.getsize(dest) > 0:
         print(f"  already downloaded: {dest}")
         return dest
     print(f"  downloading {url}")
     if have_tool("wget"):
-        run(f"wget -c '{url}' -O '{dest}'")
+        run(f"wget -c '{url}' -O '{dest}'")           # -c resumes a partial download
+    elif have_tool("curl"):
+        run(f"curl -fL '{url}' -o '{dest}'")          # -f: fail on HTTP error, -L: follow redirects
     else:
-        urllib.request.urlretrieve(url, dest)
+        try:
+            urllib.request.urlretrieve(url, dest)
+        except (urllib.error.URLError, OSError) as e:
+            if os.path.exists(dest):
+                os.remove(dest)                       # don't leave a partial file for the next run to trust
+            sys.exit(f"\nERROR: failed to download {url}\n  ({e})\n"
+                     f"Check your network connection (and any proxy settings) and try again.")
     return dest
 
 
 # ----------------------------------------------------------------------
 # Per-dependency detection
+#
+# Each returns *where* the dependency lives so the same value can drive both
+# the build/skip decision and the final Makefile hint:
+#   - GSL / libconfig: (include_dir, lib_dir)
+#   - Boost:           include_dir   (header-only, no lib_dir)
+# or None if not found.
 # ----------------------------------------------------------------------
 
-def gsl_present(prefix):
-    """True if a usable GSL is already on this system (system-wide or
-    in our own prefix)."""
+# common install roots to probe, in priority order (our own prefix first)
+def _bases(prefix):
+    return [prefix, "/usr", "/usr/local", "/opt/homebrew", "/opt/local"]
+
+
+def find_gsl(prefix):
+    """gsl-config is authoritative for GSL's own paths."""
     gsl_config = shutil.which("gsl-config") or os.path.join(prefix, "bin", "gsl-config")
-    if os.path.exists(gsl_config) or shutil.which("gsl-config"):
-        try:
-            out = subprocess.run([gsl_config if os.path.exists(gsl_config) else "gsl-config", "--version"],
-                                 capture_output=True, text=True, check=True)
-            print(f"  found GSL {out.stdout.strip()} via gsl-config")
-            return True
-        except Exception:
-            pass
-    return False
+    if not os.path.exists(gsl_config):
+        return None
+    try:
+        ver = subprocess.run([gsl_config, "--version"], capture_output=True, text=True, check=True).stdout.strip()
+        gpfx = subprocess.run([gsl_config, "--prefix"], capture_output=True, text=True, check=True).stdout.strip()
+    except Exception:
+        return None
+    print(f"  found GSL {ver} at {gpfx}")
+    return os.path.join(gpfx, "include"), os.path.join(gpfx, "lib")
 
 
-def libconfig_present(prefix):
-    candidates = [
-        os.path.join(prefix, "include", "libconfig.h"),
-        "/usr/include/libconfig.h",
-        "/usr/local/include/libconfig.h",
-    ]
-    for c in candidates:
-        if os.path.exists(c):
-            print(f"  found libconfig header at {c}")
-            return True
-    return False
+def find_libconfig(prefix):
+    for base in _bases(prefix):
+        if os.path.exists(os.path.join(base, "include", "libconfig.h")):
+            print(f"  found libconfig at {base}")
+            return os.path.join(base, "include"), os.path.join(base, "lib")
+    return None
 
 
-def boost_odeint_present(prefix):
-    candidates = [
-        os.path.join(prefix, "boost_" + BOOST_VERSION_US, "boost", "numeric", "odeint.hpp"),
-        "/usr/include/boost/numeric/odeint.hpp",
-        "/usr/local/include/boost/numeric/odeint.hpp",
-    ]
-    for c in candidates:
-        if os.path.exists(c):
-            print(f"  found Boost.odeint header at {c}")
-            return True
-    return False
+def find_boost(prefix):
+    # our own extracted tarball keeps boost/ directly under boost_x_y_z/;
+    # system installs keep it under <base>/include/
+    include_roots = [os.path.join(prefix, "boost_" + BOOST_VERSION_US)]
+    include_roots += [os.path.join(base, "include") for base in _bases(prefix)]
+    for inc in include_roots:
+        if os.path.exists(os.path.join(inc, "boost", "numeric", "odeint.hpp")):
+            print(f"  found Boost.odeint at {inc}")
+            return inc
+    return None
 
 
 # ----------------------------------------------------------------------
@@ -192,41 +209,65 @@ def main():
     print(f"Install prefix: {prefix}\n")
     check_prereqs()
 
-    built = {"gsl": False, "libconfig": False, "boost": False}
+    # For each dependency, resolve where it lives: use what's already on the
+    # system, or build/fetch it into `prefix` and use that. The resolved
+    # location then drives the Makefile hint below -- no assumptions about
+    # everything living under `prefix`.
+    status = {}   # name -> "found" | "built"
 
     print("\nChecking GSL ...")
-    if force or not gsl_present(prefix):
+    gsl = find_gsl(prefix)
+    if force or gsl is None:
         build_gsl(prefix, src_dir)
-        built["gsl"] = True
+        gsl = (os.path.join(prefix, "include"), os.path.join(prefix, "lib"))
+        status["gsl"] = "built"
     else:
-        print("  GSL already present, skipping (use --force to rebuild)")
+        status["gsl"] = "found"
 
     print("\nChecking libconfig ...")
-    if force or not libconfig_present(prefix):
+    libconfig = find_libconfig(prefix)
+    if force or libconfig is None:
         build_libconfig(prefix, src_dir)
-        built["libconfig"] = True
+        libconfig = (os.path.join(prefix, "include"), os.path.join(prefix, "lib"))
+        status["libconfig"] = "built"
     else:
-        print("  libconfig already present, skipping (use --force to rebuild)")
+        status["libconfig"] = "found"
 
     print("\nChecking Boost (odeint headers) ...")
-    if force or not boost_odeint_present(prefix):
+    boost_inc = find_boost(prefix)
+    if force or boost_inc is None:
         fetch_boost(prefix, src_dir)
-        built["boost"] = True
+        boost_inc = os.path.join(prefix, f"boost_{BOOST_VERSION_US}")
+        status["boost"] = "built"
     else:
-        print("  Boost.odeint already present, skipping (use --force to rebuild)")
+        status["boost"] = "found"
+
+    gsl_inc, gsl_lib = gsl
+    conf_inc, conf_lib = libconfig
 
     print("\nAll done.\n")
-    print("Add this to your shell profile (~/.bashrc or similar):\n")
-    print(f"    export LD_LIBRARY_PATH={prefix}/lib:$LD_LIBRARY_PATH")
-    print(f"    export PKG_CONFIG_PATH={prefix}/lib/pkgconfig:$PKG_CONFIG_PATH\n")
+    print("Summary:")
+    print(f"    GSL       : {status['gsl']:<5}  ({gsl_inc})")
+    print(f"    libconfig : {status['libconfig']:<5}  ({conf_inc})")
+    print(f"    Boost     : {status['boost']:<5}  ({boost_inc})\n")
+
+    # LD_LIBRARY_PATH / PKG_CONFIG_PATH only matter for compiled libraries we
+    # put in `prefix` (GSL, libconfig); Boost is header-only and anything
+    # "found" is already on the system's default search paths.
+    if status["gsl"] == "built" or status["libconfig"] == "built":
+        print("You built libraries into your prefix. Add this to your shell profile")
+        print("(~/.bashrc or similar) so the runtime linker can find them:\n")
+        print(f"    export LD_LIBRARY_PATH={prefix}/lib:$LD_LIBRARY_PATH")
+        print(f"    export PKG_CONFIG_PATH={prefix}/lib/pkgconfig:$PKG_CONFIG_PATH\n")
+
     print("If you haven't already, copy the Makefile template once:\n")
     print("    cd src && cp Makefile.template Makefile\n")
     print("Then set these paths in src/Makefile (your copy, not the template):\n")
-    print(f"    GSL_INCL   = -I{prefix}/include")
-    print(f"    GSL_LIB    = -L{prefix}/lib")
-    print(f"    CONF_INCL  = -I{prefix}/include")
-    print(f"    CONF_LIB   = -L{prefix}/lib")
-    print(f"    BOOST_INCL = -I{prefix}/boost_{BOOST_VERSION_US}\n")
+    print(f"    GSL_INCL   = -I{gsl_inc}")
+    print(f"    GSL_LIB    = -L{gsl_lib}")
+    print(f"    CONF_INCL  = -I{conf_inc}")
+    print(f"    CONF_LIB   = -L{conf_lib}")
+    print(f"    BOOST_INCL = -I{boost_inc}\n")
     print("Then: cd src && make\n")
 
 

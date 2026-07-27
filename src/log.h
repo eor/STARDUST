@@ -11,8 +11,6 @@
 
 #define log_main(M, ...)  fprintf(fpMainLog,  "MAIN:  " M "\n", ##__VA_ARGS__); fflush(fpMainLog)
 
-#define log_error(M, ...) fprintf(fpMainLog,  "ERROR: (%s:%d: errno: %s) " M "\n", __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__); fflush(fpMainLog) 
-
-#define check(A, M, ...) if(!(A)) { log_error(M, ##__VA_ARGS__); errno=0; goto error; }
+#define log_error(M, ...) fprintf(fpMainLog,  "ERROR: (%s:%d: errno: %s) " M "\n", __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__); fflush(fpMainLog)
 
 #endif

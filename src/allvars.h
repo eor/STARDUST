@@ -51,9 +51,16 @@ extern struct global_config{
     double  cosmoTCMB;          //  CMB temperature at z = 0    
     
     /*general setting */
-    int     settingsDebug;   
-  
-    double  settingsRMax;    
+    int     settingsDebug;
+
+    /* Strömgren-sphere test mode (formerly the STROEMGRENTEST compile flag).
+     * 0 = normal run, 1 = Strömgren test. The test source is a top-hat
+     * ("delta function") SED spanning [stroemgrenPeakE, stroemgrenPeakE+stroemgrenWidth) eV. */
+    int     settingsStroemgrenTest;
+    double  stroemgrenPeakE;    // lower edge of the top-hat [eV]
+    double  stroemgrenWidth;    // width of the top-hat [eV]
+
+    double  settingsRMax;
     double  settingsRStart;  
     
     double  settingsDeltaR;  
@@ -67,8 +74,12 @@ extern struct global_config{
 /***************************************************************
  * SED related
  ***************************************************************/
-extern double *Lambda, *Energy;
-extern int type; 
+extern double *photonEnergy, *sedLuminosity;
+
+/* Total helium number density at z=0 [cm^-3]. Runtime global (was a compile-time
+ * macro toggled by STROEMGRENTEST): set to N_HE0_PHYS for normal runs and to 0.0
+ * in Strömgren test mode. See config.c. */
+extern double n_He0;
 
 
 

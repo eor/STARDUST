@@ -85,6 +85,15 @@ config points).
 
 ## Generating your own SEDs
 
+> The Python helper scripts below (SED generation, plotting, catalog building) need
+> `numpy`, `scipy`, and `matplotlib`. A conda environment file is provided at the repository
+> root:
+>
+> ```bash
+> conda env create -f environment.yml
+> conda activate stardust
+> ```
+
 The `sed_generator` package (`scripts/sed_generator/sed/sed.py`) can be used standalone:
 
 ```bash

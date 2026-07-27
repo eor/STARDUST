@@ -146,7 +146,7 @@ def generate_SED_PL(haloMass, eHigh=1.e4, eLow=10.4, fileName=None, alpha=1.0, N
         energiesLog = np.append(energiesLog, m.log(eTmp) )
         sed4Norm    = np.append(sed4Norm, intensities[i]*eTmp)      # log integration trick
         
-    integral = integrate.simps(sed4Norm, energiesLog, even='avg')   # this scipy function wants the arguments (y,x, even=...)
+    integral = integrate.simpson(sed4Norm, x=energiesLog)   # Simpson's rule; args are (y, x=...)
     
     #print "Normalizing SED: %e"%(integral/(eHigh-eLow))
     A = (qsoEfficiency*eddLum)/integral
@@ -221,7 +221,7 @@ def generate_SED_single_pop3(starMass=100, eHigh=1.e4, eLow=10.4, fileName=None,
         energiesLog = np.append(energiesLog, m.log(eTmp) )
         sed4Norm    = np.append(sed4Norm, intensities[i]*eTmp)    # log integration trick
         
-    integral = integrate.simps(sed4Norm[::-1], energiesLog[::-1], even='avg') # energies should be increasing in value, or else the result can be negative
+    integral = integrate.simpson(sed4Norm[::-1], x=energiesLog[::-1]) # energies should be increasing in value, or else the result can be negative
 
     G = (starL*3.828e26/1.6022e-19)/(integral)
 

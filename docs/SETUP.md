@@ -9,11 +9,16 @@ STARDUST needs three external libraries:
 | [Boost](https://www.boost.org/) (header-only, `odeint`)| the ODE solvers used in `rt.c`            |
 
 You also need a C/C++ compiler (the code compiles as C++ via `g++`, despite the `.c` file
-extensions — see [the note on this in the Makefile](#a-note-on-the-makefile)), `make`, and
-Python 3.12+ if you want to use the SED-generation and plotting scripts in `scripts/`. (Python
-3.9, 3.10, and 3.11 are end-of-life or close to it as of 2026 — see
-[endoflife.date/python](https://endoflife.date/python) for current status — so 3.12 is the
-floor here rather than just a suggestion.)
+extensions — see [the note on this in the Makefile](#a-note-on-the-makefile)) and `make`. The
+STARDUST binary itself has no Python dependency. Python is only needed for the optional
+SED-generation and plotting scripts in `scripts/`, which require `numpy`, `scipy`, and
+`matplotlib` (any reasonably recent Python works; 3.10+ is recommended so you get a current
+scientific stack). A conda `environment.yml` for these is provided at the repository root:
+
+```bash
+conda env create -f environment.yml
+conda activate stardust
+```
 
 Pick the scenario below that matches your situation, then jump to
 [Pointing the Makefile at your libraries](#pointing-the-makefile-at-your-libraries).
@@ -246,8 +251,10 @@ Then build:
 make
 ```
 
-If you change anything in `config_defaults.h` or switch the ODE solver selection at the top of
-the Makefile, do a full rebuild:
+Editing any header (e.g. `config_defaults.h`, `constants.h`) or the `Makefile` itself — for
+example switching the ODE solver selection at the top of the Makefile — triggers a rebuild of all
+objects automatically (every object depends on the full header list via `INCL`), so a plain
+`make` is enough. Use `make clean && make` only if you suspect stale build artifacts:
 
 ```bash
 make clean && make

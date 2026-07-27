@@ -29,7 +29,8 @@ OPT += -DRKDOPRI5
 
 
 # Only touch if you know what you are doing
-#OPT += -DSTROEMGRENTEST
+# Note: the Strömgren-sphere test is now a runtime option
+# (settings.settingsStroemgrenTest in the config file), no longer a compile flag.
 #OPT += -DFIREHOSEDEBUG
 
 #OPT += -DSHORTPROFILES
@@ -57,7 +58,10 @@ OBJS     = main.o utils.o log.o config.o allvars.o \
            table_ion.o table_temp.o table_compton.o \
            memory.o interpolation.o rt.o
 
-INCL     = allvars.h prototype.h  Makefile
+# All headers: every object depends on these, so editing any of them (or the
+# Makefile itself) triggers a rebuild. Coarse but correct.
+INCL     = allvars.h prototype.h constants.h config_defaults.h log.h \
+           table_settings.h ode_derivatives.h ode_jacobian.h Makefile
 
 #----------------------------------------------------------------------
 # Library paths

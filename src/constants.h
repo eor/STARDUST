@@ -93,13 +93,15 @@
 /* Hydrogen density (total = protons + H-atoms) at z = 0 [ number cm^-3 ]*/
 #define  n_H0  1.9e-7 
 
-/* Helium density total at z = 0 [ number cm^-3 ] */
-#ifdef STROEMGRENTEST
-    #define n_He0  0.0
-    #define STROEMGRENTEMP 1.0e4
-#else
-    #define n_He0  1.5e-8
-#endif    
+/* Helium density total at z = 0 [ number cm^-3 ].
+ * NOTE: n_He0 itself is now a runtime global (see allvars.c / allvars.h) so the
+ * Strömgren test mode can zero it without recompiling. This macro is the physical
+ * value used for normal runs. */
+#define N_HE0_PHYS  1.5e-8
+
+/* Fixed electron temperature imposed in Strömgren test mode [K]. Used only inside
+ * the runtime test branches in rt.c. */
+#define STROEMGRENTEMP 1.0e4
 
 /* All at z=0 [ number cm^-3 ] */
 #define  nB0  2.5e-7

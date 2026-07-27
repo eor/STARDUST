@@ -86,18 +86,18 @@ def set_up_sd_dir(directory):
     if not os.path.exists(directory+'_backup_'+timestamp):
       os.rename(directory,directory+'_backup_'+timestamp)
     else:
-      print 'Error: Backup directory already exists'
+      print('Error: Backup directory already exists')
       exit(1)
       
     ## create the directory new
     os.makedirs(directory)
-    print 'Renamed '+directory+' to '+directory+'_backup_'+timestamp
+    print('Renamed '+directory+' to '+directory+'_backup_'+timestamp)
     
   # if the directory does not exist yet
   else:
     ## create it
     os.makedirs(directory)
-    print 'Created empty directory '+directory
+    print('Created empty directory '+directory)
 
 
 
@@ -200,7 +200,7 @@ def drange(start, stop, step):
         
         
 def cleanup_SD_dir(outDir):
-        print 'deleting table files'
+        print('deleting table files')
         sub.call(' cd %s && rm *table_i* '%( outDir ), shell=True)
         sub.call(' cd %s && rm *table_c* '%( outDir ), shell=True)
         sub.call(' cd %s && rm *table_t* '%( outDir ), shell=True)
