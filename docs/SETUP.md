@@ -110,8 +110,8 @@ tar -xzf gsl-2.8.tar.gz && cd gsl-2.8
 cd ..
 
 # libconfig
-wget https://github.com/hyperrealm/libconfig/releases/download/v1.8.2/libconfig-1.8.2.tar.gz
-tar -xzf libconfig-1.8.2.tar.gz && cd libconfig-1.8.2
+wget [https://github.com/hyperrealm/libconfig/releases/download/v1.8.2/libconfig-1.8.2.tar.gz](https://github.com/hyperrealm/libconfig/archive/refs/tags/v1.8.2.tar.gz)
+tar -xzf v1.8.2.tar.gz && cd libconfig-1.8.2
 ./configure --prefix=$INSTALL_DIR && make -j4 && make install
 cd ..
 
